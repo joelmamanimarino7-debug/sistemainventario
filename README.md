@@ -45,16 +45,38 @@ En los campos de precio se puede escribir con coma o con punto decimal (`12,50` 
   se corrige la orientación y se reducen de tamaño (de ~3 MB a ~100 KB).
 - Al cambiar o quitar una foto, la anterior se borra del disco.
 
+## Fase 2: control y análisis
+
+- **Ajustes de inventario** (menú *Ajustes*, o «± Ajustar stock» en cada producto): corrigen el stock cuando no
+  coincide con lo que hay de verdad. Se puede escribir el stock real contado o sumar/restar (ej. `-2` si se rompieron 2).
+  Cada ajuste guarda el motivo y su valor a costo (las pérdidas aparecen en Reportes).
+- **Devoluciones** (botón «↩ Registrar devolución» en el detalle de una venta): parciales o totales. Lo devuelto
+  descuenta el descuento de la venta en proporción. Si el producto vuelve en buen estado, se suma al stock; si está
+  dañado, no.
+- **Anular venta**: solo para ventas registradas por error y sin devoluciones. Todo vuelve al stock y la venta deja de
+  contar en los totales.
+- **Reportes** (menú *Análisis*): ventas netas, ganancia, margen, devoluciones, pérdidas por ajustes, ventas por día,
+  por método de pago, por categoría y por producto, productos sin ventas y valor del inventario. Se exporta a Excel.
+- **Excel** (menú *Importar / exportar*): descarga productos, ventas, movimientos y reportes. Importa productos con
+  vista previa: crea los nuevos y actualiza los existentes (por código). La plantilla trae instrucciones. Opcionalmente
+  ajusta el stock al valor del archivo (útil tras un conteo físico).
+
+Las ventas netas del Inicio y de Reportes ya descuentan devoluciones y no cuentan ventas anuladas.
+
 ## Estructura
 
 ```
 app/                 Pantallas (cada carpeta es una ruta)
   actions/           Operaciones que modifican datos (crear, vender, etc.)
-  api/               Buscador de productos para Venta y Entrada
+  api/               Buscador de productos, fotos y descargas de Excel (api/exportar/…)
 components/          Piezas de interfaz reutilizables
 lib/
   schema.sql         Estructura de la base de datos
-  db.ts              Conexión y registrarMovimiento(): único lugar que cambia el stock
+  db.ts              Conexión, migraciones y registrarMovimiento(): único lugar que cambia el stock
+  ajustes.ts         Lógica de ajustes de inventario (la usan la pantalla y la importación)
+  excel.ts           Herramientas para generar y leer .xlsx
+  productosExcel.ts  Columnas, lectura, revisión e importación de productos
+  exportaciones.ts   Libros de Excel de ventas, movimientos y reportes
   imagenes.ts        Procesamiento y guardado de fotos
   data/              Consultas de lectura
 scripts/seed.mjs     Datos de ejemplo
@@ -62,7 +84,7 @@ scripts/seed.mjs     Datos de ejemplo
 
 ## Reglas del sistema
 
-- **El stock nunca se edita a mano.** Solo cambia con entradas, ventas (y en la fase 2: ajustes y devoluciones).
+- **El stock nunca se edita a mano.** Solo cambia con entradas, ventas, ajustes y devoluciones.
   Cada cambio queda en *Movimientos* con stock anterior y resultante.
 - **Eliminar = desactivar.** Los productos eliminados se ocultan pero conservan su historial y se pueden reactivar.
   Categorías, marcas y proveedores solo se borran de verdad si nadie los usa.
@@ -73,5 +95,5 @@ scripts/seed.mjs     Datos de ejemplo
 ## Fases
 
 - [x] **Fase 1:** productos, catálogos, entradas, ventas, movimientos, alertas de stock bajo.
-- [ ] **Fase 2:** reportes, devoluciones, ajustes de inventario, importar/exportar Excel.
+- [x] **Fase 2:** reportes, devoluciones, ajustes de inventario, importar/exportar Excel.
 - [ ] **Fase 3:** usuarios y roles, códigos de barras, ticket de venta. (Las fotos ya se adelantaron.)

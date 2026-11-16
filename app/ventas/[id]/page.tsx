@@ -1,22 +1,37 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { anularVenta } from "@/app/actions/devoluciones";
+import { BotonConfirmar } from "@/components/botones";
 import { Miniatura } from "@/components/Foto";
 import { BotonImprimir } from "@/components/BotonImprimir";
-import { btnPrimario, tdCls, thCls } from "@/components/estilos";
-import { Dato, Encabezado, Etiqueta, Tarjeta } from "@/components/ui";
+import { btnPeligro, btnPrimario, btnSecundario, tdCls, thCls } from "@/components/estilos";
+import { Aviso, Dato, Encabezado, Etiqueta, Tarjeta } from "@/components/ui";
 import { CONFIG, etiquetaMetodo } from "@/lib/config";
 import { obtenerVenta } from "@/lib/data/ventas";
 import { cantidad, dinero, fecha, nombreUnidad } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Venta" };
 
-export default async function VentaPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function VentaPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ devolucion?: string }>;
+}) {
   const { id } = await params;
+  const sp = await searchParams;
   const datos = obtenerVenta(Number(id));
   if (!datos) notFound();
-  const { venta: v, detalle } = datos;
-  const ganancia = v.total - v.costo;
+  const { venta: v, detalle, devoluciones } = datos;
+  // Lo devuelto resta ingreso; si el producto volvió al stock, su costo se recupera.
+  const perdidaDevoluciones = devoluciones
+    .flatMap((dv) => dv.renglones)
+    .reduce((s, r) => s + r.importe - (r.reingresa ? Math.round(r.cantidad * r.costo_unitario) : 0), 0);
+  const ganancia = v.total - v.costo - perdidaDevoluciones;
+  const completada = v.estado === "completada";
+  const quedaPorDevolver = detalle.some((d) => d.devuelto < d.cantidad);
 
   return (
     <>
@@ -25,7 +40,8 @@ export default async function VentaPage({ params }: { params: Promise<{ id: stri
           titulo={
             <span className="flex items-center gap-2">
               Venta #{v.id}
-              {v.estado === "cancelada" && <Etiqueta tono="rojo">Cancelada</Etiqueta>}
+              {v.estado === "cancelada" && <Etiqueta tono="rojo">Anulada</Etiqueta>}
+              {devoluciones.length > 0 && <Etiqueta tono="teal">Con devolución</Etiqueta>}
             </span>
           }
           descripcion={fecha(v.creado_en)}
@@ -33,6 +49,22 @@ export default async function VentaPage({ params }: { params: Promise<{ id: stri
           acciones={
             <>
               <BotonImprimir />
+              {completada && quedaPorDevolver && (
+                <Link href={`/ventas/${v.id}/devolucion`} className={btnSecundario}>
+                  ↩ Registrar devolución
+                </Link>
+              )}
+              {completada && devoluciones.length === 0 && (
+                <form action={anularVenta}>
+                  <input type="hidden" name="id" value={v.id} />
+                  <BotonConfirmar
+                    className={btnPeligro}
+                    mensaje={`¿Anular la venta #${v.id}?\n\nÚsalo solo si la venta se registró por error: todos los productos vuelven al stock y la venta deja de contar en los totales. No se puede deshacer.`}
+                  >
+                    Anular venta
+                  </BotonConfirmar>
+                </form>
+              )}
               <Link href="/ventas/nueva" className={btnPrimario}>
                 + Nueva venta
               </Link>
@@ -40,6 +72,17 @@ export default async function VentaPage({ params }: { params: Promise<{ id: stri
           }
         />
       </div>
+
+      {sp.devolucion && (
+        <div className="mb-4 print:hidden">
+          <Aviso tipo="ok">Devolución registrada. Lo que volvió en buen estado ya se sumó al stock.</Aviso>
+        </div>
+      )}
+      {v.estado === "cancelada" && (
+        <div className="mb-4 print:hidden">
+          <Aviso tipo="error">Esta venta fue anulada: sus productos volvieron al stock y no cuenta en los totales.</Aviso>
+        </div>
+      )}
 
       {/* Encabezado que solo aparece al imprimir */}
       <div className="mb-4 hidden text-center print:block">
@@ -75,6 +118,9 @@ export default async function VentaPage({ params }: { params: Promise<{ id: stri
                     </td>
                     <td className={`${tdCls} tabular whitespace-nowrap text-right`}>
                       {cantidad(d.cantidad)} {nombreUnidad(d.cantidad, d.unidad)}
+                      {d.devuelto > 0 && (
+                        <div className="text-xs text-teal-700 print:hidden">devuelto {cantidad(d.devuelto)}</div>
+                      )}
                     </td>
                     <td className={`${tdCls} tabular text-right`}>{dinero(d.precio_unitario)}</td>
                     <td className={`${tdCls} tabular text-right font-medium`}>{dinero(d.subtotal)}</td>
@@ -125,16 +171,51 @@ export default async function VentaPage({ params }: { params: Promise<{ id: stri
           </div>
         </Tarjeta>
 
-        <Tarjeta titulo="Datos" className="self-start print:hidden">
-          <dl className="space-y-3 p-4">
-            <Dato etiqueta="Método de pago">{etiquetaMetodo(v.metodo_pago)}</Dato>
-            <Dato etiqueta="Cliente">{v.cliente}</Dato>
-            <Dato etiqueta="Nota">{v.nota}</Dato>
-            <Dato etiqueta="Ganancia de la venta">
-              <span className={`tabular ${ganancia < 0 ? "text-red-600" : ""}`}>{dinero(ganancia)}</span>
-            </Dato>
-          </dl>
-        </Tarjeta>
+        <div className="space-y-6 self-start print:hidden">
+          <Tarjeta titulo="Datos">
+            <dl className="space-y-3 p-4">
+              <Dato etiqueta="Método de pago">{etiquetaMetodo(v.metodo_pago)}</Dato>
+              <Dato etiqueta="Cliente">{v.cliente}</Dato>
+              <Dato etiqueta="Nota">{v.nota}</Dato>
+              {v.devuelto > 0 && (
+                <Dato etiqueta="Devuelto al cliente">
+                  <span className="tabular">{dinero(v.devuelto)}</span>
+                </Dato>
+              )}
+              {completada && (
+                <Dato etiqueta={devoluciones.length ? "Ganancia (descontando devoluciones)" : "Ganancia de la venta"}>
+                  <span className={`tabular ${ganancia < 0 ? "text-red-600" : ""}`}>{dinero(ganancia)}</span>
+                </Dato>
+              )}
+            </dl>
+          </Tarjeta>
+
+          {devoluciones.map((dv) => (
+            <Tarjeta key={dv.id} titulo={`Devolución #${dv.id}`} acciones={<span className="text-xs text-zinc-500">{fecha(dv.creado_en)}</span>}>
+              <div className="space-y-2 p-4 text-sm">
+                <p className="text-zinc-700">
+                  {dv.motivo}
+                  {dv.nota && <span className="block text-xs text-zinc-500">{dv.nota}</span>}
+                </p>
+                <ul className="space-y-1">
+                  {dv.renglones.map((r, i) => (
+                    <li key={i} className="flex justify-between gap-2">
+                      <span>
+                        {cantidad(r.cantidad)} × {r.producto}
+                        {!r.reingresa && <span className="ml-1 text-xs text-red-600">(dañado)</span>}
+                      </span>
+                      <span className="tabular text-zinc-600">{dinero(r.importe)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="flex justify-between border-t border-zinc-100 pt-2 font-medium">
+                  <span>Devuelto</span>
+                  <span className="tabular">{dinero(dv.total)}</span>
+                </p>
+              </div>
+            </Tarjeta>
+          ))}
+        </div>
       </div>
       <p className="mt-6 hidden text-center text-sm print:block">¡Gracias por su compra!</p>
     </>

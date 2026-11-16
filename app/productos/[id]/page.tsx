@@ -53,6 +53,9 @@ export default async function ProductoPage({
                 <Link href={`/entradas/nueva?producto=${p.id}`} className={btnSecundario}>
                   ↓ Registrar entrada
                 </Link>
+                <Link href={`/ajustes/nuevo?producto=${p.id}`} className={btnSecundario}>
+                  ± Ajustar stock
+                </Link>
                 <Link href={`/productos/${p.id}/editar`} className={btnPrimario}>
                   Editar
                 </Link>
@@ -166,7 +169,7 @@ export default async function ProductoPage({
           }
         >
           {movimientos.length === 0 ? (
-            <Vacio titulo="Sin movimientos todavía" texto="Aquí aparecerán las entradas y ventas de este producto." />
+            <Vacio titulo="Sin movimientos todavía" texto="Aquí aparecerán las entradas, ventas, ajustes y devoluciones de este producto." />
           ) : (
             <TablaMovimientos movimientos={movimientos} conProducto={false} />
           )}

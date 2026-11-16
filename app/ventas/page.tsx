@@ -24,9 +24,20 @@ export default async function VentasPage({ searchParams }: { searchParams: Promi
         titulo="Ventas"
         descripcion={`${total} ${total === 1 ? "venta" : "ventas"} · ${dinero(importe)}${hayFiltros ? " en el periodo filtrado" : " en total"}`}
         acciones={
-          <Link href="/ventas/nueva" className={btnPrimario}>
-            + Nueva venta
-          </Link>
+          <>
+            <a
+              href={`/api/exportar/ventas?${new URLSearchParams(
+                Object.entries({ desde: sp.desde ?? "", hasta: sp.hasta ?? "" }).filter(([, v]) => v),
+              )}`}
+              download
+              className={btnSecundario}
+            >
+              ⇩ Excel
+            </a>
+            <Link href="/ventas/nueva" className={btnPrimario}>
+              + Nueva venta
+            </Link>
+          </>
         }
       />
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
@@ -90,7 +101,12 @@ export default async function VentasPage({ searchParams }: { searchParams: Promi
                         </Link>
                         {v.estado === "cancelada" && (
                           <span className="ml-2">
-                            <Etiqueta tono="rojo">Cancelada</Etiqueta>
+                            <Etiqueta tono="rojo">Anulada</Etiqueta>
+                          </span>
+                        )}
+                        {v.devuelto > 0 && (
+                          <span className="ml-2">
+                            <Etiqueta tono="teal">Devolución {dinero(v.devuelto)}</Etiqueta>
                           </span>
                         )}
                       </td>
@@ -99,7 +115,9 @@ export default async function VentasPage({ searchParams }: { searchParams: Promi
                       <td className={tdCls}>{etiquetaMetodo(v.metodo_pago)}</td>
                       <td className={`${tdCls} tabular text-right`}>{cantidad(v.unidades)}</td>
                       <td className={`${tdCls} tabular text-right font-medium`}>{dinero(v.total)}</td>
-                      <td className={`${tdCls} tabular text-right text-zinc-600`}>{dinero(v.total - v.costo)}</td>
+                      <td className={`${tdCls} tabular text-right text-zinc-600`}>
+                        {v.estado === "cancelada" ? "—" : dinero(v.total - v.costo)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

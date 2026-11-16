@@ -15,6 +15,7 @@ export type Venta = {
   renglones: number;
   unidades: number;
   costo: number; // costo total de lo vendido (para ganancia)
+  devuelto: number; // centavos devueltos al cliente en devoluciones
 };
 
 export type VentaDetalle = {
@@ -28,13 +29,25 @@ export type VentaDetalle = {
   precio_unitario: number;
   costo_unitario: number;
   subtotal: number;
+  devuelto: number; // cantidad ya devuelta de este renglón
+};
+
+export type Devolucion = {
+  id: number;
+  venta_id: number;
+  motivo: string;
+  nota: string | null;
+  total: number;
+  creado_en: string;
+  renglones: { producto: string; cantidad: number; unidad: string; importe: number; costo_unitario: number; reingresa: number }[];
 };
 
 const SELECT = `
   SELECT v.*,
     (SELECT COUNT(*) FROM venta_detalle d WHERE d.venta_id = v.id) AS renglones,
     (SELECT IFNULL(SUM(d.cantidad),0) FROM venta_detalle d WHERE d.venta_id = v.id) AS unidades,
-    (SELECT IFNULL(SUM(ROUND(d.cantidad * d.costo_unitario)),0) FROM venta_detalle d WHERE d.venta_id = v.id) AS costo
+    (SELECT IFNULL(SUM(ROUND(d.cantidad * d.costo_unitario)),0) FROM venta_detalle d WHERE d.venta_id = v.id) AS costo,
+    (SELECT IFNULL(SUM(dv.total),0) FROM devoluciones dv WHERE dv.venta_id = v.id) AS devuelto
   FROM ventas v
 `;
 
@@ -74,15 +87,30 @@ export function listarVentas(f: FiltrosVentas) {
   return { ventas, total: resumen.n, importe: resumen.total };
 }
 
-export function obtenerVenta(id: number): { venta: Venta; detalle: VentaDetalle[] } | undefined {
+export function obtenerVenta(
+  id: number,
+): { venta: Venta; detalle: VentaDetalle[]; devoluciones: Devolucion[] } | undefined {
   const venta = db.prepare(`${SELECT} WHERE v.id = ?`).get(id) as Venta | undefined;
   if (!venta) return undefined;
   const detalle = db
     .prepare(
-      `SELECT d.*, p.nombre AS producto, p.codigo, p.unidad, p.imagen
+      `SELECT d.*, p.nombre AS producto, p.codigo, p.unidad, p.imagen,
+              (SELECT IFNULL(SUM(dd.cantidad),0) FROM devolucion_detalle dd WHERE dd.venta_detalle_id = d.id) AS devuelto
        FROM venta_detalle d JOIN productos p ON p.id = d.producto_id
        WHERE d.venta_id = ? ORDER BY d.id`,
     )
     .all(id) as VentaDetalle[];
-  return { venta, detalle };
+  const devoluciones = (
+    db.prepare("SELECT * FROM devoluciones WHERE venta_id = ? ORDER BY id").all(id) as Omit<Devolucion, "renglones">[]
+  ).map((dv) => ({
+    ...dv,
+    renglones: db
+      .prepare(
+        `SELECT p.nombre AS producto, p.unidad, dd.cantidad, dd.importe, dd.costo_unitario, dd.reingresa
+         FROM devolucion_detalle dd JOIN productos p ON p.id = dd.producto_id
+         WHERE dd.devolucion_id = ? ORDER BY dd.id`,
+      )
+      .all(dv.id) as Devolucion["renglones"],
+  }));
+  return { venta, detalle, devoluciones };
 }

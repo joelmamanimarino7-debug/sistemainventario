@@ -10,6 +10,8 @@ export type Movimiento = {
   stock_resultante: number;
   venta_id: number | null;
   entrada_id: number | null;
+  ajuste_id: number | null;
+  devolucion_id: number | null;
   nota: string | null;
   creado_en: string;
   producto: string;

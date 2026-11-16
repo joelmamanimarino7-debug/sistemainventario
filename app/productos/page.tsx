@@ -43,9 +43,14 @@ export default async function ProductosPage({ searchParams }: { searchParams: Pr
         titulo="Productos"
         descripcion={`${total} ${total === 1 ? "producto" : "productos"}`}
         acciones={
-          <Link href="/productos/nuevo" className={btnPrimario}>
-            + Nuevo producto
-          </Link>
+          <>
+            <Link href="/productos/importar" className={btnSecundario}>
+              ⇄ Importar / exportar
+            </Link>
+            <Link href="/productos/nuevo" className={btnPrimario}>
+              + Nuevo producto
+            </Link>
+          </>
         }
       />
 

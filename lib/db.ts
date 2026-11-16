@@ -18,7 +18,17 @@ function abrir(): Database.Database {
   db.exec(fs.readFileSync(SCHEMA_PATH, "utf8"));
   // Ajuste de datos: la unidad "pieza" pasó a llamarse "unidad".
   db.prepare("UPDATE productos SET unidad = 'unidad' WHERE unidad = 'pieza'").run();
+  migrar(db);
   return db;
+}
+
+/** Agrega a bases creadas en la fase 1 las columnas nuevas (CREATE TABLE IF NOT EXISTS no las agrega). */
+function migrar(db: Database.Database) {
+  const columnas = (db.prepare("PRAGMA table_info(movimientos)").all() as { name: string }[]).map((c) => c.name);
+  if (!columnas.includes("ajuste_id")) db.exec("ALTER TABLE movimientos ADD COLUMN ajuste_id INTEGER REFERENCES ajustes(id)");
+  if (!columnas.includes("devolucion_id"))
+    db.exec("ALTER TABLE movimientos ADD COLUMN devolucion_id INTEGER REFERENCES devoluciones(id)");
+  db.exec("CREATE INDEX IF NOT EXISTS idx_movimientos_venta ON movimientos(venta_id)");
 }
 
 // En desarrollo Next recarga módulos; guardamos la conexión en globalThis
@@ -43,6 +53,8 @@ export function registrarMovimiento(params: {
   cantidad: number; // positivo suma, negativo resta
   ventaId?: number | null;
   entradaId?: number | null;
+  ajusteId?: number | null;
+  devolucionId?: number | null;
   nota?: string | null;
 }) {
   const prod = db
@@ -63,8 +75,9 @@ export function registrarMovimiento(params: {
   ).run(resultante, prod.id);
 
   db.prepare(
-    `INSERT INTO movimientos (producto_id, tipo, cantidad, stock_anterior, stock_resultante, venta_id, entrada_id, nota)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO movimientos (producto_id, tipo, cantidad, stock_anterior, stock_resultante,
+       venta_id, entrada_id, ajuste_id, devolucion_id, nota)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   ).run(
     prod.id,
     params.tipo,
@@ -73,8 +86,11 @@ export function registrarMovimiento(params: {
     resultante,
     params.ventaId ?? null,
     params.entradaId ?? null,
+    params.ajusteId ?? null,
+    params.devolucionId ?? null,
     params.nota ?? null,
   );
+  return { anterior, resultante };
 }
 
 /** Error con mensaje pensado para mostrarse al usuario. */

@@ -17,6 +17,18 @@ export function EtiquetaTipo({ tipo }: { tipo: Movimiento["tipo"] }) {
 }
 
 function Referencia({ m }: { m: Movimiento }) {
+  if (m.devolucion_id)
+    return (
+      <Link href={`/ventas/${m.venta_id}`} className="text-teal-700 hover:underline">
+        Devolución #{m.devolucion_id} (venta #{m.venta_id})
+      </Link>
+    );
+  if (m.ajuste_id)
+    return (
+      <Link href={`/ajustes/${m.ajuste_id}`} className="text-teal-700 hover:underline">
+        Ajuste #{m.ajuste_id}
+      </Link>
+    );
   if (m.venta_id)
     return (
       <Link href={`/ventas/${m.venta_id}`} className="text-teal-700 hover:underline">

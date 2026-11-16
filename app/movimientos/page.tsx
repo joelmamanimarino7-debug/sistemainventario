@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { btnSecundario, inputCls } from "@/components/estilos";
+import { btnPrimario, btnSecundario, inputCls } from "@/components/estilos";
 import { Paginacion } from "@/components/Paginacion";
 import { TablaMovimientos } from "@/components/TablaMovimientos";
 import { Encabezado, Tarjeta, Vacio } from "@/components/ui";
@@ -33,6 +33,11 @@ export default async function MovimientosPage({ searchParams }: { searchParams: 
     pagina,
   });
   const hayFiltros = !!(sp.q || tipo || sp.desde || sp.hasta || productoId);
+  const filtrosUrl = new URLSearchParams(
+    Object.entries({ q: sp.q, tipo, desde: sp.desde, hasta: sp.hasta, producto: productoId ? String(productoId) : undefined }).filter(
+      (e): e is [string, string] => !!e[1],
+    ),
+  ).toString();
 
   return (
     <>
@@ -49,6 +54,16 @@ export default async function MovimientosPage({ searchParams }: { searchParams: 
           ) : (
             "Cada cambio de stock queda registrado aquí: entradas, ventas, ajustes y devoluciones."
           )
+        }
+        acciones={
+          <>
+            <a href={`/api/exportar/movimientos?${filtrosUrl}`} download className={btnSecundario}>
+              ⇩ Excel
+            </a>
+            <Link href="/ajustes/nuevo" className={btnPrimario}>
+              ± Ajustar stock
+            </Link>
+          </>
         }
       />
       <form method="get" className="mb-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_160px_160px_160px_auto]">

@@ -54,11 +54,16 @@ export default function InicioPage() {
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Indicador
           titulo="Ventas de hoy"
-          valor={dinero(r.hoy.total)}
+          valor={dinero(r.hoy.netas)}
           detalle={`${r.hoy.ventas} ${r.hoy.ventas === 1 ? "venta" : "ventas"} · ganancia ${dinero(r.hoy.ganancia)}`}
           href="/ventas"
         />
-        <Indicador titulo="Ventas del mes" valor={dinero(r.mes.total)} detalle={`${r.mes.ventas} ventas`} />
+        <Indicador
+          titulo="Ventas del mes"
+          valor={dinero(r.mes.netas)}
+          detalle={`${r.mes.ventas} ventas · ganancia ${dinero(r.mes.ganancia)}`}
+          href="/reportes"
+        />
         <Indicador
           titulo="Valor del inventario"
           valor={dinero(r.inventario.valor_costo)}

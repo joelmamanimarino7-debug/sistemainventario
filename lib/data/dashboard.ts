@@ -1,5 +1,7 @@
 import "server-only";
 import { db } from "../db";
+import { isoLocal } from "../format";
+import { resumenPeriodo, seriePeriodo } from "./reportes";
 
 export type ProductoStockBajo = {
   id: number;
@@ -13,21 +15,11 @@ export type ProductoStockBajo = {
 };
 
 export function resumenInicio() {
-  const hoy = db
-    .prepare(
-      `SELECT COUNT(*) AS ventas, IFNULL(SUM(v.total),0) AS total,
-              IFNULL(SUM(v.total - (SELECT IFNULL(SUM(ROUND(d.cantidad*d.costo_unitario)),0) FROM venta_detalle d WHERE d.venta_id=v.id)),0) AS ganancia
-       FROM ventas v
-       WHERE v.estado='completada' AND date(v.creado_en) = date('now','localtime')`,
-    )
-    .get() as { ventas: number; total: number; ganancia: number };
-
-  const mes = db
-    .prepare(
-      `SELECT COUNT(*) AS ventas, IFNULL(SUM(total),0) AS total FROM ventas
-       WHERE estado='completada' AND strftime('%Y-%m', creado_en) = strftime('%Y-%m','now','localtime')`,
-    )
-    .get() as { ventas: number; total: number };
+  // Ventas netas: ya descuentan devoluciones y no cuentan las ventas anuladas.
+  const ahora = new Date();
+  const hoyIso = isoLocal(ahora);
+  const hoy = resumenPeriodo({ desde: hoyIso, hasta: hoyIso });
+  const mes = resumenPeriodo({ desde: isoLocal(new Date(ahora.getFullYear(), ahora.getMonth(), 1)), hasta: hoyIso });
 
   const inventario = db
     .prepare(
@@ -50,18 +42,9 @@ export function resumenInicio() {
     )
     .all() as ProductoStockBajo[];
 
-  // Ventas de los últimos 7 días (incluye días sin ventas)
-  const dias = db
-    .prepare(
-      `WITH RECURSIVE d(n, dia) AS (
-         SELECT 6, date('now','localtime','-6 days')
-         UNION ALL SELECT n-1, date(dia,'+1 day') FROM d WHERE n > 0
-       )
-       SELECT d.dia, IFNULL(SUM(v.total),0) AS total, COUNT(v.id) AS ventas
-       FROM d LEFT JOIN ventas v ON date(v.creado_en) = d.dia AND v.estado='completada'
-       GROUP BY d.dia ORDER BY d.dia`,
-    )
-    .all() as { dia: string; total: number; ventas: number }[];
+  // Ventas netas de los últimos 7 días (incluye días sin ventas)
+  const dias = seriePeriodo({ desde: isoLocal(new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() - 6)), hasta: hoyIso })
+    .puntos.map((p) => ({ dia: p.clave, total: p.netas, ventas: p.ventas }));
 
   const masVendidos = db
     .prepare(

@@ -17,8 +17,14 @@ const secciones = [
     titulo: "Inventario",
     enlaces: [
       { href: "/productos", texto: "Productos", icono: "▦" },
+      { href: "/ajustes", texto: "Ajustes", icono: "±" },
       { href: "/movimientos", texto: "Movimientos", icono: "⇅" },
+      { href: "/productos/importar", texto: "Importar / exportar", icono: "⇄" },
     ],
+  },
+  {
+    titulo: "Análisis",
+    enlaces: [{ href: "/reportes", texto: "Reportes", icono: "◔" }],
   },
   {
     titulo: "Catálogos",
@@ -33,6 +39,7 @@ const secciones = [
 function activo(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   if (href === "/ventas") return pathname === "/ventas" || /^\/ventas\/\d+/.test(pathname);
+  if (href === "/productos") return pathname === "/productos" || (pathname.startsWith("/productos/") && pathname !== "/productos/importar");
   return pathname === href || pathname.startsWith(href + "/");
 }
 

@@ -17,3 +17,23 @@ export const METODOS_PAGO = [
 export function etiquetaMetodo(valor: string) {
   return METODOS_PAGO.find((m) => m.valor === valor)?.etiqueta ?? valor;
 }
+
+/** Motivos para ajustar el inventario (fase 2). */
+export const MOTIVOS_AJUSTE = [
+  "Conteo físico",
+  "Producto dañado o roto",
+  "Pérdida o robo",
+  "Uso interno",
+  "Regalo o muestra",
+  "Corrección de un error",
+  "Otro",
+] as const;
+
+/** Motivos de devolución de una venta (fase 2). */
+export const MOTIVOS_DEVOLUCION = [
+  "Producto defectuoso",
+  "No era lo que buscaba",
+  "Cambio por otro producto",
+  "Error en la venta",
+  "Otro",
+] as const;

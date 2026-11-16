@@ -79,3 +79,8 @@ export function medidas(p: {
   if (partes.length === 0) return "";
   return `${partes.map((x) => cantidad(x)).join(" × ")} ${p.unidad_medida}`;
 }
+
+/** Date → "2026-11-16" en hora local (no UTC). */
+export function isoLocal(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}

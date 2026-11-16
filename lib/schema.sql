@@ -123,6 +123,8 @@ CREATE TABLE IF NOT EXISTS movimientos (
   stock_resultante REAL    NOT NULL,
   venta_id         INTEGER REFERENCES ventas(id),
   entrada_id       INTEGER REFERENCES entradas(id),
+  ajuste_id        INTEGER REFERENCES ajustes(id),       -- fase 2 (en bases antiguas se agrega en lib/db.ts)
+  devolucion_id    INTEGER REFERENCES devoluciones(id),  -- fase 2
   nota             TEXT,
   usuario          TEXT,               -- se llenará cuando existan usuarios (fase 3)
   creado_en        TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
@@ -130,3 +132,50 @@ CREATE TABLE IF NOT EXISTS movimientos (
 
 CREATE INDEX IF NOT EXISTS idx_movimientos_producto ON movimientos(producto_id);
 CREATE INDEX IF NOT EXISTS idx_movimientos_fecha    ON movimientos(creado_en);
+
+-- ---------- Fase 2 ----------
+
+-- Ajuste de inventario: corrige el stock cuando no coincide con lo que hay de verdad
+-- (conteo físico, roturas, pérdidas, uso interno...).
+CREATE TABLE IF NOT EXISTS ajustes (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  motivo     TEXT    NOT NULL,
+  nota       TEXT,
+  creado_en  TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
+CREATE TABLE IF NOT EXISTS ajuste_detalle (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  ajuste_id       INTEGER NOT NULL REFERENCES ajustes(id),
+  producto_id     INTEGER NOT NULL REFERENCES productos(id),
+  stock_anterior  REAL    NOT NULL,
+  stock_nuevo     REAL    NOT NULL,
+  diferencia      REAL    NOT NULL,   -- positivo = sobró, negativo = faltó
+  costo_unitario  INTEGER NOT NULL    -- centavos, para valorizar la diferencia
+);
+
+CREATE INDEX IF NOT EXISTS idx_ajuste_detalle_ajuste ON ajuste_detalle(ajuste_id);
+
+-- Devolución de una venta (total o parcial)
+CREATE TABLE IF NOT EXISTS devoluciones (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  venta_id   INTEGER NOT NULL REFERENCES ventas(id),
+  motivo     TEXT    NOT NULL,
+  nota       TEXT,
+  total      INTEGER NOT NULL,        -- centavos devueltos al cliente
+  creado_en  TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
+CREATE TABLE IF NOT EXISTS devolucion_detalle (
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  devolucion_id     INTEGER NOT NULL REFERENCES devoluciones(id),
+  venta_detalle_id  INTEGER NOT NULL REFERENCES venta_detalle(id),
+  producto_id       INTEGER NOT NULL REFERENCES productos(id),
+  cantidad          REAL    NOT NULL CHECK (cantidad > 0),
+  importe           INTEGER NOT NULL,  -- centavos devueltos por este renglón (ya con el descuento prorrateado)
+  costo_unitario    INTEGER NOT NULL,  -- el costo congelado en la venta
+  reingresa         INTEGER NOT NULL DEFAULT 1  -- 1 = vuelve al stock, 0 = dañado (no vuelve)
+);
+
+CREATE INDEX IF NOT EXISTS idx_devoluciones_venta ON devoluciones(venta_id);
+CREATE INDEX IF NOT EXISTS idx_devolucion_detalle_dev ON devolucion_detalle(devolucion_id);
