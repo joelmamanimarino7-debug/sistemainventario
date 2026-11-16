@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+# Base de datos local (contiene los datos del negocio)
+data/*.db
+data/*.db-*
+data/imagenes/

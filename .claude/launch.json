@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "inventario-demo",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "-p", "3010"],
+      "env": { "INVENTARIO_DB": "data/demo.db" },
+      "port": 3010
+    }
+  ]
+}
