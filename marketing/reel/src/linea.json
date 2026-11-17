@@ -1,0 +1,96 @@
+{
+  "duracion": 51.967,
+  "bloques": [
+    {
+      "bloque": "gancho",
+      "texto": "¿Sabes cuánto vendiste hoy y cuánto te queda en stock?",
+      "desde": 0,
+      "hasta": 3.067,
+      "fuenteDesde": 5.466666666666667
+    },
+    {
+      "bloque": "problema",
+      "texto": "Si todavía lo estás anotando en cuaderno o en Excel, estás perdiendo tiempo y dinero.",
+      "desde": 3.067,
+      "hasta": 7.5,
+      "fuenteDesde": 8.933333333333334
+    },
+    {
+      "bloque": "solucion",
+      "texto": "Por eso creé este sistema de inventario y ventas para tu negocio.",
+      "desde": 7.5,
+      "hasta": 11.433,
+      "fuenteDesde": 14
+    },
+    {
+      "bloque": "productos",
+      "texto": "Registras tus productos con precio, foto y stock.",
+      "desde": 11.433,
+      "hasta": 15.233,
+      "fuenteDesde": 18.966666666666665
+    },
+    {
+      "bloque": "vender",
+      "texto": "Vendes en segundos incluso escaneando un código de barras desde tu celular.",
+      "desde": 15.233,
+      "hasta": 19.433,
+      "fuenteDesde": 23.566666666666666
+    },
+    {
+      "bloque": "cobrar",
+      "texto": "Cobras en efectivo o por QR y el stock se descuenta solo.",
+      "desde": 19.433,
+      "hasta": 22.667,
+      "fuenteDesde": 28.266666666666666
+    },
+    {
+      "bloque": "alertas",
+      "texto": "Este sistema te avisa cuando un producto se está acabando.",
+      "desde": 22.667,
+      "hasta": 25.867,
+      "fuenteDesde": 32.46666666666667
+    },
+    {
+      "bloque": "caja",
+      "texto": "Al final del día cierras caja y sabes si todo cuadra o si falta dinero.",
+      "desde": 25.867,
+      "hasta": 29.767,
+      "fuenteDesde": 36.233333333333334
+    },
+    {
+      "bloque": "vendedores",
+      "texto": "Y tus vendedores venden, pero no ven tus costos ni tus ganancias.",
+      "desde": 29.767,
+      "hasta": 34.167,
+      "fuenteDesde": 40.96666666666667
+    },
+    {
+      "bloque": "ganancias",
+      "texto": "Solo tú ves cuánto ganas y tu información se respalda sola.",
+      "desde": 34.167,
+      "hasta": 38.033,
+      "fuenteDesde": 50.333333333333336
+    },
+    {
+      "bloque": "adaptamos",
+      "texto": "Lo mejor de todo, lo adaptamos para tu negocio, ya sea una ferretería, una tienda de ropa, artículos de cocina.",
+      "desde": 38.033,
+      "hasta": 44.6,
+      "fuenteDesde": 55.63333333333333
+    },
+    {
+      "bloque": "personalizamos",
+      "texto": "Lo personalizamos según lo que tú necesites.",
+      "desde": 44.6,
+      "hasta": 47.433,
+      "fuenteDesde": 62.56666666666667
+    },
+    {
+      "bloque": "llamado",
+      "texto": "¿Quieres verlo funcionando? Escríbeme al interno y te envío el catálogo de precios.",
+      "desde": 47.433,
+      "hasta": 51.967,
+      "fuenteDesde": 67.06666666666666
+    }
+  ]
+}

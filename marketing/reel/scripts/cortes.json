@@ -1,0 +1,21 @@
+{
+  "fuente": "../../video/trabajo/grabacion_sdr.mov",
+  "nota": "Tramos de la grabación que se conservan (segundos de la grabación original). Sale el arranque (0-5,5 s) y el tropiezo (45,9-50,4 s).",
+  "margenAntes": 0.1,
+  "margenDespues": 0.16,
+  "tramos": [
+    { "bloque": "gancho",        "desde": 5.57,  "hasta": 8.38,  "texto": "¿Sabes cuánto vendiste hoy y cuánto te queda en stock?" },
+    { "bloque": "problema",      "desde": 9.02,  "hasta": 13.19, "texto": "Si todavía lo estás anotando en cuaderno o en Excel, estás perdiendo tiempo y dinero." },
+    { "bloque": "solucion",      "desde": 14.11, "hasta": 17.78, "texto": "Por eso creé este sistema de inventario y ventas para tu negocio." },
+    { "bloque": "productos",     "desde": 19.07, "hasta": 22.59, "texto": "Registras tus productos con precio, foto y stock." },
+    { "bloque": "vender",        "desde": 23.66, "hasta": 27.59, "texto": "Vendes en segundos incluso escaneando un código de barras desde tu celular." },
+    { "bloque": "cobrar",        "desde": 28.35, "hasta": 31.34, "texto": "Cobras en efectivo o por QR y el stock se descuenta solo." },
+    { "bloque": "alertas",       "desde": 32.56, "hasta": 35.50, "texto": "Este sistema te avisa cuando un producto se está acabando." },
+    { "bloque": "caja",          "desde": 36.34, "hasta": 39.98, "texto": "Al final del día cierras caja y sabes si todo cuadra o si falta dinero." },
+    { "bloque": "vendedores",    "desde": 41.07, "hasta": 45.22, "texto": "Y tus vendedores venden, pero no ven tus costos ni tus ganancias." },
+    { "bloque": "ganancias",     "desde": 50.44, "hasta": 54.03, "texto": "Solo tú ves cuánto ganas y tu información se respalda sola." },
+    { "bloque": "adaptamos",     "desde": 55.72, "hasta": 62.04, "texto": "Lo mejor de todo, lo adaptamos para tu negocio, ya sea una ferretería, una tienda de ropa, artículos de cocina." },
+    { "bloque": "personalizamos","desde": 62.68, "hasta": 65.23, "texto": "Lo personalizamos según lo que tú necesites." },
+    { "bloque": "llamado",       "desde": 67.17, "hasta": 71.45, "texto": "¿Quieres verlo funcionando? Escríbeme al interno y te envío el catálogo de precios." }
+  ]
+}

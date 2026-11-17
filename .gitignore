@@ -12,3 +12,5 @@ data/imagenes/
 certificados/
 # Respaldos (contienen los datos del negocio)
 data/respaldos*/
+# Videos grabados para redes (pesan mucho)
+video/

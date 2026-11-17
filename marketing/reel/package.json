@@ -1,0 +1,23 @@
+{
+  "name": "reel-jm-soluciones",
+  "private": true,
+  "description": "Animaciones para el reel de presentación del sistema de inventario (Remotion).",
+  "scripts": {
+    "estudio": "remotion studio src/index.ts",
+    "personalizacion": "remotion render src/index.ts Personalizacion ../../video/personalizacion.mp4 --codec h264 --crf 18",
+    "editar": "node scripts/editar.mjs",
+    "capturas": "node scripts/capturas.mjs",
+    "reel": "remotion render src/index.ts Reel ../../video/reel-inventario.mp4 --codec h264 --crf 18 --audio-bitrate 192k"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.544",
+    "puppeteer-core": "^25.18.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.544"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}
