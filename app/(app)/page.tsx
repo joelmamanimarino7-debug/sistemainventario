@@ -13,9 +13,9 @@ const DIAS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
 function Indicador({ titulo, valor, detalle, href }: { titulo: string; valor: string; detalle?: string; href?: string }) {
   const contenido = (
     <>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">{titulo}</p>
-      <p className="tabular mt-1.5 font-display text-[1.65rem] font-semibold leading-tight text-tierra-900">{valor}</p>
-      {detalle && <p className="tabular mt-0.5 text-xs text-tierra-500">{detalle}</p>}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gris-500">{titulo}</p>
+      <p className="tabular mt-1.5 font-display text-[1.65rem] font-semibold leading-tight text-gris-900">{valor}</p>
+      {detalle && <p className="tabular mt-0.5 text-xs text-gris-500">{detalle}</p>}
     </>
   );
   return (
@@ -86,7 +86,7 @@ export default async function InicioPage() {
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <Tarjeta
           titulo={
             <span className="flex items-center gap-2">
@@ -127,8 +127,8 @@ export default async function InicioPage() {
                         <Link href={`/productos/${p.id}`} className="group flex items-center gap-3">
                           <Miniatura imagen={p.imagen} alt="" tam={40} />
                           <span className="min-w-0">
-                            <span className="block font-medium text-tierra-900 group-hover:text-acento-700">{p.nombre}</span>
-                            <span className="block text-xs text-tierra-500">
+                            <span className="block font-medium text-gris-900 group-hover:text-acento-700">{p.nombre}</span>
+                            <span className="block text-xs text-gris-500">
                               <span className="font-mono">{p.codigo}</span>
                               {p.proveedor && ` · ${p.proveedor}`}
                             </span>
@@ -137,12 +137,12 @@ export default async function InicioPage() {
                       </td>
                       <td className={`${tdCls} tabular whitespace-nowrap text-right`}>
                         <span className="font-medium">{cantidad(p.stock)}</span>{" "}
-                        <span className="text-xs text-tierra-500">{nombreUnidad(p.stock, p.unidad)}</span>
+                        <span className="text-xs text-gris-500">{nombreUnidad(p.stock, p.unidad)}</span>
                         <div>
                           <EstadoStock stock={p.stock} minimo={p.stock_minimo} />
                         </div>
                       </td>
-                      <td className={`${tdCls} tabular text-right text-tierra-600`}>{cantidad(p.stock_minimo)}</td>
+                      <td className={`${tdCls} tabular text-right text-gris-600`}>{cantidad(p.stock_minimo)}</td>
                       <td className={`${tdCls} text-right`}>
                         {admin && (
                           <Link href={`/entradas/nueva?producto=${p.id}`} className="whitespace-nowrap text-sm text-acento-700 hover:underline">
@@ -172,8 +172,8 @@ export default async function InicioPage() {
                       style={{ height: `${alto}%`, minHeight: d.total > 0 ? 4 : 0 }}
                       title={`${dd}/${m}: ${dinero(d.total)} (${d.ventas} ventas)`}
                     />
-                    {d.total === 0 && <div className="h-0.5 w-full max-w-10 rounded bg-tierra-200" />}
-                    <span className="text-[11px] text-tierra-500">{nombreDia}</span>
+                    {d.total === 0 && <div className="h-0.5 w-full max-w-10 rounded bg-gris-200" />}
+                    <span className="text-[11px] text-gris-500">{nombreDia}</span>
                   </div>
                 );
               })}
@@ -182,19 +182,19 @@ export default async function InicioPage() {
 
           <Tarjeta titulo="Más vendidos (30 días)">
             {r.masVendidos.length === 0 ? (
-              <p className="px-4 py-6 text-center text-sm text-tierra-500">Aún no hay ventas en este periodo.</p>
+              <p className="px-4 py-6 text-center text-sm text-gris-500">Aún no hay ventas en este periodo.</p>
             ) : (
-              <ol className="divide-y divide-tierra-100">
+              <ol className="divide-y divide-gris-100">
                 {r.masVendidos.map((p, i) => (
                   <li key={p.id} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm">
                     <span className="flex min-w-0 items-center gap-2">
-                      <span className="w-4 text-xs text-tierra-400">{i + 1}</span>
+                      <span className="w-4 text-xs text-gris-400">{i + 1}</span>
                       <Miniatura imagen={p.imagen} alt="" tam={32} />
-                      <Link href={`/productos/${p.id}`} className="truncate font-medium text-tierra-900 hover:text-acento-700">
+                      <Link href={`/productos/${p.id}`} className="truncate font-medium text-gris-900 hover:text-acento-700">
                         {p.nombre}
                       </Link>
                     </span>
-                    <span className="tabular shrink-0 text-tierra-600">
+                    <span className="tabular shrink-0 text-gris-600">
                       {cantidad(p.cantidad)} {nombreUnidad(p.cantidad, p.unidad)}
                     </span>
                   </li>

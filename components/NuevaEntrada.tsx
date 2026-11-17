@@ -80,7 +80,7 @@ export function NuevaEntrada({
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-4">
         <BuscadorProductos ref={buscador} onElegir={agregar} precio="costo" />
         <Tarjeta className="overflow-hidden">
@@ -115,8 +115,8 @@ export function NuevaEntrada({
                           <div className="flex items-center gap-3">
                             <Miniatura imagen={r.producto.imagen} alt="" tam={44} />
                             <div className="min-w-0">
-                              <p className="font-medium text-tierra-900">{r.producto.nombre}</p>
-                          <p className="text-xs text-tierra-500">
+                              <p className="font-medium text-gris-900">{r.producto.nombre}</p>
+                          <p className="text-xs text-gris-500">
                             <span className="font-mono">{r.producto.codigo}</span> · Stock actual {cantidad(r.producto.stock)}{" "}
                             {nombreUnidad(r.producto.stock, r.producto.unidad)}
                           </p>
@@ -177,7 +177,7 @@ export function NuevaEntrada({
           <Campo label="Nota" htmlFor="nota">
             <textarea id="nota" rows={2} value={nota} onChange={(e) => setNota(e.target.value)} className={inputCls} />
           </Campo>
-          <label className="flex items-start gap-2 text-sm text-tierra-700">
+          <label className="flex items-start gap-2 text-sm text-gris-700">
             <input
               type="checkbox"
               checked={actualizarCosto}
@@ -187,12 +187,12 @@ export function NuevaEntrada({
             Actualizar el precio de costo de los productos con estos costos
           </label>
 
-          <div className="border-t border-tierra-100 pt-4">
-            <div className="flex justify-between text-sm text-tierra-500">
+          <div className="border-t border-gris-100 pt-4">
+            <div className="flex justify-between text-sm text-gris-500">
               <span>Productos</span>
               <span className="tabular">{renglones.length}</span>
             </div>
-            <div className="flex justify-between text-sm text-tierra-500">
+            <div className="flex justify-between text-sm text-gris-500">
               <span>Unidades</span>
               <span className="tabular">{cantidad(unidades)}</span>
             </div>

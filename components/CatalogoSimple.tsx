@@ -30,7 +30,7 @@ export function CatalogoSimple({
   }, [estado]);
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
       <Tarjeta className="order-2 overflow-hidden xl:order-1">
         {items.length === 0 ? (
           <Vacio titulo={`Aún no hay ${tabla}`} texto={`Agrega la primera ${singular.toLowerCase()} con el formulario.`} />
@@ -77,7 +77,7 @@ function Fila({ tabla, item }: { tabla: TablaCatalogo; item: ItemCatalogo }) {
   }, [estado]);
 
   return (
-    <tr className={item.activo ? "" : "bg-tierra-50/60 text-tierra-500"}>
+    <tr className={item.activo ? "" : "bg-gris-50/60 text-gris-500"}>
       <td className={tdCls}>
         {editando ? (
           <form action={accion} className="flex flex-wrap items-center gap-2">

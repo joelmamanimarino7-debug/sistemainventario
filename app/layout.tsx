@@ -5,8 +5,8 @@ import { obtenerNegocio } from "@/lib/negocio";
 // Todas las páginas leen la base de datos en cada visita (nunca se generan como estáticas).
 export const dynamic = "force-dynamic";
 
-// Color de la barra del navegador en el celular (café del menú).
-export const viewport: Viewport = { themeColor: "#2a211b" };
+// Color de la barra del navegador en el celular (azul oscuro del menú).
+export const viewport: Viewport = { themeColor: "#182436" };
 
 export function generateMetadata(): Metadata {
   const nombre = obtenerNegocio().nombre;

@@ -45,7 +45,7 @@ export default async function HistorialCajaPage({ searchParams }: { searchParams
                   {cajas.map((c) => {
                     const r = resumenDeCaja(c);
                     return (
-                      <tr key={c.id} className="hover:bg-tierra-50">
+                      <tr key={c.id} className="hover:bg-gris-50">
                         <td className={tdCls}>
                           <Link href={c.estado === "abierta" ? "/caja" : `/caja/${c.id}`} className="font-medium text-acento-700 hover:underline">
                             #{c.id}
@@ -53,7 +53,7 @@ export default async function HistorialCajaPage({ searchParams }: { searchParams
                         </td>
                         <td className={`${tdCls} whitespace-nowrap`}>
                           {fecha(c.abierta_en)}
-                          <div className="text-xs text-tierra-500">{c.abierta_por_nombre}</div>
+                          <div className="text-xs text-gris-500">{c.abierta_por_nombre}</div>
                         </td>
                         <td className={`${tdCls} whitespace-nowrap`}>
                           {c.estado === "abierta" ? (
@@ -61,12 +61,12 @@ export default async function HistorialCajaPage({ searchParams }: { searchParams
                           ) : (
                             <>
                               {fecha(c.cerrada_en)}
-                              <div className="text-xs text-tierra-500">{c.cerrada_por_nombre}</div>
+                              <div className="text-xs text-gris-500">{c.cerrada_por_nombre}</div>
                             </>
                           )}
                         </td>
                         <td className={`${tdCls} tabular text-right`}>{dinero(r.totalVentas - r.totalDevoluciones)}</td>
-                        <td className={`${tdCls} tabular text-right text-tierra-600`}>{c.estado === "cerrada" ? dinero(c.efectivo_esperado) : "—"}</td>
+                        <td className={`${tdCls} tabular text-right text-gris-600`}>{c.estado === "cerrada" ? dinero(c.efectivo_esperado) : "—"}</td>
                         <td className={`${tdCls} tabular text-right`}>{c.estado === "cerrada" ? dinero(c.efectivo_contado) : "—"}</td>
                         <td className={`${tdCls} whitespace-nowrap text-right`}>
                           {c.estado === "cerrada" ? <EtiquetaDiferencia diferencia={c.diferencia ?? 0} /> : "—"}

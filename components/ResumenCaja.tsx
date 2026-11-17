@@ -23,9 +23,9 @@ export function TablaPorMetodo({ r }: { r: ResumenCaja }) {
               <tr key={v.metodo}>
                 <td className={tdCls}>{v.etiqueta}</td>
                 <td className={`${tdCls} tabular text-right`}>
-                  {dinero(v.total)} <span className="text-xs text-tierra-500">({v.cantidad})</span>
+                  {dinero(v.total)} <span className="text-xs text-gris-500">({v.cantidad})</span>
                 </td>
-                <td className={`${tdCls} tabular text-right text-tierra-600`}>{d.total ? `−${dinero(d.total)}` : "—"}</td>
+                <td className={`${tdCls} tabular text-right text-gris-600`}>{d.total ? `−${dinero(d.total)}` : "—"}</td>
                 <td className={`${tdCls} tabular text-right font-medium`}>{dinero(v.total - d.total)}</td>
               </tr>
             );
@@ -35,7 +35,7 @@ export function TablaPorMetodo({ r }: { r: ResumenCaja }) {
           <tr>
             <td className="px-4 py-3 font-semibold">Total</td>
             <td className="tabular px-4 py-3 text-right">{dinero(r.totalVentas)}</td>
-            <td className="tabular px-4 py-3 text-right text-tierra-600">{r.totalDevoluciones ? `−${dinero(r.totalDevoluciones)}` : "—"}</td>
+            <td className="tabular px-4 py-3 text-right text-gris-600">{r.totalDevoluciones ? `−${dinero(r.totalDevoluciones)}` : "—"}</td>
             <td className="tabular px-4 py-3 text-right font-semibold">{dinero(r.totalVentas - r.totalDevoluciones)}</td>
           </tr>
         </tfoot>
@@ -59,11 +59,11 @@ export function CuentaEfectivo({ r }: { r: ResumenCaja }) {
     <dl className="space-y-1.5 p-4 text-sm">
       {filas.map(([t, v]) => (
         <div key={t} className="flex justify-between gap-3">
-          <dt className="text-tierra-600">{t}</dt>
+          <dt className="text-gris-600">{t}</dt>
           <dd className="tabular">{dinero(Math.abs(v))}</dd>
         </div>
       ))}
-      <div className="flex justify-between gap-3 border-t border-tierra-200 pt-2 font-semibold">
+      <div className="flex justify-between gap-3 border-t border-gris-200 pt-2 font-semibold">
         <dt>Debería haber</dt>
         <dd className="tabular">{dinero(r.efectivoEsperado)}</dd>
       </div>
@@ -86,13 +86,13 @@ export function TablaMovimientosCaja({ movimientos }: { movimientos: MovimientoC
         <tbody>
           {movimientos.map((m) => (
             <tr key={m.id}>
-              <td className={`${tdCls} whitespace-nowrap text-tierra-600`}>{fecha(m.creado_en).slice(-5)}</td>
+              <td className={`${tdCls} whitespace-nowrap text-gris-600`}>{fecha(m.creado_en).slice(-5)}</td>
               <td className={tdCls}>
                 {m.tipo === "ingreso" ? <Etiqueta tono="verde">Entra</Etiqueta> : <Etiqueta tono="ambar">Sale</Etiqueta>}
               </td>
               <td className={tdCls}>
                 {m.motivo}
-                {m.usuario && <div className="text-xs text-tierra-500">por {m.usuario}</div>}
+                {m.usuario && <div className="text-xs text-gris-500">por {m.usuario}</div>}
               </td>
               <td className={`${tdCls} tabular whitespace-nowrap text-right font-medium`}>
                 {m.tipo === "ingreso" ? "+" : "−"}

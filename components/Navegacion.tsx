@@ -74,16 +74,16 @@ export function Navegacion({
 
   return (
     <>
-      {/* Escritorio: barra lateral café */}
-      <aside className="fixed inset-y-0 left-0 hidden w-60 print:!hidden flex-col bg-tierra-900 text-tierra-200 lg:flex">
+      {/* Escritorio: barra lateral azul oscuro */}
+      <aside className="fixed inset-y-0 left-0 hidden w-60 print:!hidden flex-col bg-gris-900 text-gris-200 lg:flex">
         <div className="flex h-16 items-center gap-2.5 border-b border-white/5 px-5">
           <Marca letra={nombre.charAt(0)} />
-          <span className="truncate font-display text-[17px] font-semibold text-tierra-50">{nombre}</span>
+          <span className="truncate font-display text-[17px] font-semibold text-gris-50">{nombre}</span>
         </div>
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           {visibles.map((s) => (
             <div key={s.titulo} className="mb-5">
-              <p className="mb-1.5 px-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-tierra-500">{s.titulo}</p>
+              <p className="mb-1.5 px-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-gris-500">{s.titulo}</p>
               {s.enlaces.map((e) => {
                 const on = activo(pathname, e.href);
                 return (
@@ -92,11 +92,11 @@ export function Navegacion({
                     href={e.href}
                     aria-current={on ? "page" : undefined}
                     className={`relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors ${
-                      on ? "bg-white/[0.07] font-medium text-white" : "text-tierra-300 hover:bg-white/[0.04] hover:text-tierra-50"
+                      on ? "bg-white/[0.07] font-medium text-white" : "text-gris-300 hover:bg-white/[0.04] hover:text-gris-50"
                     }`}
                   >
                     {on && <span aria-hidden className="absolute inset-y-1.5 left-0 w-0.5 rounded-full bg-acento-400" />}
-                    <span aria-hidden className={`w-4 text-center ${on ? "text-acento-400" : "text-tierra-500"}`}>
+                    <span aria-hidden className={`w-4 text-center ${on ? "text-acento-400" : "text-gris-500"}`}>
                       {e.icono}
                     </span>
                     {e.texto}
@@ -108,32 +108,32 @@ export function Navegacion({
         </nav>
         <div className="border-t border-white/5 p-3">
           <Link href="/cuenta" className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-white/[0.05]">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tierra-700 text-xs font-semibold text-tierra-100">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gris-700 text-xs font-semibold text-gris-100">
               {iniciales(usuario.nombre)}
             </span>
             <span className="min-w-0">
-              <span className="block truncate text-sm font-medium text-tierra-50">{usuario.nombre}</span>
-              <span className="block text-xs text-tierra-400">{ROL_TEXTO[usuario.rol]} · Mi cuenta</span>
+              <span className="block truncate text-sm font-medium text-gris-50">{usuario.nombre}</span>
+              <span className="block text-xs text-gris-400">{ROL_TEXTO[usuario.rol]} · Mi cuenta</span>
             </span>
           </Link>
           <form action={cerrarSesionAccion}>
-            <button className="mt-1 w-full rounded-lg px-2 py-1.5 text-left text-sm text-tierra-400 hover:bg-white/[0.05] hover:text-tierra-50">
+            <button className="mt-1 w-full rounded-lg px-2 py-1.5 text-left text-sm text-gris-400 hover:bg-white/[0.05] hover:text-gris-50">
               ⎋ Cerrar sesión
             </button>
           </form>
         </div>
       </aside>
 
-      {/* Móvil / tablet: barra superior café con menú deslizable */}
-      <header className="sticky top-0 z-20 bg-tierra-900 text-tierra-100 shadow-md shadow-tierra-950/20 lg:hidden print:hidden">
+      {/* Móvil / tablet: barra superior azul oscuro con menú deslizable */}
+      <header className="sticky top-0 z-20 bg-gris-900 text-gris-100 shadow-md shadow-gris-950/20 lg:hidden print:hidden">
         <div className="flex h-12 items-center gap-2 px-4">
           <Marca letra={nombre.charAt(0)} chica />
-          <span className="truncate font-display font-semibold text-tierra-50">{nombre}</span>
-          <Link href="/cuenta" className="ml-auto truncate text-sm text-tierra-300">
+          <span className="truncate font-display font-semibold text-gris-50">{nombre}</span>
+          <Link href="/cuenta" className="ml-auto truncate text-sm text-gris-300">
             {usuario.nombre}
           </Link>
           <form action={cerrarSesionAccion}>
-            <button className="rounded-md px-2 py-1 text-sm text-tierra-300 hover:bg-white/10" aria-label="Cerrar sesión">
+            <button className="rounded-md px-2 py-1 text-sm text-gris-300 hover:bg-white/10" aria-label="Cerrar sesión">
               Salir
             </button>
           </form>
@@ -147,7 +147,7 @@ export function Navegacion({
                 href={e.href}
                 aria-current={on ? "page" : undefined}
                 className={`whitespace-nowrap rounded-full px-3 py-1 text-sm ${
-                  on ? "bg-acento-500 font-medium text-white" : "bg-white/[0.07] text-tierra-200"
+                  on ? "bg-acento-500 font-medium text-white" : "bg-white/[0.07] text-gris-200"
                 }`}
               >
                 {e.texto}
@@ -160,7 +160,7 @@ export function Navegacion({
   );
 }
 
-/** Logo del negocio: la inicial sobre un sello naranja. */
+/** Logo del negocio: la inicial sobre un sello azul. */
 export function Marca({ letra, chica }: { letra: string; chica?: boolean }) {
   return (
     <span

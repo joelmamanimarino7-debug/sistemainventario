@@ -26,7 +26,7 @@ export function Paginacion({
   };
 
   return (
-    <div className="flex items-center justify-between gap-2 border-t border-tierra-100 px-4 py-3 text-sm text-tierra-600">
+    <div className="flex items-center justify-between gap-2 border-t border-gris-100 px-4 py-3 text-sm text-gris-600">
       <span>
         Página {pagina} de {paginas}
       </span>

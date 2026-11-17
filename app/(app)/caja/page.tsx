@@ -13,9 +13,9 @@ export const metadata: Metadata = { title: "Caja" };
 function Indicador({ titulo, valor, detalle }: { titulo: string; valor: string; detalle?: string }) {
   return (
     <Tarjeta className="p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">{titulo}</p>
-      <p className="tabular mt-1 font-display text-2xl font-semibold text-tierra-900">{valor}</p>
-      {detalle && <p className="tabular mt-0.5 text-xs text-tierra-500">{detalle}</p>}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gris-500">{titulo}</p>
+      <p className="tabular mt-1 font-display text-2xl font-semibold text-gris-900">{valor}</p>
+      {detalle && <p className="tabular mt-0.5 text-xs text-gris-500">{detalle}</p>}
     </Tarjeta>
   );
 }
@@ -35,7 +35,7 @@ export default async function CajaPage() {
     return (
       <>
         <Encabezado titulo="Caja" descripcion="La caja está cerrada. Ábrela para empezar a vender." acciones={historial} />
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
           <Tarjeta titulo="Abrir caja" className="self-start">
             <div className="p-4">
               <FormAbrirCaja />
@@ -43,7 +43,7 @@ export default async function CajaPage() {
           </Tarjeta>
           {ultimo && (
             <Tarjeta titulo="Último cierre" className="self-start">
-              <div className="space-y-1 p-4 text-sm text-tierra-700">
+              <div className="space-y-1 p-4 text-sm text-gris-700">
                 <p>
                   {fecha(ultimo.cerrada_en)} · cerró {ultimo.cerrada_por_nombre ?? "—"}
                 </p>
@@ -91,7 +91,7 @@ export default async function CajaPage() {
         )}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         <div className="space-y-6">
           <Tarjeta titulo="Por método de pago" className="overflow-hidden">
             <TablaPorMetodo r={r} />

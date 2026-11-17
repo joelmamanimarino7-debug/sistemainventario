@@ -76,7 +76,7 @@ export function ImportarProductos() {
       <Tarjeta titulo="1. Elige el archivo">
         <div className="space-y-4 p-4">
           <label
-            className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-tierra-300 bg-tierra-50 px-4 py-8 text-center text-sm text-tierra-600 hover:border-acento-600 hover:bg-acento-50/40"
+            className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-gris-300 bg-gris-50 px-4 py-8 text-center text-sm text-gris-600 hover:border-acento-600 hover:bg-acento-50/40"
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => {
               e.preventDefault();
@@ -87,8 +87,8 @@ export function ImportarProductos() {
             <span className="text-2xl" aria-hidden>
               ⇪
             </span>
-            <span className="font-medium text-tierra-900">{nombreArchivo || "Haz clic o arrastra aquí tu Excel (.xlsx)"}</span>
-            <span className="text-xs text-tierra-500">Se revisa primero: nada cambia hasta que confirmes.</span>
+            <span className="font-medium text-gris-900">{nombreArchivo || "Haz clic o arrastra aquí tu Excel (.xlsx)"}</span>
+            <span className="text-xs text-gris-500">Se revisa primero: nada cambia hasta que confirmes.</span>
             <input
               ref={archivoRef}
               type="file"
@@ -100,7 +100,7 @@ export function ImportarProductos() {
               }}
             />
           </label>
-          <label className="flex items-start gap-2 text-sm text-tierra-700">
+          <label className="flex items-start gap-2 text-sm text-gris-700">
             <input
               type="checkbox"
               checked={ajustarStock}
@@ -109,13 +109,13 @@ export function ImportarProductos() {
             />
             <span>
               Ajustar el stock de los productos existentes al valor de la columna «Stock»
-              <span className="block text-xs text-tierra-500">
+              <span className="block text-xs text-gris-500">
                 Útil después de un conteo físico. Queda registrado como un ajuste de inventario. Si no lo marcas, el stock de
                 los productos existentes no cambia.
               </span>
             </span>
           </label>
-          {pendiente && !revision && <p className="text-sm text-tierra-500">Leyendo el archivo…</p>}
+          {pendiente && !revision && <p className="text-sm text-gris-500">Leyendo el archivo…</p>}
           {error && <Aviso tipo="error">{error}</Aviso>}
         </div>
       </Tarjeta>
@@ -138,7 +138,7 @@ export function ImportarProductos() {
 
       {revision && res && (
         <Tarjeta titulo="2. Revisa y confirma" className="overflow-hidden">
-          <div className="space-y-3 border-b border-tierra-100 p-4 text-sm">
+          <div className="space-y-3 border-b border-gris-100 p-4 text-sm">
             <div className="flex flex-wrap gap-2">
               <Etiqueta tono="verde">{res.crear} nuevos</Etiqueta>
               <Etiqueta tono="azul">{res.actualizar} a actualizar</Etiqueta>
@@ -146,7 +146,7 @@ export function ImportarProductos() {
               {res.conError > 0 && <Etiqueta tono="rojo">{res.conError} con errores (se omiten)</Etiqueta>}
             </div>
             {nuevos && nuevos.categorias.length + nuevos.marcas.length + nuevos.proveedores.length > 0 && (
-              <p className="text-tierra-600">
+              <p className="text-gris-600">
                 Se crearán:{" "}
                 {[
                   nuevos.categorias.length && `categorías ${nuevos.categorias.join(", ")}`,
@@ -173,12 +173,12 @@ export function ImportarProductos() {
               </button>
             </div>
           </div>
-          <nav className="flex gap-1 border-b border-tierra-100 px-4 py-2" aria-label="Filtrar filas">
+          <nav className="flex gap-1 border-b border-gris-100 px-4 py-2" aria-label="Filtrar filas">
             {FILTROS.map((f) => (
               <button
                 key={f.valor}
                 onClick={() => setFiltro(f.valor)}
-                className={`rounded-full px-3 py-1 text-xs ${filtro === f.valor ? "bg-acento-700 text-white" : "bg-tierra-100 text-tierra-700"}`}
+                className={`rounded-full px-3 py-1 text-xs ${filtro === f.valor ? "bg-acento-700 text-white" : "bg-gris-100 text-gris-700"}`}
               >
                 {f.texto}
               </button>
@@ -197,17 +197,17 @@ export function ImportarProductos() {
               <tbody>
                 {filas.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-4 py-6 text-center text-tierra-500">
+                    <td colSpan={4} className="px-4 py-6 text-center text-gris-500">
                       No hay filas en este filtro.
                     </td>
                   </tr>
                 ) : (
                   filas.map((f) => (
                     <tr key={f.fila} className={f.accion === "error" ? "bg-red-50/40" : ""}>
-                      <td className={`${tdCls} tabular text-tierra-500`}>{f.fila}</td>
+                      <td className={`${tdCls} tabular text-gris-500`}>{f.fila}</td>
                       <td className={tdCls}>
-                        <span className="font-medium text-tierra-900">{f.nombre}</span>
-                        <span className="block font-mono text-xs text-tierra-500">{f.codigo ?? "código automático"}</span>
+                        <span className="font-medium text-gris-900">{f.nombre}</span>
+                        <span className="block font-mono text-xs text-gris-500">{f.codigo ?? "código automático"}</span>
                       </td>
                       <td className={tdCls}>
                         {f.accion === "crear" && <Etiqueta tono="verde">Nuevo</Etiqueta>}
@@ -226,7 +226,7 @@ export function ImportarProductos() {
                           </p>
                         )}
                         {f.avisos.map((a, i) => (
-                          <p key={i} className="text-tierra-500">
+                          <p key={i} className="text-gris-500">
                             {a}
                           </p>
                         ))}

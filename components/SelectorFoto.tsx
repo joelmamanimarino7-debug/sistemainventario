@@ -80,7 +80,7 @@ export function SelectorFoto({ actual, error }: { actual?: string | null; error?
           }
         }}
         className={`group relative flex aspect-square w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed transition-colors ${
-          arrastrando ? "border-acento-600 bg-acento-50" : preview ? "border-transparent bg-tierra-50" : "border-tierra-300 bg-tierra-50 hover:border-acento-600"
+          arrastrando ? "border-acento-600 bg-acento-50" : preview ? "border-transparent bg-gris-50" : "border-gris-300 bg-gris-50 hover:border-acento-600"
         }`}
       >
         {preview ? (
@@ -91,8 +91,8 @@ export function SelectorFoto({ actual, error }: { actual?: string | null; error?
             </span>
           </>
         ) : (
-          <span className="px-4 text-center text-sm text-tierra-500">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-2 h-8 w-8 text-tierra-400" aria-hidden>
+          <span className="px-4 text-center text-sm text-gris-500">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-2 h-8 w-8 text-gris-400" aria-hidden>
               <rect x="3" y="4" width="18" height="16" rx="2" />
               <circle cx="9" cy="10" r="2" />
               <path d="m4 18 5-5 4 4 3-3 4 4" />
@@ -115,7 +115,7 @@ export function SelectorFoto({ actual, error }: { actual?: string | null; error?
       </div>
       {(aviso || error) && <p className="mt-1 text-xs text-red-600">{aviso || error}</p>}
       {!aviso && !error && (
-        <p className="mt-1 text-xs text-tierra-500">JPG, PNG o WebP. Los bordes negros se recortan solos.</p>
+        <p className="mt-1 text-xs text-gris-500">JPG, PNG o WebP. Los bordes negros se recortan solos.</p>
       )}
     </div>
   );

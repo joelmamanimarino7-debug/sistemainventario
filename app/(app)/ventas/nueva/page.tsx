@@ -19,7 +19,7 @@ export default async function NuevaVentaPage() {
         <Encabezado titulo="Nueva venta" />
         <Tarjeta titulo="La caja está cerrada" className="max-w-md">
           <div className="p-4">
-            <p className="mb-4 text-sm text-tierra-600">
+            <p className="mb-4 text-sm text-gris-600">
               Para vender hay que abrir la caja: así cada venta queda en el turno y al final del día se puede cuadrar el
               efectivo.
             </p>

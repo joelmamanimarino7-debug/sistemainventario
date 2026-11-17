@@ -80,17 +80,17 @@ export function NuevoAjuste({ productoInicial }: { productoInicial?: ProductoBus
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-4">
         <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Forma de ajustar">
           {MODOS.map((m) => (
             <label
               key={m.valor}
               className={`cursor-pointer rounded-xl border bg-papel p-3 text-sm ${
-                modo === m.valor ? "border-acento-600 ring-2 ring-acento-600/20" : "border-tierra-200 hover:border-tierra-300"
+                modo === m.valor ? "border-acento-600 ring-2 ring-acento-600/20" : "border-gris-200 hover:border-gris-300"
               }`}
             >
-              <span className="flex items-center gap-2 font-medium text-tierra-900">
+              <span className="flex items-center gap-2 font-medium text-gris-900">
                 <input
                   type="radio"
                   name="modo"
@@ -100,7 +100,7 @@ export function NuevoAjuste({ productoInicial }: { productoInicial?: ProductoBus
                 />
                 {m.titulo}
               </span>
-              <span className="mt-1 block pl-6 text-tierra-500">{m.texto}</span>
+              <span className="mt-1 block pl-6 text-gris-500">{m.texto}</span>
             </label>
           ))}
         </div>
@@ -132,12 +132,12 @@ export function NuevoAjuste({ productoInicial }: { productoInicial?: ProductoBus
                           <div className="flex items-center gap-3">
                             <Miniatura imagen={r.producto.imagen} alt="" tam={40} />
                             <div className="min-w-0">
-                              <p className="font-medium text-tierra-900">{r.producto.nombre}</p>
-                              <p className="font-mono text-xs text-tierra-500">{r.producto.codigo}</p>
+                              <p className="font-medium text-gris-900">{r.producto.nombre}</p>
+                              <p className="font-mono text-xs text-gris-500">{r.producto.codigo}</p>
                             </div>
                           </div>
                         </td>
-                        <td className={`${tdCls} tabular whitespace-nowrap text-right text-tierra-600`}>
+                        <td className={`${tdCls} tabular whitespace-nowrap text-right text-gris-600`}>
                           {cantidad(r.producto.stock)} {nombreUnidad(r.producto.stock, r.producto.unidad)}
                         </td>
                         <td className={tdCls}>
@@ -153,15 +153,15 @@ export function NuevoAjuste({ productoInicial }: { productoInicial?: ProductoBus
                         </td>
                         <td
                           className={`${tdCls} tabular whitespace-nowrap text-right font-medium ${
-                            !c || c.diferencia === 0 ? "text-tierra-400" : c.diferencia > 0 ? "text-oliva-700" : "text-red-700"
+                            !c || c.diferencia === 0 ? "text-gris-400" : c.diferencia > 0 ? "text-oliva-700" : "text-red-700"
                           }`}
                         >
                           {c ? `${c.diferencia > 0 ? "+" : ""}${cantidad(c.diferencia)}` : "—"}
                           {c && modo === "diferencia" && (
-                            <div className="text-xs font-normal text-tierra-500">queda {cantidad(c.nuevo)}</div>
+                            <div className="text-xs font-normal text-gris-500">queda {cantidad(c.nuevo)}</div>
                           )}
                         </td>
-                        <td className={`${tdCls} tabular whitespace-nowrap text-right text-tierra-600`}>
+                        <td className={`${tdCls} tabular whitespace-nowrap text-right text-gris-600`}>
                           {c ? dinero(Math.round(c.diferencia * r.producto.precio_costo)) : "—"}
                         </td>
                         <td className={`${tdCls} text-right`}>
@@ -195,8 +195,8 @@ export function NuevoAjuste({ productoInicial }: { productoInicial?: ProductoBus
             <textarea id="nota" rows={2} value={nota} onChange={(e) => setNota(e.target.value)} className={inputCls} />
           </Campo>
 
-          <div className="border-t border-tierra-100 pt-4">
-            <div className="flex justify-between text-sm text-tierra-500">
+          <div className="border-t border-gris-100 pt-4">
+            <div className="flex justify-between text-sm text-gris-500">
               <span>Productos con cambio</span>
               <span className="tabular">{conCambio}</span>
             </div>
@@ -204,7 +204,7 @@ export function NuevoAjuste({ productoInicial }: { productoInicial?: ProductoBus
               <span>Valor a costo</span>
               <span className={`tabular ${valorTotal < 0 ? "text-red-700" : ""}`}>{dinero(valorTotal)}</span>
             </div>
-            <p className="mt-1 text-xs text-tierra-500">Negativo = pérdida. Se calcula con el precio de costo actual.</p>
+            <p className="mt-1 text-xs text-gris-500">Negativo = pérdida. Se calcula con el precio de costo actual.</p>
           </div>
 
           {error && <Aviso tipo="error">{error}</Aviso>}

@@ -16,14 +16,14 @@ export function Encabezado({
   return (
     <div className="mb-6">
       {volver && (
-        <Link href={volver.href} className="mb-2 inline-block text-sm text-tierra-500 hover:text-acento-700">
+        <Link href={volver.href} className="mb-2 inline-block text-sm text-gris-500 hover:text-acento-700">
           ← {volver.texto}
         </Link>
       )}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-tierra-900">{titulo}</h1>
-          {descripcion && <p className="mt-1 text-sm text-tierra-500">{descripcion}</p>}
+          <h1 className="font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-gris-900">{titulo}</h1>
+          {descripcion && <p className="mt-1 text-sm text-gris-500">{descripcion}</p>}
         </div>
         {acciones && <div className="flex flex-wrap gap-2">{acciones}</div>}
       </div>
@@ -44,11 +44,11 @@ export function Tarjeta({
 }) {
   return (
     <section
-      className={`rounded-2xl border border-tierra-200/80 bg-papel shadow-[0_1px_2px_rgba(61,49,40,0.05),0_4px_16px_-8px_rgba(61,49,40,0.10)] ${className}`}
+      className={`rounded-2xl border border-gris-200/80 bg-papel shadow-[0_1px_2px_rgba(24,36,54,0.05),0_4px_16px_-8px_rgba(24,36,54,0.10)] ${className}`}
     >
       {titulo && (
-        <header className="flex items-center justify-between gap-2 border-b border-tierra-100 px-4 py-3">
-          <h2 className="font-display text-[15px] font-semibold text-tierra-900">{titulo}</h2>
+        <header className="flex items-center justify-between gap-2 border-b border-gris-100 px-4 py-3">
+          <h2 className="font-display text-[15px] font-semibold text-gris-900">{titulo}</h2>
           {acciones}
         </header>
       )}
@@ -59,11 +59,11 @@ export function Tarjeta({
 
 type Tono = "gris" | "verde" | "rojo" | "ambar" | "azul" | "acento";
 const tonos: Record<Tono, string> = {
-  gris: "bg-tierra-100 text-tierra-700 ring-tierra-300/60",
+  gris: "bg-gris-100 text-gris-700 ring-gris-300/60",
   verde: "bg-oliva-50 text-oliva-700 ring-oliva-600/20",
   rojo: "bg-red-50 text-red-700 ring-red-600/20",
   ambar: "bg-amber-50 text-amber-800 ring-amber-600/25",
-  azul: "bg-tierra-200/70 text-tierra-800 ring-tierra-400/30", // café: ventas, vendedores
+  azul: "bg-acento-100/70 text-acento-800 ring-acento-400/30", // ventas, vendedores
   acento: "bg-acento-50 text-acento-800 ring-acento-600/20",
 };
 
@@ -80,8 +80,8 @@ export function Etiqueta({ tono = "gris", children }: { tono?: Tono; children: R
 export function Vacio({ titulo, texto, accion }: { titulo: string; texto?: string; accion?: ReactNode }) {
   return (
     <div className="px-6 py-12 text-center">
-      <p className="font-medium text-tierra-800">{titulo}</p>
-      {texto && <p className="mt-1 text-sm text-tierra-500">{texto}</p>}
+      <p className="font-medium text-gris-800">{titulo}</p>
+      {texto && <p className="mt-1 text-sm text-gris-500">{texto}</p>}
       {accion && <div className="mt-4">{accion}</div>}
     </div>
   );
@@ -114,7 +114,7 @@ export function Campo({
       {error ? (
         <p className="mt-1 text-xs text-red-600">{error}</p>
       ) : ayuda ? (
-        <p className="mt-1 text-xs text-tierra-500">{ayuda}</p>
+        <p className="mt-1 text-xs text-gris-500">{ayuda}</p>
       ) : null}
     </div>
   );
@@ -135,8 +135,8 @@ export function Aviso({ tipo, children }: { tipo: "error" | "ok"; children: Reac
 export function Dato({ etiqueta, children }: { etiqueta: string; children: ReactNode }) {
   return (
     <div>
-      <dt className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">{etiqueta}</dt>
-      <dd className="mt-0.5 text-sm text-tierra-900">{children || <span className="text-tierra-400">—</span>}</dd>
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gris-500">{etiqueta}</dt>
+      <dd className="mt-0.5 text-sm text-gris-900">{children || <span className="text-gris-400">—</span>}</dd>
     </div>
   );
 }

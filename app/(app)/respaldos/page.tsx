@@ -52,7 +52,7 @@ export default async function RespaldosPage() {
         </div>
       )}
 
-      <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+      <div className="mb-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
         <Tarjeta titulo="Estado" className="self-start">
           <dl className="grid grid-cols-2 gap-4 p-4">
             <Dato etiqueta="Último respaldo">{ultimo ? fecha(ultimo) : <span className="text-red-700">Nunca</span>}</Dato>
@@ -65,7 +65,7 @@ export default async function RespaldosPage() {
             <Dato etiqueta="Se conservan">Los últimos {ajustes.conservar}</Dato>
             <Dato etiqueta="Respaldos guardados">{lista.length}</Dato>
           </dl>
-          <div className="border-t border-tierra-100 p-4">
+          <div className="border-t border-gris-100 p-4">
             <BotonRespaldarAhora />
           </div>
         </Tarjeta>
@@ -82,7 +82,7 @@ export default async function RespaldosPage() {
         </Tarjeta>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         <Tarjeta titulo="Respaldos guardados" className="self-start overflow-hidden">
           {lista.length === 0 ? (
             <Vacio titulo="Todavía no hay respaldos" texto="Crea el primero con «Respaldar ahora»." />
@@ -104,7 +104,7 @@ export default async function RespaldosPage() {
                       <td className={tdCls}>
                         <Etiqueta tono={TONO[r.tipo]}>{TIPOS_RESPALDO[r.tipo]}</Etiqueta>
                       </td>
-                      <td className={`${tdCls} tabular whitespace-nowrap text-right text-tierra-600`}>{tamano(r.bytes)}</td>
+                      <td className={`${tdCls} tabular whitespace-nowrap text-right text-gris-600`}>{tamano(r.bytes)}</td>
                       <td className={`${tdCls} text-right`}>
                         <div className="flex items-start justify-end gap-1.5">
                           <a href={`/api/respaldos/${encodeURIComponent(r.archivo)}`} className={`${btnSecundario} ${btnChico}`} download>
@@ -124,7 +124,7 @@ export default async function RespaldosPage() {
         <div className="space-y-6 self-start">
           <TarjetaRestaurarArchivo />
           <Tarjeta titulo="¿Qué incluye un respaldo?">
-            <ul className="list-disc space-y-1 py-4 pl-9 pr-4 text-sm text-tierra-700">
+            <ul className="list-disc space-y-1 py-4 pl-9 pr-4 text-sm text-gris-700">
               <li>Productos, catálogos, stock y movimientos.</li>
               <li>Ventas, devoluciones, entradas, ajustes y cierres de caja.</li>
               <li>Usuarios (con sus contraseñas cifradas) y configuración del negocio.</li>

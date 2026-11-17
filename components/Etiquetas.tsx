@@ -80,7 +80,7 @@ export function Etiquetas({ inicial }: { inicial: { producto: ProductoEtiqueta; 
         }
       `}</style>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px] print:hidden">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px] print:hidden">
         <div className="space-y-4">
           <BuscadorProductos onElegir={(p) => agregar(p)} precio="venta" placeholder="Buscar producto para agregar etiquetas…" />
           <div className="flex flex-wrap gap-2">
@@ -114,12 +114,12 @@ export function Etiquetas({ inicial }: { inicial: { producto: ProductoEtiqueta; 
                     {items.map((x, i) => (
                       <tr key={x.producto.id}>
                         <td className={tdCls}>
-                          <p className="font-medium text-tierra-900">{x.producto.nombre}</p>
-                          <p className="text-xs text-tierra-500">
+                          <p className="font-medium text-gris-900">{x.producto.nombre}</p>
+                          <p className="text-xs text-gris-500">
                             {dinero(x.producto.precio_venta)} · stock {cantidad(x.producto.stock)}
                           </p>
                         </td>
-                        <td className={`${tdCls} font-mono text-xs text-tierra-600`}>{valorCodigoBarras(x.producto)}</td>
+                        <td className={`${tdCls} font-mono text-xs text-gris-600`}>{valorCodigoBarras(x.producto)}</td>
                         <td className={tdCls}>
                           <input
                             type="number"
@@ -159,7 +159,7 @@ export function Etiquetas({ inicial }: { inicial: { producto: ProductoEtiqueta; 
             <Campo label="Saltar etiquetas ya usadas" htmlFor="saltar" ayuda="Para aprovechar una hoja usada: cuántas etiquetas del inicio faltan.">
               <input id="saltar" type="number" min="0" max={porHoja - 1} value={saltar} onChange={(e) => setSaltar(e.target.value)} className={`${inputCls} tabular`} />
             </Campo>
-            <div className="space-y-1.5 text-sm text-tierra-700">
+            <div className="space-y-1.5 text-sm text-gris-700">
               <label className="flex items-center gap-2">
                 <input type="checkbox" checked={conNombre} onChange={(e) => setConNombre(e.target.checked)} className="accent-acento-700" />
                 Mostrar el nombre
@@ -169,13 +169,13 @@ export function Etiquetas({ inicial }: { inicial: { producto: ProductoEtiqueta; 
                 Mostrar el precio
               </label>
             </div>
-            <p className="border-t border-tierra-100 pt-3 text-sm text-tierra-600">
+            <p className="border-t border-gris-100 pt-3 text-sm text-gris-600">
               {total} {total === 1 ? "etiqueta" : "etiquetas"} · {hojas.length} {hojas.length === 1 ? "hoja" : "hojas"}
             </p>
             <button onClick={() => window.print()} disabled={total === 0} className={`${btnPrimario} w-full !py-2.5`}>
               🖨 Imprimir
             </button>
-            <p className="text-xs text-tierra-500">
+            <p className="text-xs text-gris-500">
               En la ventana de impresión elige escala «100 %» (o «Tamaño real») y sin márgenes. Prueba primero en una hoja común.
             </p>
           </div>
@@ -184,8 +184,8 @@ export function Etiquetas({ inicial }: { inicial: { producto: ProductoEtiqueta; 
 
       {total > 0 && (
         <>
-          <h2 className="mb-3 mt-8 text-sm font-semibold uppercase tracking-wide text-tierra-500 print:hidden">Vista previa</h2>
-          <div className="hojas-etiquetas flex flex-col items-start gap-6 overflow-x-auto rounded-xl bg-tierra-200/60 p-4">
+          <h2 className="mb-3 mt-8 text-sm font-semibold uppercase tracking-wide text-gris-500 print:hidden">Vista previa</h2>
+          <div className="hojas-etiquetas flex flex-col items-start gap-6 overflow-x-auto rounded-xl bg-gris-200/60 p-4">
             {hojas.map((hoja, h) => (
               <div
                 key={h}
@@ -198,7 +198,7 @@ export function Etiquetas({ inicial }: { inicial: { producto: ProductoEtiqueta; 
                   return (
                     <div
                       key={k}
-                      className="etiqueta absolute flex flex-col items-center justify-center overflow-hidden text-center text-black outline outline-1 outline-dashed outline-tierra-200"
+                      className="etiqueta absolute flex flex-col items-center justify-center overflow-hidden text-center text-black outline outline-1 outline-dashed outline-gris-200"
                       style={{
                         left: `${formato.margenIzq + col * (formato.ancho + formato.espacioX)}mm`,
                         top: `${formato.margenSup + fila * (formato.alto + formato.espacioY)}mm`,

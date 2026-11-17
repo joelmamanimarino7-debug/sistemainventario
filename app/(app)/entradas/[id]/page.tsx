@@ -46,7 +46,7 @@ export default async function EntradaPage({
           <Aviso tipo="ok">Entrada registrada. El stock de los productos ya se actualizó.</Aviso>
         </div>
       )}
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
         <Tarjeta className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
@@ -65,8 +65,8 @@ export default async function EntradaPage({
                       <Link href={`/productos/${d.producto_id}`} className="group flex items-center gap-3">
                         <Miniatura imagen={d.imagen} alt="" tam={40} className="print:hidden" />
                         <span>
-                          <span className="block font-medium text-tierra-900 group-hover:text-acento-700">{d.producto}</span>
-                          <span className="block font-mono text-xs text-tierra-500">{d.codigo}</span>
+                          <span className="block font-medium text-gris-900 group-hover:text-acento-700">{d.producto}</span>
+                          <span className="block font-mono text-xs text-gris-500">{d.codigo}</span>
                         </span>
                       </Link>
                     </td>

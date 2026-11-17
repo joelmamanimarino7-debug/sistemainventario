@@ -178,7 +178,7 @@ export function EscanerCamara({
               {linterna.encendida ? "Apagar luz" : "Luz"}
             </button>
           )}
-          <button onClick={onCerrar} className="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-tierra-900">
+          <button onClick={onCerrar} className="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-gris-900">
             Listo
           </button>
         </div>

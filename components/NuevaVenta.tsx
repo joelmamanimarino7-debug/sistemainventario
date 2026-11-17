@@ -129,7 +129,7 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
       <div className="space-y-4">
         {exito && (
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-oliva-600/25 bg-oliva-50 px-4 py-3">
@@ -160,7 +160,64 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
           {renglones.length === 0 ? (
             <Vacio titulo="Carrito vacío" texto="Busca productos arriba o escanea su código de barras para agregarlos." />
           ) : (
-            <div className="overflow-x-auto">
+            <>
+            {/* Celular: cada producto como tarjeta, con todo a la vista (sin deslizar la tabla) */}
+            <ul className="divide-y divide-gris-100 sm:hidden">
+              {renglones.map((r, i) => {
+                const cant = Number(r.cantidad) || 0;
+                const importe = Math.round(cant * (aCentavos(r.precio) ?? 0));
+                const falta = cant > r.producto.stock;
+                return (
+                  <li key={r.producto.id} className={`space-y-3 p-3 ${falta ? "bg-red-50/50" : ""}`}>
+                    <div className="flex items-start gap-3">
+                      <Miniatura imagen={r.producto.imagen} alt="" tam={48} />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium leading-snug text-gris-900">{r.producto.nombre}</p>
+                        <p className={`text-xs ${falta ? "font-medium text-red-600" : "text-gris-500"}`}>
+                          <span className="font-mono">{r.producto.codigo}</span> · Disponible {cantidad(r.producto.stock)}{" "}
+                          {nombreUnidad(r.producto.stock, r.producto.unidad)}
+                        </p>
+                      </div>
+                      <button onClick={() => quitar(i)} className={`${btnFantasma} !px-2`} aria-label={`Quitar ${r.producto.nombre}`}>
+                        ✕
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      {puedeCambiarPrecio ? (
+                        <input
+                          inputMode="decimal"
+                          value={r.precio}
+                          onChange={(e) => cambiar(i, "precio", e.target.value)}
+                          className={`${inputCls} tabular !w-[5.5rem] !px-2 text-right`}
+                          aria-label={`Precio de ${r.producto.nombre}`}
+                        />
+                      ) : (
+                        <span className="tabular w-[5.5rem] text-sm text-gris-600">{dinero(aCentavos(r.precio) ?? 0)}</span>
+                      )}
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => sumar(i, -1)} className={`${btnSecundario} !px-2`} aria-label="Restar uno">
+                          −
+                        </button>
+                        <input
+                          type="number"
+                          min="0"
+                          step="any"
+                          value={r.cantidad}
+                          onChange={(e) => cambiar(i, "cantidad", e.target.value)}
+                          className={`${inputCls} tabular !w-11 !px-1 text-center`}
+                          aria-label={`Cantidad de ${r.producto.nombre}`}
+                        />
+                        <button onClick={() => sumar(i, 1)} className={`${btnSecundario} !px-2`} aria-label="Sumar uno">
+                          +
+                        </button>
+                      </div>
+                      <span className="tabular ml-auto whitespace-nowrap text-sm font-semibold">{dinero(importe)}</span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="hidden overflow-x-auto sm:block">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr>
@@ -182,8 +239,8 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                           <div className="flex items-center gap-3">
                             <Miniatura imagen={r.producto.imagen} alt="" tam={44} />
                             <div className="min-w-0">
-                              <p className="font-medium text-tierra-900">{r.producto.nombre}</p>
-                          <p className={`text-xs ${falta ? "font-medium text-red-600" : "text-tierra-500"}`}>
+                              <p className="font-medium text-gris-900">{r.producto.nombre}</p>
+                          <p className={`text-xs ${falta ? "font-medium text-red-600" : "text-gris-500"}`}>
                             <span className="font-mono">{r.producto.codigo}</span> · Disponible {cantidad(r.producto.stock)}{" "}
                             {nombreUnidad(r.producto.stock, r.producto.unidad)}
                           </p>
@@ -232,6 +289,7 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </Tarjeta>
       </div>
@@ -239,11 +297,11 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
       <Tarjeta titulo="Cobro" className="self-start xl:sticky xl:top-6">
         <div className="space-y-4 p-4">
           <div className="space-y-1 text-sm">
-            <div className="flex justify-between text-tierra-600">
+            <div className="flex justify-between text-gris-600">
               <span>Subtotal</span>
               <span className="tabular">{dinero(subtotal)}</span>
             </div>
-            <div className="flex items-center justify-between gap-3 text-tierra-600">
+            <div className="flex items-center justify-between gap-3 text-gris-600">
               <label htmlFor="descuento">Descuento</label>
               <input
                 id="descuento"
@@ -254,14 +312,14 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                 className={`${inputCls} tabular !w-28 !py-1 text-right`}
               />
             </div>
-            <div className="flex items-baseline justify-between border-t border-tierra-100 pt-3">
+            <div className="flex items-baseline justify-between border-t border-gris-100 pt-3">
               <span className="font-semibold">Total</span>
-              <span className="tabular font-display text-3xl font-semibold text-tierra-900">{dinero(total)}</span>
+              <span className="tabular font-display text-3xl font-semibold text-gris-900">{dinero(total)}</span>
             </div>
           </div>
 
           <fieldset>
-            <legend className="mb-1.5 text-sm font-medium text-tierra-700">Método de pago</legend>
+            <legend className="mb-1.5 text-sm font-medium text-gris-700">Método de pago</legend>
             <div className="grid grid-cols-2 gap-1.5">
               {METODOS_PAGO.map((m) => (
                 <button
@@ -272,7 +330,7 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                   className={`rounded-lg border px-3 py-2 text-sm font-medium ${
                     metodo === m.valor
                       ? "border-acento-700 bg-acento-50 text-acento-800"
-                      : "border-tierra-200 text-tierra-600 hover:bg-tierra-50"
+                      : "border-gris-200 text-gris-600 hover:bg-gris-50"
                   }`}
                 >
                   {m.etiqueta}
@@ -294,10 +352,10 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                 />
               </Campo>
               <div>
-                <p className="mb-1 text-sm font-medium text-tierra-700">Cambio</p>
+                <p className="mb-1 text-sm font-medium text-gris-700">Cambio</p>
                 <p
-                  className={`tabular rounded-lg bg-tierra-50 px-3 py-2 text-right text-sm font-semibold ${
-                    cambio != null && cambio < 0 ? "text-red-600" : "text-tierra-900"
+                  className={`tabular rounded-lg bg-gris-50 px-3 py-2 text-right text-sm font-semibold ${
+                    cambio != null && cambio < 0 ? "text-red-600" : "text-gris-900"
                   }`}
                 >
                   {cambio == null ? "—" : dinero(cambio)}
@@ -313,7 +371,7 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
             <input id="nota_venta" value={nota} onChange={(e) => setNota(e.target.value)} className={inputCls} />
           </Campo>
 
-          <label className="flex items-center gap-2 text-sm text-tierra-600">
+          <label className="flex items-center gap-2 text-sm text-gris-600">
             <input
               type="checkbox"
               checked={imprimirAuto}

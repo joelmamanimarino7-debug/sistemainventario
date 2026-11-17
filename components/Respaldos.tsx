@@ -57,7 +57,7 @@ export function FormAjustesRespaldo({
 
       {sugerencias.length > 0 && (
         <div>
-          <p className="mb-1.5 text-xs font-medium text-tierra-600">Lugares encontrados en esta computadora:</p>
+          <p className="mb-1.5 text-xs font-medium text-gris-600">Lugares encontrados en esta computadora:</p>
           <div className="flex flex-wrap gap-1.5">
             {sugerencias.map((s) => (
               <button
@@ -68,7 +68,7 @@ export function FormAjustesRespaldo({
                 className={`${btnSecundario} ${btnChico} ${ruta === s.ruta ? "!border-acento-500 !bg-acento-50 !text-acento-800" : ""}`}
               >
                 {s.nombre}
-                <span className="font-normal text-tierra-500">· {s.detalle}</span>
+                <span className="font-normal text-gris-500">· {s.detalle}</span>
               </button>
             ))}
             <button type="button" onClick={() => setRuta("")} className={`${btnSecundario} ${btnChico} ${ruta === "" ? "!border-acento-500 !bg-acento-50 !text-acento-800" : ""}`}>
@@ -90,14 +90,14 @@ export function FormAjustesRespaldo({
               defaultValue={conservar}
               className={`${inputCls} tabular !w-24`}
             />
-            <span className="text-sm text-tierra-600">respaldos</span>
+            <span className="text-sm text-gris-600">respaldos</span>
           </div>
         </Campo>
-        <label className="flex items-start gap-2 pt-6 text-sm text-tierra-700">
+        <label className="flex items-start gap-2 pt-6 text-sm text-gris-700">
           <input type="checkbox" name="automatico" value="1" defaultChecked={automatico} className="mt-0.5 accent-acento-600" />
           <span>
             Respaldo automático diario
-            <span className="block text-xs text-tierra-500">Y también cada vez que se cierra la caja.</span>
+            <span className="block text-xs text-gris-500">Y también cada vez que se cierra la caja.</span>
           </span>
         </label>
       </div>
@@ -176,14 +176,14 @@ export function RestaurarDesdeArchivo() {
 
   return (
     <div className="space-y-3 p-4">
-      <p className="text-sm text-tierra-600">
+      <p className="text-sm text-gris-600">
         Para pasar los datos a otra computadora o recuperar un respaldo guardado en un USB o en la nube.
       </p>
       <input
         ref={input}
         type="file"
         accept=".zip,application/zip"
-        className="block w-full text-sm text-tierra-700 file:mr-3 file:rounded-lg file:border file:border-tierra-300 file:bg-papel file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-tierra-800 hover:file:bg-tierra-50"
+        className="block w-full text-sm text-gris-700 file:mr-3 file:rounded-lg file:border file:border-gris-300 file:bg-papel file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-gris-800 hover:file:bg-gris-50"
         onChange={(e) => {
           setRes(null);
           setNombre(e.target.files?.[0]?.name ?? null);

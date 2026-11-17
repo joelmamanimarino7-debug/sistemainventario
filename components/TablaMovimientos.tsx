@@ -61,13 +61,13 @@ export function TablaMovimientos({ movimientos, conProducto = true }: { movimien
         <tbody>
           {movimientos.map((m) => (
             <tr key={m.id}>
-              <td className={`${tdCls} whitespace-nowrap text-tierra-600`}>{fecha(m.creado_en)}</td>
+              <td className={`${tdCls} whitespace-nowrap text-gris-600`}>{fecha(m.creado_en)}</td>
               {conProducto && (
                 <td className={tdCls}>
-                  <Link href={`/productos/${m.producto_id}`} className="font-medium text-tierra-900 hover:text-acento-700">
+                  <Link href={`/productos/${m.producto_id}`} className="font-medium text-gris-900 hover:text-acento-700">
                     {m.producto}
                   </Link>
-                  <div className="text-xs text-tierra-500">{m.codigo}</div>
+                  <div className="text-xs text-gris-500">{m.codigo}</div>
                 </td>
               )}
               <td className={tdCls}>
@@ -81,13 +81,13 @@ export function TablaMovimientos({ movimientos, conProducto = true }: { movimien
                 {m.cantidad > 0 ? "+" : ""}
                 {cantidad(m.cantidad)}
               </td>
-              <td className={`${tdCls} tabular whitespace-nowrap text-right text-tierra-600`}>
-                {cantidad(m.stock_anterior)} → <span className="font-medium text-tierra-900">{cantidad(m.stock_resultante)}</span>
+              <td className={`${tdCls} tabular whitespace-nowrap text-right text-gris-600`}>
+                {cantidad(m.stock_anterior)} → <span className="font-medium text-gris-900">{cantidad(m.stock_resultante)}</span>
               </td>
               <td className={tdCls}>
                 <Referencia m={m} />
-                {m.nota && <div className="text-xs text-tierra-500">{m.nota}</div>}
-                {m.usuario && <div className="text-xs text-tierra-400">por {m.usuario}</div>}
+                {m.nota && <div className="text-xs text-gris-500">{m.nota}</div>}
+                {m.usuario && <div className="text-xs text-gris-400">por {m.usuario}</div>}
               </td>
             </tr>
           ))}

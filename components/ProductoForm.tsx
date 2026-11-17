@@ -117,7 +117,7 @@ export function ProductoForm({
             </select>
           </Campo>
           {(categorias.length === 0 || marcas.length === 0) && (
-            <p className="text-xs text-tierra-500 sm:col-span-2">
+            <p className="text-xs text-gris-500 sm:col-span-2">
               Puedes dar de alta categorías, marcas y proveedores en{" "}
               <Link href="/categorias" className="text-acento-700 underline">
                 Catálogos
@@ -184,12 +184,12 @@ export function ProductoForm({
               className={`${inputCls} tabular`}
             />
           </Campo>
-          <div className="rounded-lg bg-tierra-50 px-4 py-3 text-sm">
-            <p className="text-xs font-medium uppercase tracking-wide text-tierra-500">Ganancia por unidad</p>
-            <p className={`tabular mt-1 text-lg font-semibold ${ganancia < 0 ? "text-red-600" : "text-tierra-900"}`}>
+          <div className="rounded-lg bg-gris-50 px-4 py-3 text-sm">
+            <p className="text-xs font-medium uppercase tracking-wide text-gris-500">Ganancia por unidad</p>
+            <p className={`tabular mt-1 text-lg font-semibold ${ganancia < 0 ? "text-red-600" : "text-gris-900"}`}>
               {dinero(ganancia)}
             </p>
-            <p className="tabular text-xs text-tierra-500">Margen {cantidad(Math.round(margen * 10) / 10)}%</p>
+            <p className="tabular text-xs text-gris-500">Margen {cantidad(Math.round(margen * 10) / 10)}%</p>
             {ganancia < 0 && <p className="mt-1 text-xs text-red-600">El precio de venta es menor que el costo.</p>}
           </div>
         </div>
@@ -208,7 +208,7 @@ export function ProductoForm({
           </Campo>
           {p ? (
             <Campo label="Stock actual" ayuda="Se cambia con entradas y ventas.">
-              <div className={`${inputCls} tabular bg-tierra-50`}>
+              <div className={`${inputCls} tabular bg-gris-50`}>
                 {cantidad(p.stock)} {nombreUnidad(p.stock, p.unidad)}
               </div>
             </Campo>
@@ -234,7 +234,7 @@ export function ProductoForm({
         </div>
       </Tarjeta>
 
-      <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-end gap-2 border-t border-tierra-200 bg-papel/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-xl sm:border">
+      <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-end gap-2 border-t border-gris-200 bg-papel/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-xl sm:border">
         {estado.error && (
           <div className="mr-auto">
             <Aviso tipo="error">{estado.error}</Aviso>

@@ -23,13 +23,13 @@ export default async function ImportarPage() {
         volver={{ href: "/productos", texto: "Productos" }}
       />
 
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-tierra-500">Descargar en Excel</h2>
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gris-500">Descargar en Excel</h2>
       <div className="mb-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {DESCARGAS.map((d) => (
           <Tarjeta key={d.href} className="flex flex-col justify-between gap-3 p-4">
             <div>
-              <p className="font-medium text-tierra-900">{d.titulo}</p>
-              <p className="mt-1 text-sm text-tierra-500">{d.texto}</p>
+              <p className="font-medium text-gris-900">{d.titulo}</p>
+              <p className="mt-1 text-sm text-gris-500">{d.texto}</p>
             </div>
             <a href={d.href} download className={`${btnSecundario} self-start`}>
               ⇩ Descargar
@@ -38,7 +38,7 @@ export default async function ImportarPage() {
         ))}
       </div>
 
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-tierra-500">Importar productos</h2>
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gris-500">Importar productos</h2>
       <ImportarProductos />
     </>
   );

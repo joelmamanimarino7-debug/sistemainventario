@@ -25,9 +25,9 @@ type SP = { periodo?: string; desde?: string; hasta?: string };
 function Indicador({ titulo, valor, detalle, tono }: { titulo: string; valor: string; detalle?: string; tono?: "rojo" }) {
   return (
     <Tarjeta className="p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">{titulo}</p>
-      <p className={`tabular mt-1.5 font-display text-[1.65rem] font-semibold leading-tight ${tono === "rojo" ? "text-red-700" : "text-tierra-900"}`}>{valor}</p>
-      {detalle && <p className="tabular mt-0.5 text-xs text-tierra-500">{detalle}</p>}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gris-500">{titulo}</p>
+      <p className={`tabular mt-1.5 font-display text-[1.65rem] font-semibold leading-tight ${tono === "rojo" ? "text-red-700" : "text-gris-900"}`}>{valor}</p>
+      {detalle && <p className="tabular mt-0.5 text-xs text-gris-500">{detalle}</p>}
     </Tarjeta>
   );
 }
@@ -36,7 +36,7 @@ function Indicador({ titulo, valor, detalle, tono }: { titulo: string; valor: st
 function Barra({ valor, max }: { valor: number; max: number }) {
   const ancho = max > 0 ? Math.max(0, Math.round((valor / max) * 100)) : 0;
   return (
-    <div className="h-1.5 w-full rounded-full bg-tierra-100">
+    <div className="h-1.5 w-full rounded-full bg-gris-100">
       <div className="h-1.5 rounded-full bg-acento-600" style={{ width: `${ancho}%` }} />
     </div>
   );
@@ -86,7 +86,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
               key={p.valor}
               href={`/reportes?periodo=${p.valor}`}
               className={`rounded-full px-3 py-1.5 text-sm ${
-                periodo.clave === p.valor ? "bg-tierra-800 text-tierra-50" : "bg-papel text-tierra-700 ring-1 ring-tierra-200 hover:bg-tierra-50"
+                periodo.clave === p.valor ? "bg-gris-800 text-gris-50" : "bg-papel text-gris-700 ring-1 ring-gris-200 hover:bg-gris-50"
               }`}
             >
               {p.texto}
@@ -94,11 +94,11 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
           ))}
         </nav>
         <form method="get" className="flex flex-wrap items-end gap-2 sm:ml-auto">
-          <label className="text-sm text-tierra-600">
+          <label className="text-sm text-gris-600">
             Desde
             <input type="date" name="desde" defaultValue={periodo.desde} className={`${inputCls} mt-1`} />
           </label>
-          <label className="text-sm text-tierra-600">
+          <label className="text-sm text-gris-600">
             Hasta
             <input type="date" name="hasta" defaultValue={periodo.hasta} className={`${inputCls} mt-1`} />
           </label>
@@ -133,7 +133,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
 
       <Tarjeta titulo={serie.porMes ? "Ventas netas por mes" : "Ventas netas por día"} className="mb-6">
         {r.ventas === 0 && r.devoluciones === 0 ? (
-          <p className="px-4 py-10 text-center text-sm text-tierra-500">No hubo ventas en este periodo.</p>
+          <p className="px-4 py-10 text-center text-sm text-gris-500">No hubo ventas en este periodo.</p>
         ) : (
           <div className="overflow-x-auto">
             <div className="flex h-52 min-w-full items-end gap-1 px-4 pb-3 pt-6" style={{ minWidth: serie.puntos.length * 14 }}>
@@ -146,8 +146,8 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
                       style={{ height: `${alto}%` }}
                       title={`${p.etiqueta}: ${dinero(p.netas)} · ${p.ventas} ventas · ganancia ${dinero(p.ganancia)}`}
                     />
-                    {p.netas <= 0 && <div className="h-0.5 w-full max-w-10 rounded bg-tierra-200" />}
-                    <span className="h-4 whitespace-nowrap text-[10px] text-tierra-500">
+                    {p.netas <= 0 && <div className="h-0.5 w-full max-w-10 rounded bg-gris-200" />}
+                    <span className="h-4 whitespace-nowrap text-[10px] text-gris-500">
                       {i % cadaCuanto === 0 ? p.etiqueta : ""}
                     </span>
                   </div>
@@ -161,19 +161,19 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
       <div className="mb-6 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         <Tarjeta titulo="Por método de pago" className="self-start">
           {metodos.length === 0 ? (
-            <p className="px-4 py-6 text-center text-sm text-tierra-500">Sin ventas.</p>
+            <p className="px-4 py-6 text-center text-sm text-gris-500">Sin ventas.</p>
           ) : (
-            <ul className="divide-y divide-tierra-100">
+            <ul className="divide-y divide-gris-100">
               {metodos.map((m) => (
                 <li key={m.metodo} className="space-y-1.5 px-4 py-3 text-sm">
                   <div className="flex justify-between gap-2">
-                    <span className="font-medium text-tierra-800">{etiquetaMetodo(m.metodo)}</span>
-                    <span className="tabular text-tierra-600">
+                    <span className="font-medium text-gris-800">{etiquetaMetodo(m.metodo)}</span>
+                    <span className="tabular text-gris-600">
                       {dinero(m.total)} · {totalMetodos > 0 ? Math.round((m.total / totalMetodos) * 100) : 0}%
                     </span>
                   </div>
                   <Barra valor={m.total} max={totalMetodos} />
-                  <p className="text-xs text-tierra-500">
+                  <p className="text-xs text-gris-500">
                     {m.ventas} {m.ventas === 1 ? "venta" : "ventas"}
                   </p>
                 </li>
@@ -184,17 +184,17 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
 
         <Tarjeta titulo="Por vendedor" className="self-start">
           {vendedores.length === 0 ? (
-            <p className="px-4 py-6 text-center text-sm text-tierra-500">Sin ventas.</p>
+            <p className="px-4 py-6 text-center text-sm text-gris-500">Sin ventas.</p>
           ) : (
-            <ul className="divide-y divide-tierra-100">
+            <ul className="divide-y divide-gris-100">
               {vendedores.map((x) => (
                 <li key={x.vendedor} className="space-y-1.5 px-4 py-3 text-sm">
                   <div className="flex justify-between gap-2">
-                    <span className="font-medium text-tierra-800">{x.vendedor}</span>
-                    <span className="tabular text-tierra-600">{dinero(x.total)}</span>
+                    <span className="font-medium text-gris-800">{x.vendedor}</span>
+                    <span className="tabular text-gris-600">{dinero(x.total)}</span>
                   </div>
                   <Barra valor={x.total} max={maxVendedor} />
-                  <p className="tabular text-xs text-tierra-500">
+                  <p className="tabular text-xs text-gris-500">
                     {x.ventas} {x.ventas === 1 ? "venta" : "ventas"} · ganancia {dinero(x.ganancia)}
                   </p>
                 </li>
@@ -205,17 +205,17 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
 
         <Tarjeta titulo="Por categoría" className="self-start">
           {categorias.length === 0 ? (
-            <p className="px-4 py-6 text-center text-sm text-tierra-500">Sin ventas.</p>
+            <p className="px-4 py-6 text-center text-sm text-gris-500">Sin ventas.</p>
           ) : (
-            <ul className="divide-y divide-tierra-100">
+            <ul className="divide-y divide-gris-100">
               {categorias.map((c) => (
                 <li key={c.categoria} className="space-y-1.5 px-4 py-3 text-sm">
                   <div className="flex justify-between gap-2">
-                    <span className="font-medium text-tierra-800">{c.categoria}</span>
-                    <span className="tabular text-tierra-600">{dinero(c.importe)}</span>
+                    <span className="font-medium text-gris-800">{c.categoria}</span>
+                    <span className="tabular text-gris-600">{dinero(c.importe)}</span>
                   </div>
                   <Barra valor={c.importe} max={maxCategoria} />
-                  <p className="tabular text-xs text-tierra-500">
+                  <p className="tabular text-xs text-gris-500">
                     {cantidad(c.vendidos)} vendidos · ganancia {dinero(c.ganancia)}
                   </p>
                 </li>
@@ -244,13 +244,13 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
               <tbody>
                 {productos.map((p, i) => (
                   <tr key={p.id}>
-                    <td className={`${tdCls} text-xs text-tierra-400`}>{i + 1}</td>
+                    <td className={`${tdCls} text-xs text-gris-400`}>{i + 1}</td>
                     <td className={tdCls}>
                       <Link href={`/productos/${p.id}`} className="group flex items-center gap-3">
                         <Miniatura imagen={p.imagen} alt="" tam={36} />
                         <span className="min-w-0">
-                          <span className="block font-medium text-tierra-900 group-hover:text-acento-700">{p.nombre}</span>
-                          <span className="block text-xs text-tierra-500">
+                          <span className="block font-medium text-gris-900 group-hover:text-acento-700">{p.nombre}</span>
+                          <span className="block text-xs text-gris-500">
                             <span className="font-mono">{p.codigo}</span>
                             {p.categoria && ` · ${p.categoria}`}
                           </span>
@@ -260,9 +260,9 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
                     <td className={`${tdCls} tabular whitespace-nowrap text-right`}>
                       {cantidad(p.vendidos)} {nombreUnidad(p.vendidos, p.unidad)}
                     </td>
-                    <td className={`${tdCls} tabular text-right text-tierra-600`}>{p.devueltos > 0 ? cantidad(p.devueltos) : "—"}</td>
+                    <td className={`${tdCls} tabular text-right text-gris-600`}>{p.devueltos > 0 ? cantidad(p.devueltos) : "—"}</td>
                     <td className={`${tdCls} tabular text-right font-medium`}>{dinero(p.importe)}</td>
-                    <td className={`${tdCls} tabular text-right ${p.ganancia < 0 ? "text-red-700" : "text-tierra-600"}`}>
+                    <td className={`${tdCls} tabular text-right ${p.ganancia < 0 ? "text-red-700" : "text-gris-600"}`}>
                       {dinero(p.ganancia)}
                     </td>
                   </tr>
@@ -276,11 +276,11 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
       <div className="grid gap-6 lg:grid-cols-2">
         <Tarjeta
           titulo={`Sin ventas en el periodo (${sinVentas.length})`}
-          acciones={sinVentas.length > 0 && <span className="tabular text-xs text-tierra-500">{dinero(valorQuieto)} a costo</span>}
+          acciones={sinVentas.length > 0 && <span className="tabular text-xs text-gris-500">{dinero(valorQuieto)} a costo</span>}
           className="self-start overflow-hidden"
         >
           {sinVentas.length === 0 ? (
-            <p className="px-4 py-6 text-center text-sm text-tierra-500">Todos los productos con stock tuvieron ventas.</p>
+            <p className="px-4 py-6 text-center text-sm text-gris-500">Todos los productos con stock tuvieron ventas.</p>
           ) : (
             <div className="max-h-96 overflow-auto">
               <table className="w-full text-left text-sm">
@@ -295,17 +295,17 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
                   {sinVentas.map((p) => (
                     <tr key={p.id}>
                       <td className={tdCls}>
-                        <Link href={`/productos/${p.id}`} className="font-medium text-tierra-900 hover:text-acento-700">
+                        <Link href={`/productos/${p.id}`} className="font-medium text-gris-900 hover:text-acento-700">
                           {p.nombre}
                         </Link>
-                        <div className="text-xs text-tierra-500">
+                        <div className="text-xs text-gris-500">
                           {p.ultima_venta ? `Última venta: ${fecha(p.ultima_venta, false)}` : "Nunca se vendió"}
                         </div>
                       </td>
                       <td className={`${tdCls} tabular whitespace-nowrap text-right`}>
                         {cantidad(p.stock)} {nombreUnidad(p.stock, p.unidad)}
                       </td>
-                      <td className={`${tdCls} tabular text-right text-tierra-600`}>{dinero(p.valor)}</td>
+                      <td className={`${tdCls} tabular text-right text-gris-600`}>{dinero(p.valor)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -316,11 +316,11 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
 
         <Tarjeta
           titulo="Inventario actual por categoría"
-          acciones={<span className="tabular text-xs text-tierra-500">{dinero(inv.costo)} a costo</span>}
+          acciones={<span className="tabular text-xs text-gris-500">{dinero(inv.costo)} a costo</span>}
           className="self-start overflow-hidden"
         >
           {inventario.length === 0 ? (
-            <p className="px-4 py-6 text-center text-sm text-tierra-500">Aún no hay productos.</p>
+            <p className="px-4 py-6 text-center text-sm text-gris-500">Aún no hay productos.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
@@ -338,7 +338,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
                       <td className={tdCls}>{c.categoria}</td>
                       <td className={`${tdCls} tabular text-right`}>{c.productos}</td>
                       <td className={`${tdCls} tabular text-right font-medium`}>{dinero(c.valor_costo)}</td>
-                      <td className={`${tdCls} tabular text-right text-tierra-600`}>{dinero(c.valor_venta)}</td>
+                      <td className={`${tdCls} tabular text-right text-gris-600`}>{dinero(c.valor_venta)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -348,7 +348,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
                       Total
                     </td>
                     <td className="tabular px-4 py-3 text-right font-semibold">{dinero(inv.costo)}</td>
-                    <td className="tabular px-4 py-3 text-right text-tierra-600">{dinero(inv.venta)}</td>
+                    <td className="tabular px-4 py-3 text-right text-gris-600">{dinero(inv.venta)}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -357,7 +357,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
         </Tarjeta>
       </div>
 
-      <p className="mt-6 text-xs text-tierra-500">
+      <p className="mt-6 text-xs text-gris-500">
         Las ventas netas descuentan las devoluciones y no incluyen ventas anuladas. La ganancia usa el costo que tenía cada
         producto al momento de venderse.{" "}
         <Link href="/ajustes" className="text-acento-700 hover:underline">

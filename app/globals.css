@@ -1,44 +1,46 @@
 @import "tailwindcss";
 
 /*
-  Tema del sistema: beige, café y naranja.
-  - tierra: neutros cálidos (del beige claro al café oscuro). Textos, bordes y fondos.
-  - acento: naranja terracota. Botones principales, enlaces y elementos activos.
-  - papel: fondo de tarjetas y campos (blanco cálido).
+  Tema del sistema: gris, blanco y azul oscuro (colores del logo de JM Soluciones).
+  - gris: neutros fríos con un leve tinte azul, del gris muy claro al azul marino casi negro
+    (menú lateral). Textos, bordes y fondos.
+  - acento: azul marino del logo (#1f446b). Botones principales, enlaces y elementos activos.
+  - oliva: verde para estados positivos (stock bien, caja que cuadra).
+  - papel: fondo de tarjetas y campos (blanco).
   Para cambiar el tema basta con cambiar estos valores.
 */
 @theme {
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", ui-serif, Georgia, serif;
 
-  --color-tierra-50: #faf6f0;
-  --color-tierra-100: #f3ece2;
-  --color-tierra-200: #e7dccd;
-  --color-tierra-300: #d5c4ad;
-  --color-tierra-400: #b19d84;
-  --color-tierra-500: #8b7763;
-  --color-tierra-600: #6d5b4a;
-  --color-tierra-700: #554537;
-  --color-tierra-800: #3d3128;
-  --color-tierra-900: #2a211b;
-  --color-tierra-950: #1b1511;
+  --color-gris-50: #f5f7fa;
+  --color-gris-100: #edf1f5;
+  --color-gris-200: #dde4ec;
+  --color-gris-300: #c4cfdb;
+  --color-gris-400: #95a3b4;
+  --color-gris-500: #66768a;
+  --color-gris-600: #4c5b6e;
+  --color-gris-700: #384657;
+  --color-gris-800: #263445;
+  --color-gris-900: #182436;
+  --color-gris-950: #0f1826;
 
-  --color-acento-50: #fdf3ea;
-  --color-acento-100: #fbe3cd;
-  --color-acento-200: #f5c59c;
-  --color-acento-300: #eea063;
-  --color-acento-400: #e57f36;
-  --color-acento-500: #d4661c;
-  --color-acento-600: #b95315;
-  --color-acento-700: #974215;
-  --color-acento-800: #7a3718;
-  --color-acento-900: #642f17;
+  --color-acento-50: #eef4fa;
+  --color-acento-100: #d9e7f4;
+  --color-acento-200: #b3cfe8;
+  --color-acento-300: #7fafd6;
+  --color-acento-400: #4a92c8;
+  --color-acento-500: #2f6fa3;
+  --color-acento-600: #24507d;
+  --color-acento-700: #1f446b;
+  --color-acento-800: #193857;
+  --color-acento-900: #142c45;
 
-  --color-oliva-50: #f1f3e6;
-  --color-oliva-600: #5f6e2c;
-  --color-oliva-700: #4b5822;
+  --color-oliva-50: #ecf6f0;
+  --color-oliva-600: #2e7d52;
+  --color-oliva-700: #246541;
 
-  --color-papel: #fffcf8;
+  --color-papel: #ffffff;
 }
 
 :root {
@@ -46,8 +48,8 @@
 }
 
 body {
-  background: #f4ede3;
-  color: var(--color-tierra-900);
+  background: #eef2f6;
+  color: var(--color-gris-900);
 }
 
 h1 {
@@ -56,7 +58,7 @@ h1 {
 
 ::selection {
   background: var(--color-acento-200);
-  color: var(--color-tierra-950);
+  color: var(--color-gris-950);
 }
 
 /* Quita las flechas de los inputs numéricos */

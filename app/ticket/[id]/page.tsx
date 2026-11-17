@@ -27,7 +27,7 @@ export default async function TicketPage({
   const anulada = v.estado === "cancelada";
 
   return (
-    <div className="min-h-screen bg-tierra-100 py-6 print:bg-white print:py-0">
+    <div className="min-h-screen bg-gris-100 py-6 print:bg-white print:py-0">
       <style>{`
         @media print {
           @page { size: 80mm auto; margin: 0; }

@@ -60,24 +60,24 @@ export default async function CierrePage({
 
       <div className="mb-6 grid gap-4 sm:grid-cols-3 print:grid-cols-3">
         <Tarjeta className="p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">Efectivo contado</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gris-500">Efectivo contado</p>
           <p className="tabular mt-1 font-display text-2xl font-semibold">{dinero(c.efectivo_contado)}</p>
-          <p className="tabular mt-0.5 text-xs text-tierra-500">Debería haber {dinero(c.efectivo_esperado)}</p>
+          <p className="tabular mt-0.5 text-xs text-gris-500">Debería haber {dinero(c.efectivo_esperado)}</p>
         </Tarjeta>
         <Tarjeta className="p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">Resultado</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gris-500">Resultado</p>
           <p className="mt-2 text-lg">
             <EtiquetaDiferencia diferencia={c.diferencia ?? 0} />
           </p>
         </Tarjeta>
         <Tarjeta className="p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">Ventas netas del turno</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gris-500">Ventas netas del turno</p>
           <p className="tabular mt-1 font-display text-2xl font-semibold">{dinero(r.totalVentas - r.totalDevoluciones)}</p>
-          <p className="tabular mt-0.5 text-xs text-tierra-500">{r.numVentas} ventas</p>
+          <p className="tabular mt-0.5 text-xs text-gris-500">{r.numVentas} ventas</p>
         </Tarjeta>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] print:block print:space-y-4">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] print:block print:space-y-4">
         <div className="space-y-6">
           <Tarjeta titulo="Por método de pago" className="overflow-hidden">
             <TablaPorMetodo r={r} />
@@ -120,7 +120,7 @@ export default async function CierrePage({
                             </span>
                           )}
                         </td>
-                        <td className={`${tdCls} text-tierra-600`}>{fecha(v.creado_en).slice(-5)}</td>
+                        <td className={`${tdCls} text-gris-600`}>{fecha(v.creado_en).slice(-5)}</td>
                         <td className={tdCls}>{etiquetaMetodo(v.metodo_pago)}</td>
                         <td className={tdCls}>{v.vendedor ?? "—"}</td>
                         <td className={`${tdCls} tabular text-right font-medium`}>{dinero(v.total)}</td>
@@ -135,7 +135,7 @@ export default async function CierrePage({
         <div className="space-y-6">
           <Tarjeta titulo="Efectivo">
             <CuentaEfectivo r={r} />
-            <div className="flex justify-between gap-3 border-t border-tierra-100 px-4 py-3 text-sm">
+            <div className="flex justify-between gap-3 border-t border-gris-100 px-4 py-3 text-sm">
               <span className="font-semibold">Contado</span>
               <span className="tabular font-semibold">{dinero(c.efectivo_contado)}</span>
             </div>

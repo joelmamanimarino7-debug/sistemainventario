@@ -46,15 +46,15 @@ export default async function VentasPage({ searchParams }: { searchParams: Promi
         }
       />
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
-        <label className="text-sm text-tierra-600">
+        <label className="text-sm text-gris-600">
           Desde
           <input type="date" name="desde" defaultValue={sp.desde} className={`${inputCls} mt-1`} />
         </label>
-        <label className="text-sm text-tierra-600">
+        <label className="text-sm text-gris-600">
           Hasta
           <input type="date" name="hasta" defaultValue={sp.hasta} className={`${inputCls} mt-1`} />
         </label>
-        <label className="text-sm text-tierra-600">
+        <label className="text-sm text-gris-600">
           Método
           <select name="metodo" defaultValue={metodo ?? ""} className={`${inputCls} mt-1`}>
             <option value="">Todos</option>
@@ -99,7 +99,7 @@ export default async function VentasPage({ searchParams }: { searchParams: Promi
                 </thead>
                 <tbody>
                   {ventas.map((v) => (
-                    <tr key={v.id} className="hover:bg-tierra-50">
+                    <tr key={v.id} className="hover:bg-gris-50">
                       <td className={tdCls}>
                         <Link href={`/ventas/${v.id}`} className="font-medium text-acento-700 hover:underline">
                           #{v.id}
@@ -116,12 +116,12 @@ export default async function VentasPage({ searchParams }: { searchParams: Promi
                         )}
                       </td>
                       <td className={`${tdCls} whitespace-nowrap`}>{fecha(v.creado_en)}</td>
-                      <td className={tdCls}>{v.cliente ?? <span className="text-tierra-400">—</span>}</td>
+                      <td className={tdCls}>{v.cliente ?? <span className="text-gris-400">—</span>}</td>
                       <td className={tdCls}>{etiquetaMetodo(v.metodo_pago)}</td>
                       <td className={`${tdCls} tabular text-right`}>{cantidad(v.unidades)}</td>
                       <td className={`${tdCls} tabular text-right font-medium`}>{dinero(v.total)}</td>
                       {admin && (
-                        <td className={`${tdCls} tabular text-right text-tierra-600`}>
+                        <td className={`${tdCls} tabular text-right text-gris-600`}>
                           {v.estado === "cancelada" ? "—" : dinero(v.total - v.costo)}
                         </td>
                       )}

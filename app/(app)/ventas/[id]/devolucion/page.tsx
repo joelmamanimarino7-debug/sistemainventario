@@ -33,7 +33,7 @@ export default async function DevolucionPage({ params }: { params: Promise<{ id:
       {!hayCaja ? (
         <Tarjeta titulo="La caja está cerrada" className="max-w-md">
           <div className="space-y-4 p-4">
-            <p className="text-sm text-tierra-600">
+            <p className="text-sm text-gris-600">
               El dinero de una devolución sale de la caja, así que hay que abrirla primero.
             </p>
             <Link href="/caja" className={btnPrimario}>

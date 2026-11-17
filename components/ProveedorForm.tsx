@@ -35,7 +35,7 @@ export function ProveedorForm({ proveedor }: { proveedor?: Proveedor }) {
             <textarea id="notas" name="notas" rows={3} defaultValue={p?.notas ?? ""} className={inputCls} />
           </Campo>
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-tierra-100 px-5 py-3">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-gris-100 px-5 py-3">
           {estado.error && (
             <div className="mr-auto">
               <Aviso tipo="error">{estado.error}</Aviso>

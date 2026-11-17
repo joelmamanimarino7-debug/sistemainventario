@@ -62,11 +62,11 @@ export function FormMovimientoCaja() {
             aria-checked={tipo === valor}
             onClick={() => setTipo(valor)}
             className={`rounded-lg border px-3 py-2 text-left text-sm ${
-              tipo === valor ? "border-acento-500 bg-acento-50 text-acento-900" : "border-tierra-200 text-tierra-700 hover:bg-tierra-50"
+              tipo === valor ? "border-acento-500 bg-acento-50 text-acento-900" : "border-gris-200 text-gris-700 hover:bg-gris-50"
             }`}
           >
             <span className="block font-medium">{texto}</span>
-            <span className="block text-xs text-tierra-500">{ayuda}</span>
+            <span className="block text-xs text-gris-500">{ayuda}</span>
           </button>
         ))}
       </div>
@@ -126,7 +126,7 @@ export function FormCerrarCaja({ cajaId, esperado }: { cajaId: number; esperado:
       <input type="hidden" name="efectivo_contado" value={contado != null ? centavosAInput(contado) : ""} />
 
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-medium text-tierra-800">¿Cuánto efectivo hay en la caja?</p>
+        <p className="text-sm font-medium text-gris-800">¿Cuánto efectivo hay en la caja?</p>
         <button type="button" onClick={() => setPorBilletes((v) => !v)} className={`${btnFantasma} ${btnChico}`}>
           {porBilletes ? "Escribir el total" : "Contar por billetes y monedas"}
         </button>
@@ -140,12 +140,12 @@ export function FormCerrarCaja({ cajaId, esperado }: { cajaId: number; esperado:
               <label key={d.valor} className="flex items-center gap-2 text-sm">
                 <span
                   className={`w-16 shrink-0 rounded-md px-2 py-1 text-center text-xs font-semibold ${
-                    d.tipo === "billete" ? "bg-oliva-50 text-oliva-700" : "bg-tierra-100 text-tierra-700"
+                    d.tipo === "billete" ? "bg-oliva-50 text-oliva-700" : "bg-gris-100 text-gris-700"
                   }`}
                 >
                   Bs {d.texto}
                 </span>
-                <span className="text-tierra-400">×</span>
+                <span className="text-gris-400">×</span>
                 <input
                   type="number"
                   min={0}
@@ -156,7 +156,7 @@ export function FormCerrarCaja({ cajaId, esperado }: { cajaId: number; esperado:
                   className={`${inputCls} tabular !w-16 !px-2 !py-1 text-center`}
                   aria-label={`Cantidad de ${d.tipo === "billete" ? "billetes" : "monedas"} de ${d.texto} bolivianos`}
                 />
-                {n > 0 && <span className="tabular whitespace-nowrap text-xs text-tierra-500">{dinero(n * d.valor)}</span>}
+                {n > 0 && <span className="tabular whitespace-nowrap text-xs text-gris-500">{dinero(n * d.valor)}</span>}
               </label>
             );
           })}
@@ -172,20 +172,20 @@ export function FormCerrarCaja({ cajaId, esperado }: { cajaId: number; esperado:
         />
       )}
 
-      <div className="space-y-1 rounded-lg bg-tierra-50 px-4 py-3 text-sm">
+      <div className="space-y-1 rounded-lg bg-gris-50 px-4 py-3 text-sm">
         <div className="flex justify-between">
-          <span className="text-tierra-600">Contado</span>
+          <span className="text-gris-600">Contado</span>
           <span className="tabular font-semibold">{contado != null ? dinero(contado) : "—"}</span>
         </div>
         {esperado != null && (
           <>
             <div className="flex justify-between">
-              <span className="text-tierra-600">Debería haber</span>
+              <span className="text-gris-600">Debería haber</span>
               <span className="tabular">{dinero(esperado)}</span>
             </div>
             {diferencia != null && (
-              <div className="flex justify-between border-t border-tierra-200 pt-1">
-                <span className="text-tierra-600">Diferencia</span>
+              <div className="flex justify-between border-t border-gris-200 pt-1">
+                <span className="text-gris-600">Diferencia</span>
                 <EtiquetaDiferencia diferencia={diferencia} />
               </div>
             )}

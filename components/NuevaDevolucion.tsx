@@ -63,7 +63,7 @@ export function NuevaDevolucion({
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
       <Tarjeta
         className="self-start overflow-hidden"
         titulo="¿Qué devuelve el cliente?"
@@ -89,13 +89,13 @@ export function NuevaDevolucion({
                 const disp = disponible(l);
                 const cant = leer(l.id);
                 return (
-                  <tr key={l.id} className={disp <= 0 ? "text-tierra-400" : ""}>
+                  <tr key={l.id} className={disp <= 0 ? "text-gris-400" : ""}>
                     <td className={tdCls}>
                       <div className="flex items-center gap-3">
                         <Miniatura imagen={l.imagen} alt="" tam={40} />
                         <div className="min-w-0">
-                          <p className="font-medium text-tierra-900">{l.producto}</p>
-                          <p className="text-xs text-tierra-500">
+                          <p className="font-medium text-gris-900">{l.producto}</p>
+                          <p className="text-xs text-gris-500">
                             <span className="font-mono">{l.codigo}</span> · {dinero(l.precio_unitario)} c/u
                           </p>
                         </div>
@@ -103,7 +103,7 @@ export function NuevaDevolucion({
                     </td>
                     <td className={`${tdCls} tabular whitespace-nowrap text-right`}>
                       {cantidad(l.cantidad)} {nombreUnidad(l.cantidad, l.unidad)}
-                      {l.devuelto > 0 && <div className="text-xs text-tierra-500">ya devuelto {cantidad(l.devuelto)}</div>}
+                      {l.devuelto > 0 && <div className="text-xs text-gris-500">ya devuelto {cantidad(l.devuelto)}</div>}
                     </td>
                     <td className={tdCls}>
                       {disp > 0 ? (
@@ -145,7 +145,7 @@ export function NuevaDevolucion({
           </table>
         </div>
         {factor < 1 && (
-          <p className="border-t border-tierra-100 px-4 py-2 text-xs text-tierra-500">
+          <p className="border-t border-gris-100 px-4 py-2 text-xs text-gris-500">
             La venta tuvo descuento: lo devuelto ya lo descuenta en proporción.
           </p>
         )}
@@ -166,12 +166,12 @@ export function NuevaDevolucion({
           <Campo label="Nota" htmlFor="nota" ayuda="Opcional.">
             <textarea id="nota" rows={2} value={nota} onChange={(e) => setNota(e.target.value)} className={inputCls} />
           </Campo>
-          <div className="border-t border-tierra-100 pt-4">
+          <div className="border-t border-gris-100 pt-4">
             <div className="flex justify-between text-lg font-semibold">
               <span>Devolver al cliente</span>
               <span className="tabular">{dinero(total)}</span>
             </div>
-            <p className="mt-1 text-xs text-tierra-500">
+            <p className="mt-1 text-xs text-gris-500">
               Lo marcado como «Vuelve al stock» se suma al inventario. Lo dañado no.
             </p>
           </div>
