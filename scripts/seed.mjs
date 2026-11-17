@@ -1,8 +1,8 @@
-// Carga datos de ejemplo (artículos de cocina) para probar el sistema.
+// Carga datos de ejemplo (una tienda de tecnología) para probar el sistema.
 // Uso:  INVENTARIO_DB=data/demo.db npm run seed    → recomendado: base separada para pruebas
 //       npm run seed                               → usa data/inventario.db
 // Solo inserta datos si la base no tiene productos. Las fotos se toman de la carpeta images/.
-// Los precios, medidas y stock son inventados, solo para la demostración.
+// Los precios y el stock son inventados, solo para la demostración.
 
 import Database from "better-sqlite3";
 import crypto from "node:crypto";
@@ -45,49 +45,51 @@ async function procesarFoto(archivo) {
   return id;
 }
 
-const categorias = ["Repostería", "Servir y presentar", "Organización", "Conservación"];
-const proveedor = "Proveedor de ejemplo";
+const categorias = ["Cámaras", "Audio", "Accesorios", "Seguridad"];
+const marcas = ["GoPro", "UGREEN", "Sony", "Insta360"];
+const proveedor = "Importadora de ejemplo";
 
+// Fotos de Pexels (licencia libre, uso comercial permitido). Precios y stock inventados.
 const productos = [
   {
-    nombre: "Bandeja para torta con tapa",
-    categoria: "Repostería",
-    descripcion: "Base con relieve decorativo y tapa transparente con perilla tipo diamante. Ideal para tortas cuadradas.",
-    material: "Acrílico", color: "Transparente",
-    medidas: [30, 30, 15], costo: 55, venta: 95, stock: 8, minimo: 3, ubicacion: "Estante A1",
-    foto: "bandeja.jpg",
+    nombre: "Cámara de acción",
+    categoria: "Cámaras", marca: "GoPro", modelo: null,
+    descripcion: "Cámara de acción compacta con pantalla. Ideal para deportes, viajes y contenido para redes.",
+    color: "Negro",
+    costo: 2400, venta: 3200, stock: 4, minimo: 2, ubicacion: "Vitrina 1",
+    foto: "pexels-amar-8799699.jpg",
   },
   {
-    nombre: "Juego de fuentes octogonales (3 piezas)",
-    categoria: "Servir y presentar",
-    descripcion: "Incluye 3 fuentes octogonales: grande, mediana y pequeña. Se guardan una dentro de otra. Medidas de la fuente grande.",
-    material: "Melamina", color: "Café oscuro",
-    medidas: [45, 28, 7], costo: 130, venta: 220, stock: 4, minimo: 2, ubicacion: "Estante B2",
-    foto: "fuentes.jpg",
+    nombre: "Cargador rápido USB-C",
+    categoria: "Accesorios", marca: "UGREEN", modelo: "Nexode",
+    descripcion: "Cargador de pared compacto para celular, tablet y laptop.",
+    color: "Gris",
+    costo: 180, venta: 290, stock: 15, minimo: 5, ubicacion: "Estante A2",
+    foto: "pexels-mintworkspace-19983031.jpg",
   },
   {
-    nombre: "Condimentero giratorio",
-    categoria: "Organización",
-    descripcion: "Soporte giratorio de dos caras con frascos de vidrio y tapa negra.",
-    material: "Metal y vidrio", color: "Negro",
-    medidas: [25, 15, 30], costo: 95, venta: 160, stock: 2, minimo: 3, ubicacion: "Estante A3",
-    foto: "condimentero.PNG",
+    nombre: "Parlante Bluetooth portátil",
+    categoria: "Audio", marca: "Sony", modelo: null,
+    descripcion: "Parlante inalámbrico pequeño, con correa para llevar.",
+    color: "Rojo",
+    costo: 320, venta: 480, stock: 2, minimo: 3, ubicacion: "Estante B1",
+    foto: "pexels-olenkabohovyk-12021852.jpg",
   },
   {
-    nombre: "Cesta multiuso con tapa para alimentos",
-    categoria: "Conservación",
-    descripcion: "Cesta con ranuras para escurrir y tapa transparente. Ideal para frutas y verduras. Colores: verde, blanco y mostaza.",
-    material: "Plástico", color: "Verde / Blanco / Mostaza",
-    medidas: [20, 20, 9], costo: 18, venta: 35, stock: 24, minimo: 10, ubicacion: "Estante C1",
-    foto: "cestas.PNG",
+    nombre: "Cámara de seguridad Wi-Fi",
+    categoria: "Seguridad", marca: null, modelo: null,
+    descripcion: "Cámara para interiores con base magnética. Se ve desde el celular.",
+    color: "Blanco",
+    costo: 150, venta: 250, stock: 10, minimo: 4, ubicacion: "Estante C3",
+    foto: "pexels-ron-lach-9795001.jpg",
   },
   {
-    nombre: "Mantequillera con tapa de vidrio",
-    categoria: "Servir y presentar",
-    descripcion: "Base de bambú y campana de vidrio con perilla.",
-    material: "Vidrio y bambú", color: "Natural",
-    medidas: [18, 11, 10], costo: 40, venta: 75, stock: 0, minimo: 2, ubicacion: "Estante B1",
-    foto: "mantequillera.PNG",
+    nombre: "Cámara de mano con estabilizador 8K",
+    categoria: "Cámaras", marca: "Insta360", modelo: "Luna Ultra",
+    descripcion: "Cámara con estabilizador (gimbal) y doble lente.",
+    color: "Negro",
+    costo: 3900, venta: 5200, stock: 0, minimo: 1, ubicacion: "Vitrina 2",
+    foto: "pexels-sinan-kriya-2162662325-39629710.jpg",
   },
 ];
 
@@ -98,22 +100,23 @@ const id = (tabla, nombre) => db.prepare(`SELECT id FROM ${tabla} WHERE nombre =
 
 db.transaction(() => {
   for (const n of categorias) db.prepare("INSERT INTO categorias (nombre) VALUES (?)").run(n);
+  for (const n of marcas) db.prepare("INSERT INTO marcas (nombre) VALUES (?)").run(n);
   db.prepare("INSERT INTO proveedores (nombre, notas) VALUES (?, ?)").run(proveedor, "Proveedor creado para la demostración.");
 
-  const insP = db.prepare(`INSERT INTO productos (codigo, nombre, descripcion, categoria_id, proveedor_id, unidad,
-    largo, ancho, alto, unidad_medida, color, material, precio_costo, precio_venta, stock, stock_minimo, ubicacion, imagen)
-    VALUES (?, ?, ?, ?, ?, 'unidad', ?, ?, ?, 'cm', ?, ?, ?, ?, ?, ?, ?, ?)`);
+  const insP = db.prepare(`INSERT INTO productos (codigo, nombre, descripcion, categoria_id, marca_id, modelo, proveedor_id,
+    unidad, color, precio_costo, precio_venta, stock, stock_minimo, ubicacion, imagen)
+    VALUES (?, ?, ?, ?, ?, ?, ?, 'unidad', ?, ?, ?, ?, ?, ?, ?)`);
   const insM = db.prepare(`INSERT INTO movimientos (producto_id, tipo, cantidad, stock_anterior, stock_resultante, nota)
     VALUES (?, 'entrada', ?, 0, ?, 'Stock inicial')`);
 
   productos.forEach((p, i) => {
-    const [l, a, h] = p.medidas;
     const r = insP.run(
-      `P-${String(i + 1).padStart(5, "0")}`, p.nombre, p.descripcion, id("categorias", p.categoria), id("proveedores", proveedor),
-      l, a, h, p.color, p.material, Math.round(p.costo * 100), Math.round(p.venta * 100), p.stock, p.minimo, p.ubicacion, p.imagen,
+      `P-${String(i + 1).padStart(5, "0")}`, p.nombre, p.descripcion, id("categorias", p.categoria),
+      p.marca ? id("marcas", p.marca) : null, p.modelo, id("proveedores", proveedor),
+      p.color, Math.round(p.costo * 100), Math.round(p.venta * 100), p.stock, p.minimo, p.ubicacion, p.imagen,
     );
     if (p.stock > 0) insM.run(r.lastInsertRowid, p.stock, p.stock);
   });
 })();
 
-console.log(`Listo: ${productos.length} artículos de cocina cargados en ${dbPath}`);
+console.log(`Listo: ${productos.length} productos de tecnología cargados en ${dbPath}`);

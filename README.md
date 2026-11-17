@@ -46,7 +46,8 @@ para los celulares conectados al **mismo wifi**, por ejemplo `https://192.168.1.
 
 ### Datos de ejemplo
 
-Carga 5 artículos de cocina con las fotos de la carpeta `images/` (precios y medidas inventados).
+Carga una tienda de tecnología de ejemplo con 5 productos y fotos de la carpeta `images/` (fotos libres de
+Pexels; precios y stock inventados).
 Para probar sin tocar tu base real:
 
 ```bash
