@@ -12,13 +12,21 @@ export const DIR_IMAGENES = path.join(path.dirname(DB_PATH), "imagenes");
 
 function abrir(): Database.Database {
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-  const db = new Database(DB_PATH);
+  // timeout: si otro proceso tiene la base ocupada, esperar hasta 15 s en vez de fallar.
+  const db = new Database(DB_PATH, { timeout: 15_000 });
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
-  db.exec(fs.readFileSync(SCHEMA_PATH, "utf8"));
-  // Ajuste de datos: la unidad "pieza" pasó a llamarse "unidad".
-  db.prepare("UPDATE productos SET unidad = 'unidad' WHERE unidad = 'pieza'").run();
-  migrar(db);
+
+  // Varios procesos pueden abrir la base al mismo tiempo (por ejemplo, `next build` usa varios).
+  // La creación y actualización del esquema va en una transacción IMMEDIATE: SQLite deja pasar
+  // a un solo proceso a la vez y los demás esperan su turno. Cuando cada uno entra, vuelve a
+  // revisar qué falta, así nunca se intenta agregar dos veces la misma columna.
+  db.transaction(() => {
+    db.exec(fs.readFileSync(SCHEMA_PATH, "utf8"));
+    // Ajuste de datos: la unidad "pieza" pasó a llamarse "unidad".
+    db.prepare("UPDATE productos SET unidad = 'unidad' WHERE unidad = 'pieza'").run();
+    migrar(db);
+  }).immediate();
   return db;
 }
 
