@@ -21,6 +21,28 @@ npm start
 Los datos se guardan en `data/inventario.db` y las fotos de los productos en `data/imagenes/`.
 **Respalda la carpeta `data/` completa** (cópiala a otro lugar) con frecuencia.
 
+### Desde el celular (y escanear con la cámara)
+
+```bash
+npm run movil              # en lugar de npm run dev
+npm run movil:produccion   # versión optimizada (antes: npm run build)
+```
+
+En la computadora se sigue entrando por http://localhost:3000. Al arrancar, la terminal muestra la dirección
+para los celulares conectados al **mismo wifi**, por ejemplo `https://192.168.1.3:3443`.
+
+- La primera vez, el navegador del celular avisa que la conexión no es privada, porque el certificado lo
+  generó esta computadora (carpeta `certificados/`, no se sube a git). Acepta y continúa: en Safari,
+  «Mostrar detalles → visitar este sitio web»; en Chrome, «Configuración avanzada → Continuar».
+- Para quitar el aviso del todo, abre en el celular `https://<dirección>:3443/certificado-inventario.crt`,
+  instálalo y márcalo como de confianza (iPhone: *Ajustes → General → Información → Ajustes de confianza de
+  certificados*).
+- Si la dirección de la computadora cambia (otro wifi), el sistema sigue funcionando con el aviso. Para un
+  certificado nuevo, borra la carpeta `certificados/` y vuelve a arrancar.
+- **Escanear:** en Nueva venta (y en Entradas, Ajustes y Etiquetas) toca el botón de la cámara junto al
+  buscador, apunta al código y el producto se agrega solo. Puedes escanear varios seguidos; toca «Listo» al
+  terminar. Funciona con códigos de fábrica (EAN, UPC, Code 128…) y con las etiquetas del sistema.
+
 ### Datos de ejemplo
 
 Carga 5 artículos de cocina con las fotos de la carpeta `images/` (precios y medidas inventados).
@@ -80,6 +102,8 @@ Las ventas netas del Inicio y de Reportes ya descuentan devoluciones y no cuenta
   entrada): hojas adhesivas A4 o carta en 4 formatos, con nombre, precio y código Code 128. Si el producto no
   tiene código de fábrica se usa su código interno (P-00001), que el buscador de ventas reconoce con el lector.
   Se pueden saltar etiquetas ya usadas de una hoja.
+- **Escáner con la cámara** del celular o la computadora (botón junto al buscador de productos). En Android usa
+  el lector del navegador; en iPhone, la librería ZXing. Requiere entrar por HTTPS (`npm run movil`).
 - **Ticket de venta** para impresora térmica de 80 mm: botón «🖨 Imprimir ticket» en la venta, o marca
   «Imprimir el ticket al cobrar» en Nueva venta (se recuerda en ese equipo). En la ventana de impresión elige la
   impresora de tickets y márgenes «Ninguno».
@@ -108,6 +132,7 @@ lib/
   imagenes.ts        Procesamiento y guardado de fotos
   data/              Consultas de lectura
 scripts/seed.mjs     Datos de ejemplo
+scripts/movil.mjs    HTTPS para celulares de la red local (npm run movil)
 ```
 
 ## Reglas del sistema

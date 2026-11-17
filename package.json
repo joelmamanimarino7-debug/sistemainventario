@@ -4,11 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "movil": "node scripts/movil.mjs",
+    "movil:produccion": "node scripts/movil.mjs produccion",
     "build": "next build",
     "start": "next start",
     "seed": "node scripts/seed.mjs"
   },
   "dependencies": {
+    "@zxing/browser": "^0.2.1",
+    "@zxing/library": "^0.23.0",
     "better-sqlite3": "^13.2.0",
     "exceljs": "^4.4.0",
     "next": "^16.4.6",

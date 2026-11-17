@@ -1,8 +1,9 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type { ProductoBusqueda } from "@/lib/data/productos";
 import { cantidad, dinero, nombreUnidad } from "@/lib/format";
+import { EscanerCamara } from "./EscanerCamara";
 import { inputCls } from "./estilos";
 import { Miniatura } from "./Foto";
 
@@ -18,8 +19,11 @@ export const BuscadorProductos = forwardRef<
     onElegir: (p: ProductoBusqueda) => void;
     precio: "venta" | "costo";
     placeholder?: string;
+    /** Muestra el botón para escanear con la cámara (por defecto sí). */
+    camara?: boolean;
   }
->(function BuscadorProductos({ onElegir, precio, placeholder }, ref) {
+>(function BuscadorProductos({ onElegir, precio, placeholder, camara = true }, ref) {
+  const [escaneando, setEscaneando] = useState(false);
   const [q, setQ] = useState("");
   const [resultados, setResultados] = useState<ProductoBusqueda[]>([]);
   const [abierto, setAbierto] = useState(false);
@@ -67,6 +71,25 @@ export const BuscadorProductos = forwardRef<
     inputRef.current?.focus();
   }
 
+  /** Código leído con la cámara: agrega el producto si el código coincide exactamente. */
+  const alEscanear = useCallback(
+    async (codigo: string) => {
+      const texto = codigo.trim();
+      try {
+        const r = await fetch(`/api/productos/buscar?q=${encodeURIComponent(texto)}`);
+        if (r.status === 401) return { ok: false, mensaje: "Tu sesión terminó. Vuelve a iniciar sesión." };
+        const datos = (await r.json()) as ProductoBusqueda[];
+        const p = datos.find((x) => x.codigo.toLowerCase() === texto.toLowerCase() || x.codigo_barras === texto);
+        if (!p) return { ok: false, mensaje: `No hay ningún producto con el código ${texto}` };
+        onElegir(p);
+        return { ok: true, mensaje: `✓ ${p.nombre}` };
+      } catch {
+        return { ok: false, mensaje: "Sin conexión con el sistema. Revisa el wifi." };
+      }
+    },
+    [onElegir],
+  );
+
   async function alPresionarEnter() {
     const texto = q.trim();
     if (!texto) return;
@@ -112,13 +135,28 @@ export const BuscadorProductos = forwardRef<
           }
         }}
         placeholder={placeholder ?? "Buscar producto por nombre, código o escanear…"}
-        className={`${inputCls} !py-2.5 !text-base`}
+        className={`${inputCls} !py-2.5 !text-base ${camara ? "!pr-14" : ""}`}
         role="combobox"
         aria-expanded={abierto}
         aria-controls="resultados-busqueda"
         autoComplete="off"
       />
-      {cargando && <span className="absolute right-3 top-3 text-xs text-zinc-400">Buscando…</span>}
+      {cargando && <span className={`absolute top-3 text-xs text-zinc-400 ${camara ? "right-14" : "right-3"}`}>Buscando…</span>}
+      {camara && (
+        <button
+          type="button"
+          onClick={() => setEscaneando(true)}
+          className="absolute right-1.5 top-1.5 grid h-9 w-11 place-items-center rounded-md bg-teal-700 text-white hover:bg-teal-800"
+          aria-label="Escanear código de barras con la cámara"
+          title="Escanear con la cámara"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden>
+            <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2" />
+            <path d="M7 8v8M10 8v8M13 8v8M16 8v8" />
+          </svg>
+        </button>
+      )}
+      {escaneando && <EscanerCamara onCodigo={alEscanear} onCerrar={() => setEscaneando(false)} />}
 
       {abierto && (
         <ul

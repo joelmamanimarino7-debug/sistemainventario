@@ -8,3 +8,5 @@ next-env.d.ts
 data/*.db
 data/*.db-*
 data/imagenes/
+# Certificado HTTPS de la red local (lo genera npm run movil)
+certificados/
