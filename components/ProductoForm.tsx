@@ -6,6 +6,7 @@ import { actualizarProducto, crearProducto } from "@/app/actions/productos";
 import { UNIDADES, UNIDADES_MEDIDA } from "@/lib/config";
 import type { Producto } from "@/lib/data/productos";
 import { aCentavos, cantidad, centavosAInput, dinero, nombreUnidad } from "@/lib/format";
+import { CampoCodigoBarras } from "./CampoCodigoBarras";
 import { btnPrimario, btnSecundario, inputCls } from "./estilos";
 import { SelectorFoto } from "./SelectorFoto";
 import { Aviso, Campo, Tarjeta } from "./ui";
@@ -60,8 +61,13 @@ export function ProductoForm({
           >
             <input id="codigo" name="codigo" defaultValue={p?.codigo} className={inputCls} required={!!p} />
           </Campo>
-          <Campo label="Código de barras" htmlFor="codigo_barras" ayuda="Opcional. Si lo dejas vacío, las etiquetas usan el código interno.">
-            <input id="codigo_barras" name="codigo_barras" defaultValue={p?.codigo_barras ?? ""} className={inputCls} />
+          <Campo
+            label="Código de barras"
+            htmlFor="codigo_barras"
+            error={err.codigo_barras}
+            ayuda="Opcional. Escríbelo o léelo con la cámara. Si lo dejas vacío, las etiquetas usan el código interno."
+          >
+            <CampoCodigoBarras valorInicial={p?.codigo_barras ?? ""} productoId={p?.id} />
           </Campo>
           <Campo
             label="Descripción"
