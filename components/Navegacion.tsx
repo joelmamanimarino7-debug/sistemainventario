@@ -12,6 +12,7 @@ const secciones: { titulo: string; enlaces: Enlace[] }[] = [
     enlaces: [
       { href: "/", texto: "Inicio", icono: "◧" },
       { href: "/ventas/nueva", texto: "Nueva venta", icono: "＋" },
+      { href: "/caja", texto: "Caja", icono: "▣" },
       { href: "/ventas", texto: "Ventas", icono: "▤" },
       { href: "/entradas", texto: "Entradas", icono: "↓", soloAdmin: true },
     ],
@@ -42,6 +43,7 @@ const secciones: { titulo: string; enlaces: Enlace[] }[] = [
     titulo: "Administración",
     enlaces: [
       { href: "/usuarios", texto: "Usuarios", icono: "◉", soloAdmin: true },
+      { href: "/respaldos", texto: "Respaldos", icono: "⛁", soloAdmin: true },
       { href: "/configuracion", texto: "Configuración", icono: "⚙", soloAdmin: true },
     ],
   },

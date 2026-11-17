@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { usuarioDeAccion } from "@/lib/auth";
+import { idCajaAbierta } from "@/lib/caja";
 import { METODOS_PAGO } from "@/lib/config";
 import { db, ErrorNegocio, redondear, registrarMovimiento } from "@/lib/db";
 import { mensajeError } from "@/lib/forms";
@@ -28,6 +29,7 @@ export async function registrarVenta(datos: {
     const descuento = Math.max(0, Math.round(datos.descuento || 0));
 
     const id = db.transaction(() => {
+      const cajaId = idCajaAbierta("vender");
       // Tomamos el costo vigente de cada producto para poder calcular la ganancia después.
       const lineas = datos.renglones.map((r) => {
         const prod = db
@@ -51,8 +53,8 @@ export async function registrarVenta(datos: {
 
       const v = db
         .prepare(
-          `INSERT INTO ventas (cliente, metodo_pago, subtotal, descuento, total, pago_con, nota, usuario_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO ventas (cliente, metodo_pago, subtotal, descuento, total, pago_con, nota, usuario_id, caja_id)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         )
         .run(
           datos.cliente?.trim() || null,
@@ -63,6 +65,7 @@ export async function registrarVenta(datos: {
           datos.metodoPago === "efectivo" ? datos.pagoCon : null,
           datos.nota?.trim() || null,
           yo.id,
+          cajaId,
         );
       const ventaId = Number(v.lastInsertRowid);
 

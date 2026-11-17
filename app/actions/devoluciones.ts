@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { exigirAdmin, usuarioDeAccion } from "@/lib/auth";
+import { idCajaAbierta } from "@/lib/caja";
 import { MOTIVOS_DEVOLUCION } from "@/lib/config";
 import { db, ErrorNegocio, redondear, registrarMovimiento } from "@/lib/db";
 import { mensajeError } from "@/lib/forms";
@@ -36,6 +37,8 @@ export async function registrarDevolucion(datos: {
     if (!renglones.length) throw new ErrorNegocio("Indica cuánto se devuelve de al menos un producto.");
 
     const id = db.transaction(() => {
+      // El dinero se devuelve desde la caja abierta (aunque la venta sea de otro día).
+      const cajaId = idCajaAbierta("registrar devoluciones");
       const venta = db.prepare("SELECT id, subtotal, total, estado FROM ventas WHERE id = ?").get(datos.ventaId) as
         | { id: number; subtotal: number; total: number; estado: string }
         | undefined;
@@ -77,8 +80,8 @@ export async function registrarDevolucion(datos: {
       }
 
       const dv = db
-        .prepare("INSERT INTO devoluciones (venta_id, motivo, nota, total, usuario_id) VALUES (?, ?, ?, ?, ?)")
-        .run(venta.id, datos.motivo, datos.nota?.trim() || null, total, yo.id);
+        .prepare("INSERT INTO devoluciones (venta_id, motivo, nota, total, usuario_id, caja_id) VALUES (?, ?, ?, ?, ?, ?)")
+        .run(venta.id, datos.motivo, datos.nota?.trim() || null, total, yo.id, cajaId);
       const devolucionId = Number(dv.lastInsertRowid);
       const ins = db.prepare(
         `INSERT INTO devolucion_detalle (devolucion_id, venta_detalle_id, producto_id, cantidad, importe, costo_unitario, reingresa)

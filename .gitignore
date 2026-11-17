@@ -10,3 +10,5 @@ data/*.db-*
 data/imagenes/
 # Certificado HTTPS de la red local (lo genera npm run movil)
 certificados/
+# Respaldos (contienen los datos del negocio)
+data/respaldos*/

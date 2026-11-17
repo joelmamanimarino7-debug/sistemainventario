@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { exigirUsuario } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
 import { NuevaDevolucion } from "@/components/NuevaDevolucion";
+import { btnPrimario } from "@/components/estilos";
+import { Tarjeta } from "@/components/ui";
+import { cajaAbierta } from "@/lib/caja";
 import { Encabezado } from "@/components/ui";
 import { obtenerVenta } from "@/lib/data/ventas";
 import { dinero, fecha } from "@/lib/format";
@@ -15,6 +19,7 @@ export default async function DevolucionPage({ params }: { params: Promise<{ id:
   if (!datos) notFound();
   const { venta: v, detalle } = datos;
   if (v.estado !== "completada") redirect(`/ventas/${v.id}`);
+  const hayCaja = !!cajaAbierta();
 
   return (
     <>
@@ -25,6 +30,18 @@ export default async function DevolucionPage({ params }: { params: Promise<{ id:
         }`}
         volver={{ href: `/ventas/${v.id}`, texto: `Venta #${v.id}` }}
       />
+      {!hayCaja ? (
+        <Tarjeta titulo="La caja está cerrada" className="max-w-md">
+          <div className="space-y-4 p-4">
+            <p className="text-sm text-tierra-600">
+              El dinero de una devolución sale de la caja, así que hay que abrirla primero.
+            </p>
+            <Link href="/caja" className={btnPrimario}>
+              Ir a Caja
+            </Link>
+          </div>
+        </Tarjeta>
+      ) : (
       <NuevaDevolucion
         ventaId={v.id}
         factor={v.subtotal > 0 ? v.total / v.subtotal : 0}
@@ -39,6 +56,7 @@ export default async function DevolucionPage({ params }: { params: Promise<{ id:
           precio_unitario: d.precio_unitario,
         }))}
       />
+      )}
     </>
   );
 }

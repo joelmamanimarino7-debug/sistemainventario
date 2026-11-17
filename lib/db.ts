@@ -5,6 +5,9 @@ import path from "node:path";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const DB_PATH = process.env.INVENTARIO_DB ?? path.join(DATA_DIR, "inventario.db");
+
+/** Ruta del archivo de la base de datos (la usan los respaldos). */
+export const RUTA_DB = DB_PATH;
 const SCHEMA_PATH = path.join(process.cwd(), "lib", "schema.sql");
 
 /** Carpeta de las fotos de productos: siempre junto a la base de datos, para respaldarlas juntas. */
@@ -21,13 +24,19 @@ function abrir(): Database.Database {
   // La creación y actualización del esquema va en una transacción IMMEDIATE: SQLite deja pasar
   // a un solo proceso a la vez y los demás esperan su turno. Cuando cada uno entra, vuelve a
   // revisar qué falta, así nunca se intenta agregar dos veces la misma columna.
-  db.transaction(() => {
-    db.exec(fs.readFileSync(SCHEMA_PATH, "utf8"));
-    // Ajuste de datos: la unidad "pieza" pasó a llamarse "unidad".
-    db.prepare("UPDATE productos SET unidad = 'unidad' WHERE unidad = 'pieza'").run();
-    migrar(db);
-  }).immediate();
+  db.transaction(() => prepararEsquema(db)).immediate();
   return db;
+}
+
+/**
+ * Crea las tablas que falten y actualiza bases de versiones anteriores.
+ * También se usa al restaurar un respaldo, para llevarlo a la versión actual antes de copiarlo.
+ */
+export function prepararEsquema(db: Database.Database) {
+  db.exec(fs.readFileSync(SCHEMA_PATH, "utf8"));
+  // Ajuste de datos: la unidad "pieza" pasó a llamarse "unidad".
+  db.prepare("UPDATE productos SET unidad = 'unidad' WHERE unidad = 'pieza'").run();
+  migrar(db);
 }
 
 /** Agrega a bases creadas en la fase 1 las columnas nuevas (CREATE TABLE IF NOT EXISTS no las agrega). */
@@ -43,6 +52,14 @@ function migrar(db: Database.Database) {
     const cols = (db.prepare(`PRAGMA table_info(${tabla})`).all() as { name: string }[]).map((c) => c.name);
     if (!cols.includes("usuario_id")) db.exec(`ALTER TABLE ${tabla} ADD COLUMN usuario_id INTEGER REFERENCES usuarios(id)`);
   }
+
+  // Caja: en qué turno de caja se cobró cada venta y se pagó cada devolución.
+  for (const tabla of ["ventas", "devoluciones"]) {
+    const cols = (db.prepare(`PRAGMA table_info(${tabla})`).all() as { name: string }[]).map((c) => c.name);
+    if (!cols.includes("caja_id")) db.exec(`ALTER TABLE ${tabla} ADD COLUMN caja_id INTEGER REFERENCES cajas(id)`);
+  }
+  db.exec("CREATE INDEX IF NOT EXISTS idx_ventas_caja ON ventas(caja_id)");
+  db.exec("CREATE INDEX IF NOT EXISTS idx_devoluciones_caja ON devoluciones(caja_id)");
 }
 
 // En desarrollo Next recarga módulos; guardamos la conexión en globalThis

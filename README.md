@@ -19,7 +19,8 @@ npm start
 ```
 
 Los datos se guardan en `data/inventario.db` y las fotos de los productos en `data/imagenes/`.
-**Respalda la carpeta `data/` completa** (cópiala a otro lugar) con frecuencia.
+El sistema hace **respaldos automáticos** (ver *Respaldos* más abajo); elige en esa pantalla una carpeta de
+iCloud Drive, Google Drive o un USB para que no queden solo en esta computadora.
 
 ### Desde el celular (y escanear con la cámara)
 
@@ -108,6 +109,40 @@ Las ventas netas del Inicio y de Reportes ya descuentan devoluciones y no cuenta
   «Imprimir el ticket al cobrar» en Nueva venta (se recuerda en ese equipo). En la ventana de impresión elige la
   impresora de tickets y márgenes «Ninguno».
 
+## Caja
+
+Menú *Operación → Caja*. Hay una sola caja para todo el negocio y **no se puede vender ni registrar devoluciones
+con la caja cerrada** (Nueva venta ofrece abrirla ahí mismo).
+
+- **Abrir:** con el efectivo inicial (el cambio del día). Puede hacerlo un vendedor o un administrador.
+- **Durante el turno:** ventas por método de pago, lo cobrado por QR (para revisarlo en la app del banco),
+  devoluciones y **entradas o salidas de efectivo** que no son ventas (pago de pasaje, pago a un proveedor, retiro
+  del dueño, más cambio…), cada una con su motivo y quién la registró.
+- **Cerrar:** se cuenta el efectivo, escribiendo el total o **por billetes y monedas** (Bs 200 a 0,10). El sistema
+  compara con lo que debería haber (inicial + ventas en efectivo − devoluciones en efectivo + entradas − salidas) y
+  muestra si cuadra, sobra o falta. El vendedor cuenta **a ciegas**: no ve lo esperado antes de cerrar.
+- El cierre queda guardado (no cambia aunque después se anule una venta), se puede imprimir y aparece en el
+  **Historial de cierres** (solo administradores), con faltantes y sobrantes por turno.
+- Las devoluciones salen de la caja abierta en ese momento, aunque la venta sea de otro día, con el mismo método de
+  pago de la venta.
+
+## Respaldos
+
+Menú *Administración → Respaldos* (solo administradores). Cada respaldo es un archivo `.zip` con la base de datos
+(copia segura aunque el sistema esté en uso) y las fotos.
+
+- **Automáticos:** uno al día (mientras el sistema esté encendido revisa cada 30 minutos; si la computadora estuvo
+  apagada, lo hace al encenderla) y otro **cada vez que se cierra la caja**.
+- **Carpeta:** por defecto `data/respaldos/` (la demo usa `data/respaldos-demo/`). La pantalla sugiere iCloud Drive,
+  Google Drive, OneDrive, Dropbox o un disco USB si los encuentra, y avisa cuando los respaldos están en la misma
+  computadora. Se conservan los últimos 30 (configurable) y los más antiguos se borran solos.
+- **Descargar** cualquier respaldo, o **Respaldar ahora**.
+- **Restaurar** uno de la lista o un `.zip` subido (por ejemplo, para pasar los datos a otra computadora). Antes se
+  guarda automáticamente un respaldo «Antes de restaurar», así que se puede deshacer. Todo se copia de una vez (si
+  algo falla, no cambia nada), los respaldos de versiones anteriores se actualizan solos, y después todos vuelven a
+  iniciar sesión con los usuarios del respaldo. Los ajustes de respaldo de la computadora se conservan.
+- Los respaldos contienen los datos del negocio: `data/respaldos*/` no se sube a git.
+
 ## Estructura
 
 ```
@@ -130,6 +165,9 @@ lib/
   productosExcel.ts  Columnas, lectura, revisión e importación de productos
   exportaciones.ts   Libros de Excel de ventas, movimientos y reportes
   imagenes.ts        Procesamiento y guardado de fotos
+  caja.ts            Turnos de caja: totales por método, efectivo esperado, historial
+  respaldos.ts       Crear, listar, podar y restaurar respaldos (.zip)
+  respaldosAuto.ts   Respaldo automático diario (lo arranca instrumentation.ts al iniciar el servidor)
   data/              Consultas de lectura
 scripts/seed.mjs     Datos de ejemplo
 scripts/movil.mjs    HTTPS para celulares de la red local (npm run movil)

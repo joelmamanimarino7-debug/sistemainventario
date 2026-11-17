@@ -209,3 +209,38 @@ CREATE TABLE IF NOT EXISTS configuracion (
   clave  TEXT PRIMARY KEY,
   valor  TEXT
 );
+
+-- ---------- Caja ----------
+
+-- Turno de caja: se abre con el efectivo inicial (para dar cambio) y se cierra contando el efectivo.
+-- Solo puede haber una caja abierta a la vez. Las ventas y devoluciones guardan su caja_id
+-- (la columna se agrega en lib/db.ts).
+CREATE TABLE IF NOT EXISTS cajas (
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+  estado             TEXT    NOT NULL DEFAULT 'abierta' CHECK (estado IN ('abierta', 'cerrada')),
+  abierta_por        INTEGER NOT NULL REFERENCES usuarios(id),
+  abierta_en         TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  monto_inicial      INTEGER NOT NULL DEFAULT 0,   -- centavos
+  cerrada_por        INTEGER REFERENCES usuarios(id),
+  cerrada_en         TEXT,
+  efectivo_esperado  INTEGER,                      -- centavos, calculado al cerrar
+  efectivo_contado   INTEGER,                      -- centavos, lo que se contó
+  diferencia         INTEGER,                      -- contado - esperado (negativo = faltante)
+  resumen            TEXT,                         -- JSON con los totales al momento del cierre
+  nota_cierre        TEXT
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_una_caja_abierta ON cajas(estado) WHERE estado = 'abierta';
+
+-- Entradas y salidas de efectivo que no son ventas (pago a un proveedor, retiro del dueño, cambio extra...).
+CREATE TABLE IF NOT EXISTS caja_movimientos (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  caja_id     INTEGER NOT NULL REFERENCES cajas(id),
+  tipo        TEXT    NOT NULL CHECK (tipo IN ('ingreso', 'retiro')),
+  monto       INTEGER NOT NULL CHECK (monto > 0),  -- centavos
+  motivo      TEXT    NOT NULL,
+  usuario_id  INTEGER REFERENCES usuarios(id),
+  creado_en   TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_caja_movimientos_caja ON caja_movimientos(caja_id);
