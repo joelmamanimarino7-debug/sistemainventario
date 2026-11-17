@@ -65,8 +65,8 @@ export default async function EntradaPage({
                       <Link href={`/productos/${d.producto_id}`} className="group flex items-center gap-3">
                         <Miniatura imagen={d.imagen} alt="" tam={40} className="print:hidden" />
                         <span>
-                          <span className="block font-medium text-zinc-900 group-hover:text-teal-700">{d.producto}</span>
-                          <span className="block font-mono text-xs text-zinc-500">{d.codigo}</span>
+                          <span className="block font-medium text-tierra-900 group-hover:text-acento-700">{d.producto}</span>
+                          <span className="block font-mono text-xs text-tierra-500">{d.codigo}</span>
                         </span>
                       </Link>
                     </td>

@@ -42,12 +42,12 @@ export default async function UsuariosPage({ searchParams }: { searchParams: Pro
             </thead>
             <tbody>
               {usuarios.map((u) => (
-                <tr key={u.id} className={u.activo ? "hover:bg-zinc-50" : "bg-zinc-50/60 text-zinc-500"}>
+                <tr key={u.id} className={u.activo ? "hover:bg-tierra-50" : "bg-tierra-50/60 text-tierra-500"}>
                   <td className={tdCls}>
-                    <Link href={`/usuarios/${u.id}`} className="font-medium text-teal-700 hover:underline">
+                    <Link href={`/usuarios/${u.id}`} className="font-medium text-acento-700 hover:underline">
                       {u.nombre}
                     </Link>
-                    {u.id === yo.id && <span className="ml-2 text-xs text-zinc-500">(tú)</span>}
+                    {u.id === yo.id && <span className="ml-2 text-xs text-tierra-500">(tú)</span>}
                     {!u.activo && (
                       <span className="ml-2">
                         <Etiqueta>Desactivado</Etiqueta>
@@ -56,10 +56,10 @@ export default async function UsuariosPage({ searchParams }: { searchParams: Pro
                   </td>
                   <td className={`${tdCls} font-mono text-xs`}>{u.usuario}</td>
                   <td className={tdCls}>
-                    {u.rol === "admin" ? <Etiqueta tono="teal">Administrador</Etiqueta> : <Etiqueta tono="azul">Vendedor</Etiqueta>}
+                    {u.rol === "admin" ? <Etiqueta tono="acento">Administrador</Etiqueta> : <Etiqueta tono="azul">Vendedor</Etiqueta>}
                   </td>
                   <td className={`${tdCls} tabular text-right`}>{u.ventas}</td>
-                  <td className={`${tdCls} whitespace-nowrap text-zinc-600`}>{u.ultimo_acceso ? fecha(u.ultimo_acceso) : "Nunca"}</td>
+                  <td className={`${tdCls} whitespace-nowrap text-tierra-600`}>{u.ultimo_acceso ? fecha(u.ultimo_acceso) : "Nunca"}</td>
                 </tr>
               ))}
             </tbody>

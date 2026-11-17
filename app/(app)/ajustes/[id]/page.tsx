@@ -61,17 +61,17 @@ export default async function AjustePage({
                       <Link href={`/productos/${d.producto_id}`} className="group flex items-center gap-3">
                         <Miniatura imagen={d.imagen} alt="" tam={40} />
                         <span>
-                          <span className="block font-medium text-zinc-900 group-hover:text-teal-700">{d.producto}</span>
-                          <span className="block font-mono text-xs text-zinc-500">{d.codigo}</span>
+                          <span className="block font-medium text-tierra-900 group-hover:text-acento-700">{d.producto}</span>
+                          <span className="block font-mono text-xs text-tierra-500">{d.codigo}</span>
                         </span>
                       </Link>
                     </td>
-                    <td className={`${tdCls} tabular text-right text-zinc-600`}>{cantidad(d.stock_anterior)}</td>
+                    <td className={`${tdCls} tabular text-right text-tierra-600`}>{cantidad(d.stock_anterior)}</td>
                     <td className={`${tdCls} tabular whitespace-nowrap text-right`}>
-                      {cantidad(d.stock_nuevo)} <span className="text-xs text-zinc-500">{nombreUnidad(d.stock_nuevo, d.unidad)}</span>
+                      {cantidad(d.stock_nuevo)} <span className="text-xs text-tierra-500">{nombreUnidad(d.stock_nuevo, d.unidad)}</span>
                     </td>
                     <td
-                      className={`${tdCls} tabular text-right font-medium ${d.diferencia > 0 ? "text-emerald-700" : "text-red-700"}`}
+                      className={`${tdCls} tabular text-right font-medium ${d.diferencia > 0 ? "text-oliva-700" : "text-red-700"}`}
                     >
                       {d.diferencia > 0 ? "+" : ""}
                       {cantidad(d.diferencia)}

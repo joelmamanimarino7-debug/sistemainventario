@@ -14,7 +14,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   return (
     <PantallaAcceso nombre={obtenerNegocio().nombre} titulo="Iniciar sesión">
       <FormLogin siguiente={sp.siguiente} />
-      <p className="mt-4 text-center text-xs text-zinc-500">¿Olvidaste tu contraseña? Pide a un administrador que la cambie.</p>
+      <p className="mt-4 text-center text-xs text-tierra-500">¿Olvidaste tu contraseña? Pide a un administrador que la cambie.</p>
     </PantallaAcceso>
   );
 }

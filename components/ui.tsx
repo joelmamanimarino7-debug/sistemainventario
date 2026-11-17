@@ -16,14 +16,14 @@ export function Encabezado({
   return (
     <div className="mb-6">
       {volver && (
-        <Link href={volver.href} className="mb-2 inline-block text-sm text-zinc-500 hover:text-zinc-800">
+        <Link href={volver.href} className="mb-2 inline-block text-sm text-tierra-500 hover:text-acento-700">
           ← {volver.texto}
         </Link>
       )}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">{titulo}</h1>
-          {descripcion && <p className="mt-1 text-sm text-zinc-500">{descripcion}</p>}
+          <h1 className="font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-tierra-900">{titulo}</h1>
+          {descripcion && <p className="mt-1 text-sm text-tierra-500">{descripcion}</p>}
         </div>
         {acciones && <div className="flex flex-wrap gap-2">{acciones}</div>}
       </div>
@@ -43,10 +43,12 @@ export function Tarjeta({
   acciones?: ReactNode;
 }) {
   return (
-    <section className={`rounded-xl border border-zinc-200 bg-white shadow-xs ${className}`}>
+    <section
+      className={`rounded-2xl border border-tierra-200/80 bg-papel shadow-[0_1px_2px_rgba(61,49,40,0.05),0_4px_16px_-8px_rgba(61,49,40,0.10)] ${className}`}
+    >
       {titulo && (
-        <header className="flex items-center justify-between gap-2 border-b border-zinc-100 px-4 py-3">
-          <h2 className="text-sm font-semibold text-zinc-800">{titulo}</h2>
+        <header className="flex items-center justify-between gap-2 border-b border-tierra-100 px-4 py-3">
+          <h2 className="font-display text-[15px] font-semibold text-tierra-900">{titulo}</h2>
           {acciones}
         </header>
       )}
@@ -55,14 +57,14 @@ export function Tarjeta({
   );
 }
 
-type Tono = "gris" | "verde" | "rojo" | "ambar" | "azul" | "teal";
+type Tono = "gris" | "verde" | "rojo" | "ambar" | "azul" | "acento";
 const tonos: Record<Tono, string> = {
-  gris: "bg-zinc-100 text-zinc-700",
-  verde: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
+  gris: "bg-tierra-100 text-tierra-700 ring-tierra-300/60",
+  verde: "bg-oliva-50 text-oliva-700 ring-oliva-600/20",
   rojo: "bg-red-50 text-red-700 ring-red-600/20",
-  ambar: "bg-amber-50 text-amber-800 ring-amber-600/20",
-  azul: "bg-sky-50 text-sky-700 ring-sky-600/20",
-  teal: "bg-teal-50 text-teal-800 ring-teal-600/20",
+  ambar: "bg-amber-50 text-amber-800 ring-amber-600/25",
+  azul: "bg-tierra-200/70 text-tierra-800 ring-tierra-400/30", // café: ventas, vendedores
+  acento: "bg-acento-50 text-acento-800 ring-acento-600/20",
 };
 
 export function Etiqueta({ tono = "gris", children }: { tono?: Tono; children: ReactNode }) {
@@ -78,8 +80,8 @@ export function Etiqueta({ tono = "gris", children }: { tono?: Tono; children: R
 export function Vacio({ titulo, texto, accion }: { titulo: string; texto?: string; accion?: ReactNode }) {
   return (
     <div className="px-6 py-12 text-center">
-      <p className="font-medium text-zinc-800">{titulo}</p>
-      {texto && <p className="mt-1 text-sm text-zinc-500">{texto}</p>}
+      <p className="font-medium text-tierra-800">{titulo}</p>
+      {texto && <p className="mt-1 text-sm text-tierra-500">{texto}</p>}
       {accion && <div className="mt-4">{accion}</div>}
     </div>
   );
@@ -112,7 +114,7 @@ export function Campo({
       {error ? (
         <p className="mt-1 text-xs text-red-600">{error}</p>
       ) : ayuda ? (
-        <p className="mt-1 text-xs text-zinc-500">{ayuda}</p>
+        <p className="mt-1 text-xs text-tierra-500">{ayuda}</p>
       ) : null}
     </div>
   );
@@ -122,7 +124,7 @@ export function Aviso({ tipo, children }: { tipo: "error" | "ok"; children: Reac
   const cls =
     tipo === "error"
       ? "border-red-200 bg-red-50 text-red-800"
-      : "border-emerald-200 bg-emerald-50 text-emerald-800";
+      : "border-oliva-600/25 bg-oliva-50 text-oliva-700";
   return (
     <div role={tipo === "error" ? "alert" : "status"} className={`rounded-lg border px-3 py-2 text-sm ${cls}`}>
       {children}
@@ -133,8 +135,8 @@ export function Aviso({ tipo, children }: { tipo: "error" | "ok"; children: Reac
 export function Dato({ etiqueta, children }: { etiqueta: string; children: ReactNode }) {
   return (
     <div>
-      <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
-      <dd className="mt-0.5 text-sm text-zinc-900">{children || <span className="text-zinc-400">—</span>}</dd>
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">{etiqueta}</dt>
+      <dd className="mt-0.5 text-sm text-tierra-900">{children || <span className="text-tierra-400">—</span>}</dd>
     </div>
   );
 }

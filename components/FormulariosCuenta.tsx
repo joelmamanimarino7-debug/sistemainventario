@@ -121,14 +121,14 @@ export function FormUsuario({
             </Campo>
           )}
           <fieldset className="sm:col-span-2">
-            <legend className="mb-1 text-sm font-medium text-zinc-700">Rol</legend>
+            <legend className="mb-1 text-sm font-medium text-tierra-700">Rol</legend>
             <div className="grid gap-2 sm:grid-cols-2">
               {roles.map((r) => (
-                <label key={r.valor} className="flex cursor-pointer gap-2 rounded-lg border border-zinc-200 p-3 text-sm has-[:checked]:border-teal-600 has-[:checked]:bg-teal-50/50">
-                  <input type="radio" name="rol" value={r.valor} defaultChecked={(u?.rol ?? "vendedor") === r.valor} className="mt-0.5 accent-teal-700" />
+                <label key={r.valor} className="flex cursor-pointer gap-2 rounded-lg border border-tierra-200 p-3 text-sm has-[:checked]:border-acento-600 has-[:checked]:bg-acento-50/50">
+                  <input type="radio" name="rol" value={r.valor} defaultChecked={(u?.rol ?? "vendedor") === r.valor} className="mt-0.5 accent-acento-700" />
                   <span>
-                    <span className="block font-medium text-zinc-900">{r.texto}</span>
-                    <span className="block text-zinc-500">{r.descripcion}</span>
+                    <span className="block font-medium text-tierra-900">{r.texto}</span>
+                    <span className="block text-tierra-500">{r.descripcion}</span>
                   </span>
                 </label>
               ))}
@@ -136,7 +136,7 @@ export function FormUsuario({
             {c.rol && <p className="mt-1 text-xs text-red-600">{c.rol}</p>}
           </fieldset>
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-zinc-100 px-5 py-3">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-tierra-100 px-5 py-3">
           {estado.error && (
             <div className="mr-auto">
               <Aviso tipo="error">{estado.error}</Aviso>
@@ -181,7 +181,7 @@ export function FormConfiguracion({
             <input id="mensajeTicket" name="mensajeTicket" defaultValue={negocio.mensajeTicket} maxLength={200} className={inputCls} />
           </Campo>
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-zinc-100 px-5 py-3">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-tierra-100 px-5 py-3">
           {estado.error && (
             <div className="mr-auto">
               <Aviso tipo="error">{estado.error}</Aviso>

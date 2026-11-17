@@ -48,12 +48,12 @@ export default async function ProveedoresPage() {
               </thead>
               <tbody>
                 {proveedores.map((p) => (
-                  <tr key={p.id} className={p.activo ? "" : "bg-zinc-50/60 text-zinc-500"}>
+                  <tr key={p.id} className={p.activo ? "" : "bg-tierra-50/60 text-tierra-500"}>
                     <td className={tdCls}>
-                      <Link href={`/proveedores/${p.id}`} className="font-medium text-zinc-900 hover:text-teal-700">
+                      <Link href={`/proveedores/${p.id}`} className="font-medium text-tierra-900 hover:text-acento-700">
                         {p.nombre}
                       </Link>
-                      {p.email && <div className="text-xs text-zinc-500">{p.email}</div>}
+                      {p.email && <div className="text-xs text-tierra-500">{p.email}</div>}
                     </td>
                     <td className={tdCls}>{p.contacto ?? "—"}</td>
                     <td className={tdCls}>{p.telefono ?? "—"}</td>

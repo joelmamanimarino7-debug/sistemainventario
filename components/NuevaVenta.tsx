@@ -132,13 +132,13 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
       <div className="space-y-4">
         {exito && (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-oliva-600/25 bg-oliva-50 px-4 py-3">
             <div>
-              <p className="font-medium text-emerald-900">
+              <p className="font-medium text-oliva-700">
                 Venta #{exito.id} registrada por {dinero(exito.total)}
               </p>
               {exito.cambio != null && exito.cambio > 0 && (
-                <p className="text-sm text-emerald-800">
+                <p className="text-sm text-oliva-700">
                   Cambio a entregar: <span className="tabular font-semibold">{dinero(exito.cambio)}</span>
                 </p>
               )}
@@ -182,8 +182,8 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                           <div className="flex items-center gap-3">
                             <Miniatura imagen={r.producto.imagen} alt="" tam={44} />
                             <div className="min-w-0">
-                              <p className="font-medium text-zinc-900">{r.producto.nombre}</p>
-                          <p className={`text-xs ${falta ? "font-medium text-red-600" : "text-zinc-500"}`}>
+                              <p className="font-medium text-tierra-900">{r.producto.nombre}</p>
+                          <p className={`text-xs ${falta ? "font-medium text-red-600" : "text-tierra-500"}`}>
                             <span className="font-mono">{r.producto.codigo}</span> · Disponible {cantidad(r.producto.stock)}{" "}
                             {nombreUnidad(r.producto.stock, r.producto.unidad)}
                           </p>
@@ -239,11 +239,11 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
       <Tarjeta titulo="Cobro" className="self-start xl:sticky xl:top-6">
         <div className="space-y-4 p-4">
           <div className="space-y-1 text-sm">
-            <div className="flex justify-between text-zinc-600">
+            <div className="flex justify-between text-tierra-600">
               <span>Subtotal</span>
               <span className="tabular">{dinero(subtotal)}</span>
             </div>
-            <div className="flex items-center justify-between gap-3 text-zinc-600">
+            <div className="flex items-center justify-between gap-3 text-tierra-600">
               <label htmlFor="descuento">Descuento</label>
               <input
                 id="descuento"
@@ -254,14 +254,14 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                 className={`${inputCls} tabular !w-28 !py-1 text-right`}
               />
             </div>
-            <div className="flex items-baseline justify-between border-t border-zinc-100 pt-3">
+            <div className="flex items-baseline justify-between border-t border-tierra-100 pt-3">
               <span className="font-semibold">Total</span>
-              <span className="tabular text-3xl font-semibold text-zinc-900">{dinero(total)}</span>
+              <span className="tabular font-display text-3xl font-semibold text-tierra-900">{dinero(total)}</span>
             </div>
           </div>
 
           <fieldset>
-            <legend className="mb-1.5 text-sm font-medium text-zinc-700">Método de pago</legend>
+            <legend className="mb-1.5 text-sm font-medium text-tierra-700">Método de pago</legend>
             <div className="grid grid-cols-2 gap-1.5">
               {METODOS_PAGO.map((m) => (
                 <button
@@ -271,8 +271,8 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                   aria-pressed={metodo === m.valor}
                   className={`rounded-lg border px-3 py-2 text-sm font-medium ${
                     metodo === m.valor
-                      ? "border-teal-700 bg-teal-50 text-teal-800"
-                      : "border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                      ? "border-acento-700 bg-acento-50 text-acento-800"
+                      : "border-tierra-200 text-tierra-600 hover:bg-tierra-50"
                   }`}
                 >
                   {m.etiqueta}
@@ -294,10 +294,10 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
                 />
               </Campo>
               <div>
-                <p className="mb-1 text-sm font-medium text-zinc-700">Cambio</p>
+                <p className="mb-1 text-sm font-medium text-tierra-700">Cambio</p>
                 <p
-                  className={`tabular rounded-lg bg-zinc-50 px-3 py-2 text-right text-sm font-semibold ${
-                    cambio != null && cambio < 0 ? "text-red-600" : "text-zinc-900"
+                  className={`tabular rounded-lg bg-tierra-50 px-3 py-2 text-right text-sm font-semibold ${
+                    cambio != null && cambio < 0 ? "text-red-600" : "text-tierra-900"
                   }`}
                 >
                   {cambio == null ? "—" : dinero(cambio)}
@@ -313,12 +313,12 @@ export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean
             <input id="nota_venta" value={nota} onChange={(e) => setNota(e.target.value)} className={inputCls} />
           </Campo>
 
-          <label className="flex items-center gap-2 text-sm text-zinc-600">
+          <label className="flex items-center gap-2 text-sm text-tierra-600">
             <input
               type="checkbox"
               checked={imprimirAuto}
               onChange={(e) => cambiarImprimirAuto(e.target.checked)}
-              className="accent-teal-700"
+              className="accent-acento-700"
             />
             Imprimir el ticket al cobrar
           </label>

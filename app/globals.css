@@ -1,7 +1,44 @@
 @import "tailwindcss";
 
+/*
+  Tema del sistema: beige, café y naranja.
+  - tierra: neutros cálidos (del beige claro al café oscuro). Textos, bordes y fondos.
+  - acento: naranja terracota. Botones principales, enlaces y elementos activos.
+  - papel: fondo de tarjetas y campos (blanco cálido).
+  Para cambiar el tema basta con cambiar estos valores.
+*/
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", ui-serif, Georgia, serif;
+
+  --color-tierra-50: #faf6f0;
+  --color-tierra-100: #f3ece2;
+  --color-tierra-200: #e7dccd;
+  --color-tierra-300: #d5c4ad;
+  --color-tierra-400: #b19d84;
+  --color-tierra-500: #8b7763;
+  --color-tierra-600: #6d5b4a;
+  --color-tierra-700: #554537;
+  --color-tierra-800: #3d3128;
+  --color-tierra-900: #2a211b;
+  --color-tierra-950: #1b1511;
+
+  --color-acento-50: #fdf3ea;
+  --color-acento-100: #fbe3cd;
+  --color-acento-200: #f5c59c;
+  --color-acento-300: #eea063;
+  --color-acento-400: #e57f36;
+  --color-acento-500: #d4661c;
+  --color-acento-600: #b95315;
+  --color-acento-700: #974215;
+  --color-acento-800: #7a3718;
+  --color-acento-900: #642f17;
+
+  --color-oliva-50: #f1f3e6;
+  --color-oliva-600: #5f6e2c;
+  --color-oliva-700: #4b5822;
+
+  --color-papel: #fffcf8;
 }
 
 :root {
@@ -9,8 +46,17 @@
 }
 
 body {
-  background: #f6f7f9;
-  color: #18181b;
+  background: #f4ede3;
+  color: var(--color-tierra-900);
+}
+
+h1 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-acento-200);
+  color: var(--color-tierra-950);
 }
 
 /* Quita las flechas de los inputs numéricos */

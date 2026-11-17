@@ -141,12 +141,12 @@ export const BuscadorProductos = forwardRef<
         aria-controls="resultados-busqueda"
         autoComplete="off"
       />
-      {cargando && <span className={`absolute top-3 text-xs text-zinc-400 ${camara ? "right-14" : "right-3"}`}>Buscando…</span>}
+      {cargando && <span className={`absolute top-3 text-xs text-tierra-400 ${camara ? "right-14" : "right-3"}`}>Buscando…</span>}
       {camara && (
         <button
           type="button"
           onClick={() => setEscaneando(true)}
-          className="absolute right-1.5 top-1.5 grid h-9 w-11 place-items-center rounded-md bg-teal-700 text-white hover:bg-teal-800"
+          className="absolute right-1.5 top-1.5 grid h-9 w-11 place-items-center rounded-md bg-acento-700 text-white hover:bg-acento-800"
           aria-label="Escanear código de barras con la cámara"
           title="Escanear con la cámara"
         >
@@ -162,10 +162,10 @@ export const BuscadorProductos = forwardRef<
         <ul
           id="resultados-busqueda"
           role="listbox"
-          className="absolute z-30 mt-1 max-h-80 w-full overflow-y-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg"
+          className="absolute z-30 mt-1 max-h-80 w-full overflow-y-auto rounded-lg border border-tierra-200 bg-papel py-1 shadow-lg"
         >
           {resultados.length === 0 ? (
-            <li className="px-3 py-3 text-sm text-zinc-500">Sin resultados para “{q}”.</li>
+            <li className="px-3 py-3 text-sm text-tierra-500">Sin resultados para “{q}”.</li>
           ) : (
             resultados.map((p, i) => (
               <li
@@ -178,20 +178,20 @@ export const BuscadorProductos = forwardRef<
                 }}
                 onMouseEnter={() => setIndice(i)}
                 className={`flex cursor-pointer items-center justify-between gap-3 px-3 py-2 text-sm ${
-                  i === indice ? "bg-teal-50" : ""
+                  i === indice ? "bg-acento-50" : ""
                 }`}
               >
                 <Miniatura imagen={p.imagen} alt="" tam={44} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-zinc-900">{p.nombre}</p>
-                  <p className="truncate text-xs text-zinc-500">
+                  <p className="truncate font-medium text-tierra-900">{p.nombre}</p>
+                  <p className="truncate text-xs text-tierra-500">
                     <span className="font-mono">{p.codigo}</span>
                     {[p.marca, p.modelo].filter(Boolean).length > 0 && ` · ${[p.marca, p.modelo].filter(Boolean).join(" · ")}`}
                   </p>
                 </div>
                 <div className="tabular shrink-0 text-right">
                   <p className="font-medium">{dinero(precio === "venta" ? p.precio_venta : p.precio_costo)}</p>
-                  <p className={`text-xs ${p.stock <= 0 ? "text-red-600" : "text-zinc-500"}`}>
+                  <p className={`text-xs ${p.stock <= 0 ? "text-red-600" : "text-tierra-500"}`}>
                     {p.stock <= 0 ? "Agotado" : `${cantidad(p.stock)} ${nombreUnidad(p.stock, p.unidad)}`}
                   </p>
                 </div>

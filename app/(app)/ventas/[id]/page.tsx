@@ -45,7 +45,7 @@ export default async function VentaPage({
             <span className="flex items-center gap-2">
               Venta #{v.id}
               {v.estado === "cancelada" && <Etiqueta tono="rojo">Anulada</Etiqueta>}
-              {devoluciones.length > 0 && <Etiqueta tono="teal">Con devolución</Etiqueta>}
+              {devoluciones.length > 0 && <Etiqueta tono="acento">Con devolución</Etiqueta>}
             </span>
           }
           descripcion={fecha(v.creado_en)}
@@ -117,15 +117,15 @@ export default async function VentaPage({
                       <Link href={`/productos/${d.producto_id}`} className="group flex items-center gap-3">
                         <Miniatura imagen={d.imagen} alt="" tam={40} className="print:hidden" />
                         <span>
-                          <span className="block font-medium text-zinc-900 group-hover:text-teal-700">{d.producto}</span>
-                          <span className="block font-mono text-xs text-zinc-500">{d.codigo}</span>
+                          <span className="block font-medium text-tierra-900 group-hover:text-acento-700">{d.producto}</span>
+                          <span className="block font-mono text-xs text-tierra-500">{d.codigo}</span>
                         </span>
                       </Link>
                     </td>
                     <td className={`${tdCls} tabular whitespace-nowrap text-right`}>
                       {cantidad(d.cantidad)} {nombreUnidad(d.cantidad, d.unidad)}
                       {d.devuelto > 0 && (
-                        <div className="text-xs text-teal-700 print:hidden">devuelto {cantidad(d.devuelto)}</div>
+                        <div className="text-xs text-acento-700 print:hidden">devuelto {cantidad(d.devuelto)}</div>
                       )}
                     </td>
                     <td className={`${tdCls} tabular text-right`}>{dinero(d.precio_unitario)}</td>
@@ -137,13 +137,13 @@ export default async function VentaPage({
                 {v.descuento > 0 && (
                   <>
                     <tr>
-                      <td colSpan={3} className="px-4 pt-3 text-right text-zinc-600">
+                      <td colSpan={3} className="px-4 pt-3 text-right text-tierra-600">
                         Subtotal
                       </td>
                       <td className="tabular px-4 pt-3 text-right">{dinero(v.subtotal)}</td>
                     </tr>
                     <tr>
-                      <td colSpan={3} className="px-4 text-right text-zinc-600">
+                      <td colSpan={3} className="px-4 text-right text-tierra-600">
                         Descuento
                       </td>
                       <td className="tabular px-4 text-right">−{dinero(v.descuento)}</td>
@@ -159,13 +159,13 @@ export default async function VentaPage({
                 {v.pago_con != null && (
                   <>
                     <tr>
-                      <td colSpan={3} className="px-4 text-right text-zinc-600">
+                      <td colSpan={3} className="px-4 text-right text-tierra-600">
                         Pagó con
                       </td>
                       <td className="tabular px-4 text-right">{dinero(v.pago_con)}</td>
                     </tr>
                     <tr>
-                      <td colSpan={3} className="px-4 pb-3 text-right text-zinc-600">
+                      <td colSpan={3} className="px-4 pb-3 text-right text-tierra-600">
                         Cambio
                       </td>
                       <td className="tabular px-4 pb-3 text-right">{dinero(v.pago_con - v.total)}</td>
@@ -198,12 +198,12 @@ export default async function VentaPage({
           </Tarjeta>
 
           {devoluciones.map((dv) => (
-            <Tarjeta key={dv.id} titulo={`Devolución #${dv.id}`} acciones={<span className="text-xs text-zinc-500">{fecha(dv.creado_en)}</span>}>
+            <Tarjeta key={dv.id} titulo={`Devolución #${dv.id}`} acciones={<span className="text-xs text-tierra-500">{fecha(dv.creado_en)}</span>}>
               <div className="space-y-2 p-4 text-sm">
-                <p className="text-zinc-700">
+                <p className="text-tierra-700">
                   {dv.motivo}
-                  {dv.usuario && <span className="block text-xs text-zinc-500">Registró: {dv.usuario}</span>}
-                  {dv.nota && <span className="block text-xs text-zinc-500">{dv.nota}</span>}
+                  {dv.usuario && <span className="block text-xs text-tierra-500">Registró: {dv.usuario}</span>}
+                  {dv.nota && <span className="block text-xs text-tierra-500">{dv.nota}</span>}
                 </p>
                 <ul className="space-y-1">
                   {dv.renglones.map((r, i) => (
@@ -212,11 +212,11 @@ export default async function VentaPage({
                         {cantidad(r.cantidad)} × {r.producto}
                         {!r.reingresa && <span className="ml-1 text-xs text-red-600">(dañado)</span>}
                       </span>
-                      <span className="tabular text-zinc-600">{dinero(r.importe)}</span>
+                      <span className="tabular text-tierra-600">{dinero(r.importe)}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="flex justify-between border-t border-zinc-100 pt-2 font-medium">
+                <p className="flex justify-between border-t border-tierra-100 pt-2 font-medium">
                   <span>Devuelto</span>
                   <span className="tabular">{dinero(dv.total)}</span>
                 </p>

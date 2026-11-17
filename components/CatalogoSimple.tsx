@@ -77,7 +77,7 @@ function Fila({ tabla, item }: { tabla: TablaCatalogo; item: ItemCatalogo }) {
   }, [estado]);
 
   return (
-    <tr className={item.activo ? "" : "bg-zinc-50/60 text-zinc-500"}>
+    <tr className={item.activo ? "" : "bg-tierra-50/60 text-tierra-500"}>
       <td className={tdCls}>
         {editando ? (
           <form action={accion} className="flex flex-wrap items-center gap-2">

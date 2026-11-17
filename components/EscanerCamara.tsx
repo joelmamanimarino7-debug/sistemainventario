@@ -178,7 +178,7 @@ export function EscanerCamara({
               {linterna.encendida ? "Apagar luz" : "Luz"}
             </button>
           )}
-          <button onClick={onCerrar} className="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-zinc-900">
+          <button onClick={onCerrar} className="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-tierra-900">
             Listo
           </button>
         </div>
@@ -202,7 +202,7 @@ export function EscanerCamara({
 
       <div className="min-h-16 px-4 py-3 text-center text-sm" aria-live="polite">
         {aviso ? (
-          <p className={`rounded-lg px-3 py-2 font-medium ${aviso.ok ? "bg-emerald-500 text-white" : "bg-red-500 text-white"}`}>{aviso.mensaje}</p>
+          <p className={`rounded-lg px-3 py-2 font-medium ${aviso.ok ? "bg-oliva-600 text-white" : "bg-red-500 text-white"}`}>{aviso.mensaje}</p>
         ) : (
           !error && <p className="text-white/70">Se agregan solos al leerlos. Toca «Listo» al terminar.</p>
         )}

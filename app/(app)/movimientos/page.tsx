@@ -50,7 +50,7 @@ export default async function MovimientosPage({ searchParams }: { searchParams: 
           producto ? (
             <>
               Mostrando solo{" "}
-              <Link href={`/productos/${producto.id}`} className="font-medium text-teal-700 hover:underline">
+              <Link href={`/productos/${producto.id}`} className="font-medium text-acento-700 hover:underline">
                 {producto.nombre}
               </Link>
             </>

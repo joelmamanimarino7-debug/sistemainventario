@@ -29,11 +29,11 @@ export default async function EntradasPage({ searchParams }: { searchParams: Pro
         }
       />
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
-        <label className="text-sm text-zinc-600">
+        <label className="text-sm text-tierra-600">
           Desde
           <input type="date" name="desde" defaultValue={sp.desde} className={`${inputCls} mt-1`} />
         </label>
-        <label className="text-sm text-zinc-600">
+        <label className="text-sm text-tierra-600">
           Hasta
           <input type="date" name="hasta" defaultValue={sp.hasta} className={`${inputCls} mt-1`} />
         </label>
@@ -71,15 +71,15 @@ export default async function EntradasPage({ searchParams }: { searchParams: Pro
                 </thead>
                 <tbody>
                   {entradas.map((e) => (
-                    <tr key={e.id} className="hover:bg-zinc-50">
+                    <tr key={e.id} className="hover:bg-tierra-50">
                       <td className={tdCls}>
-                        <Link href={`/entradas/${e.id}`} className="font-medium text-teal-700 hover:underline">
+                        <Link href={`/entradas/${e.id}`} className="font-medium text-acento-700 hover:underline">
                           #{e.id}
                         </Link>
                       </td>
                       <td className={`${tdCls} whitespace-nowrap`}>{fecha(e.creado_en)}</td>
-                      <td className={tdCls}>{e.proveedor ?? <span className="text-zinc-400">—</span>}</td>
-                      <td className={tdCls}>{e.referencia ?? <span className="text-zinc-400">—</span>}</td>
+                      <td className={tdCls}>{e.proveedor ?? <span className="text-tierra-400">—</span>}</td>
+                      <td className={tdCls}>{e.referencia ?? <span className="text-tierra-400">—</span>}</td>
                       <td className={`${tdCls} tabular text-right`}>{e.renglones}</td>
                       <td className={`${tdCls} tabular text-right`}>{cantidad(e.piezas)}</td>
                       <td className={`${tdCls} tabular text-right font-medium`}>{dinero(e.total)}</td>

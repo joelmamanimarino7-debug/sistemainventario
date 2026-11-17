@@ -134,14 +134,14 @@ export default async function ProductosPage({ searchParams }: { searchParams: Pr
                 </thead>
                 <tbody>
                   {productos.map((p) => (
-                    <tr key={p.id} className={p.activo ? "hover:bg-zinc-50" : "bg-zinc-50/60 text-zinc-500"}>
-                      <td className={`${tdCls} whitespace-nowrap font-mono text-xs text-zinc-600`}>{p.codigo}</td>
+                    <tr key={p.id} className={p.activo ? "hover:bg-tierra-50" : "bg-tierra-50/60 text-tierra-500"}>
+                      <td className={`${tdCls} whitespace-nowrap font-mono text-xs text-tierra-600`}>{p.codigo}</td>
                       <td className={tdCls}>
                         <Link href={`/productos/${p.id}`} className="group flex items-center gap-3">
                           <Miniatura imagen={p.imagen} alt={p.nombre} tam={48} />
                           <span className="min-w-0">
-                            <span className="block font-medium text-zinc-900 group-hover:text-teal-700">{p.nombre}</span>
-                            <span className="block text-xs text-zinc-500">
+                            <span className="block font-medium text-tierra-900 group-hover:text-acento-700">{p.nombre}</span>
+                            <span className="block text-xs text-tierra-500">
                               {[p.marca, p.modelo].filter(Boolean).join(" · ")}
                               {!p.activo && (
                                 <span className="ml-1">
@@ -152,16 +152,16 @@ export default async function ProductosPage({ searchParams }: { searchParams: Pr
                           </span>
                         </Link>
                       </td>
-                      <td className={tdCls}>{p.categoria ?? <span className="text-zinc-400">—</span>}</td>
-                      <td className={`${tdCls} whitespace-nowrap text-zinc-600`}>{medidas(p) || <span className="text-zinc-400">—</span>}</td>
+                      <td className={tdCls}>{p.categoria ?? <span className="text-tierra-400">—</span>}</td>
+                      <td className={`${tdCls} whitespace-nowrap text-tierra-600`}>{medidas(p) || <span className="text-tierra-400">—</span>}</td>
                       <td className={`${tdCls} tabular whitespace-nowrap text-right`}>{dinero(p.precio_venta)}</td>
                       <td className={`${tdCls} whitespace-nowrap text-right`}>
                         <div className="tabular font-medium">
-                          {cantidad(p.stock)} <span className="text-xs font-normal text-zinc-500">{nombreUnidad(p.stock, p.unidad)}</span>
+                          {cantidad(p.stock)} <span className="text-xs font-normal text-tierra-500">{nombreUnidad(p.stock, p.unidad)}</span>
                         </div>
                         <EstadoStock stock={p.stock} minimo={p.stock_minimo} />
                       </td>
-                      <td className={tdCls}>{p.ubicacion ?? <span className="text-zinc-400">—</span>}</td>
+                      <td className={tdCls}>{p.ubicacion ?? <span className="text-tierra-400">—</span>}</td>
                     </tr>
                   ))}
                 </tbody>

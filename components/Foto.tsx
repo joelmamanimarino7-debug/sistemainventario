@@ -21,7 +21,7 @@ export function Miniatura({
     return (
       <span
         style={estilo}
-        className={`grid shrink-0 place-items-center rounded-lg border border-zinc-200 bg-zinc-100 text-zinc-300 ${className}`}
+        className={`grid shrink-0 place-items-center rounded-lg border border-tierra-200 bg-tierra-100 text-tierra-300 ${className}`}
         aria-hidden
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ width: tam * 0.5, height: tam * 0.5 }}>
@@ -38,7 +38,7 @@ export function Miniatura({
       alt={alt}
       style={estilo}
       loading="lazy"
-      className={`shrink-0 rounded-lg border border-zinc-200 bg-zinc-50 object-contain ${className}`}
+      className={`shrink-0 rounded-lg border border-tierra-200 bg-tierra-50 object-contain ${className}`}
     />
   );
 }

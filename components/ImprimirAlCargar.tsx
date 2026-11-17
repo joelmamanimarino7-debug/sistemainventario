@@ -15,10 +15,10 @@ export function ImprimirAlCargar({ activo }: { activo: boolean }) {
 export function BotonesTicket() {
   return (
     <div className="mx-auto mb-4 flex max-w-[80mm] gap-2 print:hidden">
-      <button onClick={() => window.print()} className="flex-1 rounded-lg bg-teal-700 px-3 py-2 text-sm font-medium text-white hover:bg-teal-800">
+      <button onClick={() => window.print()} className="flex-1 rounded-lg bg-acento-700 px-3 py-2 text-sm font-medium text-white hover:bg-acento-800">
         🖨 Imprimir
       </button>
-      <button onClick={() => window.close()} className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50">
+      <button onClick={() => window.close()} className="rounded-lg border border-tierra-300 bg-papel px-3 py-2 text-sm text-tierra-700 hover:bg-tierra-50">
         Cerrar
       </button>
     </div>

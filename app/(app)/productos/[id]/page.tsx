@@ -99,19 +99,19 @@ export default async function ProductoPage({
 
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
         <Tarjeta className="p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Stock</p>
-          <p className="tabular mt-1 text-3xl font-semibold text-zinc-900">
-            {cantidad(p.stock)} <span className="text-base font-normal text-zinc-500">{nombreUnidad(p.stock, p.unidad)}</span>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">Stock</p>
+          <p className="tabular mt-1 font-display text-3xl font-semibold text-tierra-900">
+            {cantidad(p.stock)} <span className="text-base font-normal text-tierra-500">{nombreUnidad(p.stock, p.unidad)}</span>
           </p>
-          <div className="mt-1 flex items-center gap-2 text-xs text-zinc-500">
+          <div className="mt-1 flex items-center gap-2 text-xs text-tierra-500">
             Mínimo {cantidad(p.stock_minimo)} <EstadoStock stock={p.stock} minimo={p.stock_minimo} />
           </div>
         </Tarjeta>
         <Tarjeta className="p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Precio de venta</p>
-          <p className="tabular mt-1 text-3xl font-semibold text-zinc-900">{dinero(p.precio_venta)}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">Precio de venta</p>
+          <p className="tabular mt-1 font-display text-3xl font-semibold text-tierra-900">{dinero(p.precio_venta)}</p>
           {admin && (
-            <p className="tabular mt-1 text-xs text-zinc-500">
+            <p className="tabular mt-1 text-xs text-tierra-500">
               Costo {dinero(p.precio_costo)} · Ganancia{" "}
               <span className={ganancia < 0 ? "text-red-600" : ""}>
                 {dinero(ganancia)} ({cantidad(margen)}%)
@@ -120,11 +120,11 @@ export default async function ProductoPage({
           )}
         </Tarjeta>
         <Tarjeta className="p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Valor en inventario</p>
-          <p className="tabular mt-1 text-3xl font-semibold text-zinc-900">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-tierra-500">Valor en inventario</p>
+          <p className="tabular mt-1 font-display text-3xl font-semibold text-tierra-900">
             {dinero(Math.round(p.stock * (admin ? p.precio_costo : p.precio_venta)))}
           </p>
-          <p className="tabular mt-1 text-xs text-zinc-500">
+          <p className="tabular mt-1 text-xs text-tierra-500">
             {admin ? `A precio de venta: ${dinero(Math.round(p.stock * p.precio_venta))}` : "A precio de venta"}
           </p>
         </Tarjeta>
@@ -136,12 +136,12 @@ export default async function ProductoPage({
           {p.imagen ? (
             <a href={urlImagen(p.imagen)} target="_blank" rel="noreferrer" title="Ver foto completa">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={urlImagen(p.imagen)} alt={p.nombre} className="h-80 w-full bg-zinc-50 object-contain lg:h-auto lg:aspect-square" />
+              <img src={urlImagen(p.imagen)} alt={p.nombre} className="h-80 w-full bg-tierra-50 object-contain lg:h-auto lg:aspect-square" />
             </a>
           ) : (
             <Link
               href={admin ? `/productos/${p.id}/editar` : "#"}
-              className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 bg-zinc-50 text-sm text-zinc-500 hover:text-teal-700"
+              className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 bg-tierra-50 text-sm text-tierra-500 hover:text-acento-700"
             >
               <Miniatura imagen={null} alt="" tam={56} className="border-0 bg-transparent" />
               {admin ? "Sin foto · Agregar una" : "Sin foto"}
@@ -181,7 +181,7 @@ export default async function ProductoPage({
           className="self-start overflow-hidden"
           acciones={
             total > movimientos.length ? (
-              <Link href={`/movimientos?producto=${p.id}`} className="text-sm text-teal-700 hover:underline">
+              <Link href={`/movimientos?producto=${p.id}`} className="text-sm text-acento-700 hover:underline">
                 Ver los {total}
               </Link>
             ) : null
