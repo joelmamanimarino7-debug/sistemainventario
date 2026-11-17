@@ -60,7 +60,7 @@ export function ProductoForm({
           >
             <input id="codigo" name="codigo" defaultValue={p?.codigo} className={inputCls} required={!!p} />
           </Campo>
-          <Campo label="Código de barras" htmlFor="codigo_barras" ayuda="Opcional.">
+          <Campo label="Código de barras" htmlFor="codigo_barras" ayuda="Opcional. Si lo dejas vacío, las etiquetas usan el código interno.">
             <input id="codigo_barras" name="codigo_barras" defaultValue={p?.codigo_barras ?? ""} className={inputCls} />
           </Campo>
           <Campo

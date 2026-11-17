@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { exigirAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { catalogoEnUso, type TablaCatalogo } from "@/lib/data/catalogos";
 import { type EstadoForm, mensajeError, texto } from "@/lib/forms";
@@ -20,6 +21,7 @@ function refrescar() {
 // ---------- Categorías y marcas (solo tienen nombre) ----------
 
 export async function crearItemCatalogo(_prev: EstadoForm, fd: FormData): Promise<EstadoForm> {
+  await exigirAdmin();
   const tabla = validarTabla(String(fd.get("tabla")));
   const nombre = texto(fd, "nombre");
   if (!nombre) return { error: "Escribe un nombre." };
@@ -33,6 +35,7 @@ export async function crearItemCatalogo(_prev: EstadoForm, fd: FormData): Promis
 }
 
 export async function renombrarItemCatalogo(_prev: EstadoForm, fd: FormData): Promise<EstadoForm> {
+  await exigirAdmin();
   const tabla = validarTabla(String(fd.get("tabla")));
   const id = Number(fd.get("id"));
   const nombre = texto(fd, "nombre");
@@ -47,6 +50,7 @@ export async function renombrarItemCatalogo(_prev: EstadoForm, fd: FormData): Pr
 }
 
 export async function cambiarEstadoCatalogo(fd: FormData) {
+  await exigirAdmin();
   const tabla = String(fd.get("tabla"));
   if (![...TABLAS, "proveedores"].includes(tabla)) throw new Error("Catálogo no válido");
   const id = Number(fd.get("id"));
@@ -57,6 +61,7 @@ export async function cambiarEstadoCatalogo(fd: FormData) {
 
 /** Borra solo si nadie lo usa; si está en uso, hay que desactivarlo. */
 export async function eliminarItemCatalogo(fd: FormData) {
+  await exigirAdmin();
   const tabla = String(fd.get("tabla")) as TablaCatalogo | "proveedores";
   if (![...TABLAS, "proveedores"].includes(tabla)) throw new Error("Catálogo no válido");
   const id = Number(fd.get("id"));
@@ -71,6 +76,7 @@ export async function eliminarItemCatalogo(fd: FormData) {
 // ---------- Proveedores ----------
 
 export async function guardarProveedor(_prev: EstadoForm, fd: FormData): Promise<EstadoForm> {
+  await exigirAdmin();
   const id = fd.get("id") ? Number(fd.get("id")) : null;
   const datos = {
     nombre: texto(fd, "nombre"),

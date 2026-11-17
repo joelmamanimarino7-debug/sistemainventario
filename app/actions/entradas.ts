@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { usuarioDeAccion } from "@/lib/auth";
 import { db, ErrorNegocio, redondear, registrarMovimiento } from "@/lib/db";
 import { mensajeError } from "@/lib/forms";
 
@@ -16,6 +17,7 @@ export async function registrarEntrada(datos: {
   renglones: RenglonEntrada[];
 }): Promise<ResultadoOperacion> {
   try {
+    const yo = await usuarioDeAccion("admin");
     if (!datos.renglones.length) throw new ErrorNegocio("Agrega al menos un producto.");
     for (const r of datos.renglones) {
       if (!Number.isFinite(r.cantidad) || r.cantidad <= 0) throw new ErrorNegocio("Todas las cantidades deben ser mayores a 0.");
@@ -25,8 +27,8 @@ export async function registrarEntrada(datos: {
     const id = db.transaction(() => {
       const total = datos.renglones.reduce((s, r) => s + Math.round(r.cantidad * r.costoUnitario), 0);
       const e = db
-        .prepare("INSERT INTO entradas (proveedor_id, referencia, nota, total) VALUES (?, ?, ?, ?)")
-        .run(datos.proveedorId, datos.referencia?.trim() || null, datos.nota?.trim() || null, total);
+        .prepare("INSERT INTO entradas (proveedor_id, referencia, nota, total, usuario_id) VALUES (?, ?, ?, ?, ?)")
+        .run(datos.proveedorId, datos.referencia?.trim() || null, datos.nota?.trim() || null, total, yo.id);
       const entradaId = Number(e.lastInsertRowid);
 
       const insDetalle = db.prepare(
@@ -35,7 +37,7 @@ export async function registrarEntrada(datos: {
       for (const r of datos.renglones) {
         const cant = redondear(r.cantidad);
         insDetalle.run(entradaId, r.productoId, cant, r.costoUnitario, Math.round(cant * r.costoUnitario));
-        registrarMovimiento({ productoId: r.productoId, tipo: "entrada", cantidad: cant, entradaId });
+        registrarMovimiento({ productoId: r.productoId, tipo: "entrada", cantidad: cant, entradaId, usuario: yo.nombre });
         if (datos.actualizarCosto) {
           db.prepare("UPDATE productos SET precio_costo = ? WHERE id = ?").run(r.costoUnitario, r.productoId);
         }

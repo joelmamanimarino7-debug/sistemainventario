@@ -385,7 +385,7 @@ export function revisarImportacion(entrada: FilaArchivo[], opciones: { ajustarSt
 /** Aplica las filas válidas en una sola transacción: si algo falla, no se cambia nada. */
 export function aplicarImportacion(
   entrada: FilaArchivo[],
-  opciones: { ajustarStock: boolean },
+  opciones: { ajustarStock: boolean; usuario: { id: number; nombre: string } },
 ): { creados: number; actualizados: number; omitidos: number; ajusteId: number | null } {
   return db.transaction(() => {
     const revision = revisarImportacion(entrada, opciones);
@@ -435,14 +435,20 @@ export function aplicarImportacion(
           db.prepare("UPDATE productos SET codigo = ? WHERE id = ?").run(nuevo, id);
         }
         if (v.stock && v.stock > 0) {
-          registrarMovimiento({ productoId: id, tipo: "entrada", cantidad: v.stock, nota: "Stock inicial (importado de Excel)" });
+          registrarMovimiento({
+            productoId: id,
+            tipo: "entrada",
+            cantidad: v.stock,
+            nota: "Stock inicial (importado de Excel)",
+            usuario: opciones.usuario.nombre,
+          });
         }
         creados++;
       }
     }
 
     const ajusteId = renglonesAjuste.length
-      ? crearAjuste({ motivo: "Conteo físico", nota: "Importado desde Excel", renglones: renglonesAjuste })
+      ? crearAjuste({ motivo: "Conteo físico", nota: "Importado desde Excel", renglones: renglonesAjuste, usuario: opciones.usuario })
       : null;
     return { creados, actualizados, omitidos: revision.conError, ajusteId };
   })();

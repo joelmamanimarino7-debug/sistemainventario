@@ -16,6 +16,7 @@ export type Venta = {
   unidades: number;
   costo: number; // costo total de lo vendido (para ganancia)
   devuelto: number; // centavos devueltos al cliente en devoluciones
+  vendedor: string | null; // quién registró la venta
 };
 
 export type VentaDetalle = {
@@ -39,6 +40,7 @@ export type Devolucion = {
   nota: string | null;
   total: number;
   creado_en: string;
+  usuario: string | null;
   renglones: { producto: string; cantidad: number; unidad: string; importe: number; costo_unitario: number; reingresa: number }[];
 };
 
@@ -47,7 +49,8 @@ const SELECT = `
     (SELECT COUNT(*) FROM venta_detalle d WHERE d.venta_id = v.id) AS renglones,
     (SELECT IFNULL(SUM(d.cantidad),0) FROM venta_detalle d WHERE d.venta_id = v.id) AS unidades,
     (SELECT IFNULL(SUM(ROUND(d.cantidad * d.costo_unitario)),0) FROM venta_detalle d WHERE d.venta_id = v.id) AS costo,
-    (SELECT IFNULL(SUM(dv.total),0) FROM devoluciones dv WHERE dv.venta_id = v.id) AS devuelto
+    (SELECT IFNULL(SUM(dv.total),0) FROM devoluciones dv WHERE dv.venta_id = v.id) AS devuelto,
+    (SELECT u.nombre FROM usuarios u WHERE u.id = v.usuario_id) AS vendedor
   FROM ventas v
 `;
 
@@ -101,7 +104,11 @@ export function obtenerVenta(
     )
     .all(id) as VentaDetalle[];
   const devoluciones = (
-    db.prepare("SELECT * FROM devoluciones WHERE venta_id = ? ORDER BY id").all(id) as Omit<Devolucion, "renglones">[]
+    db
+      .prepare(
+        "SELECT dv.*, (SELECT nombre FROM usuarios u WHERE u.id = dv.usuario_id) AS usuario FROM devoluciones dv WHERE dv.venta_id = ? ORDER BY dv.id",
+      )
+      .all(id) as Omit<Devolucion, "renglones">[]
   ).map((dv) => ({
     ...dv,
     renglones: db

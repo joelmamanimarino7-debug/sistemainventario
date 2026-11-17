@@ -33,8 +33,9 @@ INVENTARIO_DB=data/demo.db npm run dev
 
 ## Configuración
 
-En `lib/config.ts` puedes cambiar el nombre del negocio, la moneda (por defecto bolivianos: `Bs 1.234,50`),
-el formato regional, las unidades de venta y los métodos de pago.
+El nombre del negocio, la dirección, el teléfono, el NIT y el mensaje del ticket se cambian desde
+**Configuración** (menú *Administración*). En `lib/config.ts` se cambian la moneda (por defecto bolivianos:
+`Bs 1.234,50`), el formato regional, las unidades de venta y los métodos de pago.
 
 En los campos de precio se puede escribir con coma o con punto decimal (`12,50` o `12.50`).
 
@@ -63,15 +64,42 @@ En los campos de precio se puede escribir con coma o con punto decimal (`12,50` 
 
 Las ventas netas del Inicio y de Reportes ya descuentan devoluciones y no cuentan ventas anuladas.
 
+## Fase 3: usuarios, códigos de barras y ticket
+
+- **Usuarios** (menú *Administración → Usuarios*). La primera vez que se abre el sistema pide crear el usuario
+  administrador. Hay dos roles:
+  - **Administrador:** todo.
+  - **Vendedor:** vende (sin poder cambiar precios), registra devoluciones, consulta productos y movimientos e
+    imprime etiquetas. No ve costos ni ganancias, ni entra a entradas, ajustes, reportes, catálogos, Excel,
+    usuarios o configuración.
+
+  Cada venta, entrada, ajuste, devolución y movimiento guarda quién lo hizo. Reportes muestra ventas por vendedor.
+  Cada usuario cambia su contraseña en *Mi cuenta*; si alguien la olvida, un administrador le pone una nueva.
+  Las contraseñas se guardan cifradas (scrypt) y la sesión dura 30 días.
+- **Etiquetas con código de barras** (menú *Etiquetas*, o botón «▥ Etiquetas» en cada producto y en cada
+  entrada): hojas adhesivas A4 o carta en 4 formatos, con nombre, precio y código Code 128. Si el producto no
+  tiene código de fábrica se usa su código interno (P-00001), que el buscador de ventas reconoce con el lector.
+  Se pueden saltar etiquetas ya usadas de una hoja.
+- **Ticket de venta** para impresora térmica de 80 mm: botón «🖨 Imprimir ticket» en la venta, o marca
+  «Imprimir el ticket al cobrar» en Nueva venta (se recuerda en ese equipo). En la ventana de impresión elige la
+  impresora de tickets y márgenes «Ninguno».
+
 ## Estructura
 
 ```
 app/                 Pantallas (cada carpeta es una ruta)
+  (app)/             Pantallas con menú; cada página revisa la sesión y el rol
+  login/, configurar/  Iniciar sesión y primer uso (sin menú)
+  ticket/            Ticket de venta para imprimir
   actions/           Operaciones que modifican datos (crear, vender, etc.)
   api/               Buscador de productos, fotos y descargas de Excel (api/exportar/…)
 components/          Piezas de interfaz reutilizables
 lib/
   schema.sql         Estructura de la base de datos
+  auth.ts            Usuarios, contraseñas, sesiones y permisos (exigirUsuario / exigirAdmin)
+  negocio.ts         Datos del negocio editables desde Configuración
+  code128.ts         Generador de códigos de barras Code 128 (sin librerías)
+  etiquetas.ts       Formatos de hojas de etiquetas
   db.ts              Conexión, migraciones y registrarMovimiento(): único lugar que cambia el stock
   ajustes.ts         Lógica de ajustes de inventario (la usan la pantalla y la importación)
   excel.ts           Herramientas para generar y leer .xlsx
@@ -96,4 +124,4 @@ scripts/seed.mjs     Datos de ejemplo
 
 - [x] **Fase 1:** productos, catálogos, entradas, ventas, movimientos, alertas de stock bajo.
 - [x] **Fase 2:** reportes, devoluciones, ajustes de inventario, importar/exportar Excel.
-- [ ] **Fase 3:** usuarios y roles, códigos de barras, ticket de venta. (Las fotos ya se adelantaron.)
+- [x] **Fase 3:** usuarios y roles, códigos de barras, ticket de venta. (Las fotos ya se adelantaron.)

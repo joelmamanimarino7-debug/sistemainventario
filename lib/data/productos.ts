@@ -146,3 +146,13 @@ export function obtenerParaOperacion(id: number): ProductoBusqueda | undefined {
     )
     .get(id) as ProductoBusqueda | undefined;
 }
+
+/** Datos mínimos para imprimir etiquetas. */
+export type ProductoEtiqueta = Pick<Producto, "id" | "codigo" | "codigo_barras" | "nombre" | "precio_venta" | "stock">;
+
+export function productosParaEtiquetas(ids?: number[]): ProductoEtiqueta[] {
+  const sql = `SELECT id, codigo, codigo_barras, nombre, precio_venta, stock FROM productos WHERE activo = 1`;
+  if (!ids) return db.prepare(`${sql} ORDER BY nombre COLLATE NOCASE`).all() as ProductoEtiqueta[];
+  if (!ids.length) return [];
+  return db.prepare(`${sql} AND id IN (${ids.map(() => "?").join(",")})`).all(...ids) as ProductoEtiqueta[];
+}

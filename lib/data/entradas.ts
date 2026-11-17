@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "../db";
 
 export type Entrada = {
+  usuario: string | null;
   id: number;
   proveedor_id: number | null;
   proveedor: string | null;
@@ -26,7 +27,7 @@ export type EntradaDetalle = {
 };
 
 const SELECT = `
-  SELECT e.*, pr.nombre AS proveedor,
+  SELECT e.*, pr.nombre AS proveedor, (SELECT u.nombre FROM usuarios u WHERE u.id = e.usuario_id) AS usuario,
          (SELECT COUNT(*) FROM entrada_detalle d WHERE d.entrada_id = e.id) AS renglones,
          (SELECT IFNULL(SUM(cantidad),0) FROM entrada_detalle d WHERE d.entrada_id = e.id) AS piezas
   FROM entradas e LEFT JOIN proveedores pr ON pr.id = e.proveedor_id

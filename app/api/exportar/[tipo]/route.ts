@@ -1,3 +1,4 @@
+import { usuarioActual } from "@/lib/auth";
 import type { TipoMovimiento } from "@/lib/db";
 import { descargarLibro, nombreConFecha } from "@/lib/excel";
 import { libroMovimientos, libroReporte, libroVentas } from "@/lib/exportaciones";
@@ -11,6 +12,9 @@ const fecha = (s: string | null) => (s && /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : un
 const TIPOS: TipoMovimiento[] = ["entrada", "venta", "ajuste", "devolucion"];
 
 export async function GET(req: Request, { params }: { params: Promise<{ tipo: string }> }) {
+  const yo = await usuarioActual();
+  if (!yo) return new Response("Inicia sesión para descargar.", { status: 401 });
+  if (yo.rol !== "admin") return new Response("Solo un administrador puede descargar estos datos.", { status: 403 });
   const { tipo } = await params;
   const sp = new URL(req.url).searchParams;
   const desde = fecha(sp.get("desde"));

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { exigirAdmin, usuarioDeAccion } from "@/lib/auth";
 import { MOTIVOS_DEVOLUCION } from "@/lib/config";
 import { db, ErrorNegocio, redondear, registrarMovimiento } from "@/lib/db";
 import { mensajeError } from "@/lib/forms";
@@ -29,6 +30,7 @@ export async function registrarDevolucion(datos: {
   renglones: RenglonDevolucion[];
 }): Promise<ResultadoOperacion> {
   try {
+    const yo = await usuarioDeAccion();
     if (!(MOTIVOS_DEVOLUCION as readonly string[]).includes(datos.motivo)) throw new ErrorNegocio("Elige un motivo.");
     const renglones = datos.renglones.filter((r) => r.cantidad > 0);
     if (!renglones.length) throw new ErrorNegocio("Indica cuánto se devuelve de al menos un producto.");
@@ -75,8 +77,8 @@ export async function registrarDevolucion(datos: {
       }
 
       const dv = db
-        .prepare("INSERT INTO devoluciones (venta_id, motivo, nota, total) VALUES (?, ?, ?, ?)")
-        .run(venta.id, datos.motivo, datos.nota?.trim() || null, total);
+        .prepare("INSERT INTO devoluciones (venta_id, motivo, nota, total, usuario_id) VALUES (?, ?, ?, ?, ?)")
+        .run(venta.id, datos.motivo, datos.nota?.trim() || null, total, yo.id);
       const devolucionId = Number(dv.lastInsertRowid);
       const ins = db.prepare(
         `INSERT INTO devolucion_detalle (devolucion_id, venta_detalle_id, producto_id, cantidad, importe, costo_unitario, reingresa)
@@ -92,6 +94,7 @@ export async function registrarDevolucion(datos: {
             ventaId: venta.id,
             devolucionId,
             nota: datos.motivo,
+            usuario: yo.nombre,
           });
         }
       }
@@ -110,6 +113,7 @@ export async function registrarDevolucion(datos: {
  * Solo se permite si la venta no tiene devoluciones (en ese caso hay que devolver lo que falta).
  */
 export async function anularVenta(fd: FormData) {
+  const yo = await exigirAdmin();
   const ventaId = Number(fd.get("id"));
   db.transaction(() => {
     const venta = db.prepare("SELECT estado FROM ventas WHERE id = ?").get(ventaId) as { estado: string } | undefined;
@@ -122,7 +126,14 @@ export async function anularVenta(fd: FormData) {
       cantidad: number;
     }[];
     for (const l of lineas) {
-      registrarMovimiento({ productoId: l.producto_id, tipo: "devolucion", cantidad: l.cantidad, ventaId, nota: "Venta anulada" });
+      registrarMovimiento({
+        productoId: l.producto_id,
+        tipo: "devolucion",
+        cantidad: l.cantidad,
+        ventaId,
+        nota: "Venta anulada",
+        usuario: yo.nombre,
+      });
     }
     db.prepare("UPDATE ventas SET estado = 'cancelada' WHERE id = ?").run(ventaId);
   })();

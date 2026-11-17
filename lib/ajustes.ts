@@ -12,7 +12,12 @@ export type RenglonAjuste = {
  * Crea un ajuste de inventario con sus movimientos. Debe llamarse dentro de db.transaction().
  * Los renglones sin diferencia se ignoran. Devuelve el id del ajuste, o null si no hubo nada que ajustar.
  */
-export function crearAjuste(datos: { motivo: string; nota: string | null; renglones: RenglonAjuste[] }): number | null {
+export function crearAjuste(datos: {
+  motivo: string;
+  nota: string | null;
+  renglones: RenglonAjuste[];
+  usuario: { id: number; nombre: string };
+}): number | null {
   const lineas: { productoId: number; anterior: number; nuevo: number; costo: number }[] = [];
   const vistos = new Set<number>();
   for (const r of datos.renglones) {
@@ -29,7 +34,9 @@ export function crearAjuste(datos: { motivo: string; nota: string | null; renglo
   }
   if (lineas.length === 0) return null;
 
-  const a = db.prepare("INSERT INTO ajustes (motivo, nota) VALUES (?, ?)").run(datos.motivo, datos.nota?.trim() || null);
+  const a = db
+    .prepare("INSERT INTO ajustes (motivo, nota, usuario_id) VALUES (?, ?, ?)")
+    .run(datos.motivo, datos.nota?.trim() || null, datos.usuario.id);
   const ajusteId = Number(a.lastInsertRowid);
   const ins = db.prepare(
     `INSERT INTO ajuste_detalle (ajuste_id, producto_id, stock_anterior, stock_nuevo, diferencia, costo_unitario)
@@ -38,7 +45,14 @@ export function crearAjuste(datos: { motivo: string; nota: string | null; renglo
   for (const l of lineas) {
     const diferencia = redondear(l.nuevo - l.anterior);
     ins.run(ajusteId, l.productoId, l.anterior, l.nuevo, diferencia, l.costo);
-    registrarMovimiento({ productoId: l.productoId, tipo: "ajuste", cantidad: diferencia, ajusteId, nota: datos.motivo });
+    registrarMovimiento({
+      productoId: l.productoId,
+      tipo: "ajuste",
+      cantidad: diferencia,
+      ajusteId,
+      nota: datos.motivo,
+      usuario: datos.usuario.nombre,
+    });
   }
   return ajusteId;
 }

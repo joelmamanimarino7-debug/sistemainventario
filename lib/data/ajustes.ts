@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "../db";
 
 export type Ajuste = {
+  usuario: string | null;
   id: number;
   motivo: string;
   nota: string | null;
@@ -25,7 +26,7 @@ export type AjusteDetalle = {
 };
 
 const SELECT = `
-  SELECT a.*,
+  SELECT a.*, (SELECT u.nombre FROM usuarios u WHERE u.id = a.usuario_id) AS usuario,
     (SELECT COUNT(*) FROM ajuste_detalle d WHERE d.ajuste_id = a.id) AS productos,
     (SELECT IFNULL(SUM(ROUND(d.diferencia * d.costo_unitario)),0) FROM ajuste_detalle d WHERE d.ajuste_id = a.id) AS valor
   FROM ajustes a

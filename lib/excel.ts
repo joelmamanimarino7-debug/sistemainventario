@@ -1,6 +1,6 @@
 import "server-only";
 import ExcelJS from "exceljs";
-import { CONFIG } from "./config";
+import { obtenerNegocio } from "./negocio";
 
 // Herramientas comunes para generar y leer archivos de Excel (.xlsx).
 
@@ -21,7 +21,7 @@ const FORMATOS: Record<string, string> = {
 
 export function nuevoLibro(): ExcelJS.Workbook {
   const libro = new ExcelJS.Workbook();
-  libro.creator = CONFIG.nombreNegocio;
+  libro.creator = obtenerNegocio().nombre;
   libro.created = new Date();
   return libro;
 }

@@ -179,3 +179,33 @@ CREATE TABLE IF NOT EXISTS devolucion_detalle (
 
 CREATE INDEX IF NOT EXISTS idx_devoluciones_venta ON devoluciones(venta_id);
 CREATE INDEX IF NOT EXISTS idx_devolucion_detalle_dev ON devolucion_detalle(devolucion_id);
+
+-- ---------- Fase 3 ----------
+
+-- Usuarios del sistema. rol: 'admin' (todo) o 'vendedor' (vender, devoluciones, consultar).
+CREATE TABLE IF NOT EXISTS usuarios (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre         TEXT    NOT NULL,
+  usuario        TEXT    NOT NULL UNIQUE COLLATE NOCASE,   -- nombre para iniciar sesión
+  clave_hash     TEXT    NOT NULL,                         -- scrypt, nunca la contraseña en texto
+  rol            TEXT    NOT NULL DEFAULT 'vendedor' CHECK (rol IN ('admin', 'vendedor')),
+  activo         INTEGER NOT NULL DEFAULT 1,
+  ultimo_acceso  TEXT,
+  creado_en      TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
+-- Sesiones abiertas. Se guarda el hash del token de la cookie, no el token.
+CREATE TABLE IF NOT EXISTS sesiones (
+  id          TEXT    PRIMARY KEY,
+  usuario_id  INTEGER NOT NULL REFERENCES usuarios(id),
+  creado_en   TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  expira_en   TEXT    NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_sesiones_usuario ON sesiones(usuario_id);
+
+-- Datos del negocio que se pueden cambiar desde la pantalla Configuración (nombre, dirección, ticket...).
+CREATE TABLE IF NOT EXISTS configuracion (
+  clave  TEXT PRIMARY KEY,
+  valor  TEXT
+);

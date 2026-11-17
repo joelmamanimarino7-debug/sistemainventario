@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { usuarioDeAccion } from "@/lib/auth";
 import { mensajeError } from "@/lib/forms";
 import {
   aplicarImportacion,
@@ -16,6 +17,7 @@ export type RespuestaRevision = { ok: true; filas: FilaArchivo[]; resumen: Resum
 /** Paso 1: lee el Excel y muestra qué pasaría, sin cambiar nada. */
 export async function revisarArchivo(fd: FormData, ajustarStock: boolean): Promise<RespuestaRevision> {
   try {
+    await usuarioDeAccion("admin");
     const archivo = fd.get("archivo");
     if (!(archivo instanceof File) || archivo.size === 0) return { ok: false, error: "Elige un archivo de Excel." };
     const filas = await leerArchivoProductos(archivo);
@@ -28,6 +30,7 @@ export async function revisarArchivo(fd: FormData, ajustarStock: boolean): Promi
 /** Vuelve a revisar las mismas filas (por ejemplo, al marcar o desmarcar «Ajustar el stock»). */
 export async function revisarDeNuevo(filas: unknown, ajustarStock: boolean): Promise<RespuestaRevision> {
   try {
+    await usuarioDeAccion("admin");
     const limpias = limpiarFilas(filas);
     return { ok: true, filas: limpias, resumen: revisarImportacion(limpias, { ajustarStock }) };
   } catch (e) {
@@ -43,7 +46,8 @@ export async function importarProductos(
   { ok: true; creados: number; actualizados: number; omitidos: number; ajusteId: number | null } | { ok: false; error: string }
 > {
   try {
-    const r = aplicarImportacion(limpiarFilas(filas), { ajustarStock });
+    const yo = await usuarioDeAccion("admin");
+    const r = aplicarImportacion(limpiarFilas(filas), { ajustarStock, usuario: yo });
     revalidatePath("/", "layout");
     return { ok: true, ...r };
   } catch (e) {

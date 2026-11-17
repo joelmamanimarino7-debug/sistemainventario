@@ -87,6 +87,7 @@ export function TablaMovimientos({ movimientos, conProducto = true }: { movimien
               <td className={tdCls}>
                 <Referencia m={m} />
                 {m.nota && <div className="text-xs text-zinc-500">{m.nota}</div>}
+                {m.usuario && <div className="text-xs text-zinc-400">por {m.usuario}</div>}
               </td>
             </tr>
           ))}

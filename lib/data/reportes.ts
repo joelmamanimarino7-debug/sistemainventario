@@ -241,3 +241,16 @@ export function inventarioPorCategoria() {
     )
     .all() as { categoria: string; productos: number; unidades: number; valor_costo: number; valor_venta: number }[];
 }
+
+/** Ventas por vendedor (quien registró la venta). */
+export function ventasPorVendedor(p: Periodo) {
+  return db
+    .prepare(
+      `SELECT IFNULL(u.nombre, 'Sin usuario') AS vendedor, COUNT(*) AS ventas, SUM(v.total) AS total,
+              SUM(v.total - (SELECT IFNULL(SUM(ROUND(d.cantidad*d.costo_unitario)),0) FROM venta_detalle d WHERE d.venta_id = v.id)) AS ganancia
+       FROM ventas v LEFT JOIN usuarios u ON u.id = v.usuario_id
+       WHERE v.estado = 'completada' AND v.creado_en BETWEEN ? AND ?
+       GROUP BY v.usuario_id ORDER BY total DESC`,
+    )
+    .all(...rango(p)) as { vendedor: string; ventas: number; total: number; ganancia: number }[];
+}

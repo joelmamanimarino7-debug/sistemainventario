@@ -1,6 +1,6 @@
 import "server-only";
 import type ExcelJS from "exceljs";
-import { CONFIG, etiquetaMetodo } from "./config";
+import { etiquetaMetodo } from "./config";
 import { listarMovimientos, type FiltrosMovimientos } from "./data/movimientos";
 import {
   inventarioPorCategoria,
@@ -15,6 +15,7 @@ import {
 import { listarVentas } from "./data/ventas";
 import { db } from "./db";
 import { agregarHoja, agregarHojaSimple, bs, fechaExcel, nuevoLibro } from "./excel";
+import { obtenerNegocio } from "./negocio";
 
 const TIPOS_MOV: Record<string, string> = { entrada: "Entrada", venta: "Venta", ajuste: "Ajuste", devolucion: "Devolución" };
 const fmt = (s: string) => s.split("-").reverse().join("/");
@@ -30,6 +31,7 @@ export function libroVentas(p: Partial<Periodo>): ExcelJS.Workbook {
       { titulo: "Fecha", ancho: 17, formato: "fecha", valor: (v) => fechaExcel(v.creado_en) },
       { titulo: "Estado", ancho: 11, valor: (v) => (v.estado === "cancelada" ? "Anulada" : "Completada") },
       { titulo: "Cliente", ancho: 20, valor: (v) => v.cliente },
+      { titulo: "Vendedor", ancho: 18, valor: (v) => v.vendedor },
       { titulo: "Método de pago", ancho: 16, valor: (v) => etiquetaMetodo(v.metodo_pago) },
       { titulo: "Artículos", formato: "cantidad", valor: (v) => v.unidades },
       { titulo: "Subtotal", ancho: 13, formato: "dinero", valor: (v) => bs(v.subtotal) },
@@ -150,7 +152,7 @@ export function libroReporte(p: Periodo): ExcelJS.Workbook {
   const libro = nuevoLibro();
   const r = resumenPeriodo(p);
   agregarHojaSimple(libro, "Resumen", [
-    [`${CONFIG.nombreNegocio} · Reporte del ${fmt(p.desde)} al ${fmt(p.hasta)}`, null],
+    [`${obtenerNegocio().nombre} · Reporte del ${fmt(p.desde)} al ${fmt(p.hasta)}`, null],
     ["", null],
     ["Ventas (cantidad)", r.ventas],
     ["Ventas cobradas", bs(r.bruto), "dinero"],

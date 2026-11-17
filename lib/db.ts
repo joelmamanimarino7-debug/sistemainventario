@@ -29,6 +29,12 @@ function migrar(db: Database.Database) {
   if (!columnas.includes("devolucion_id"))
     db.exec("ALTER TABLE movimientos ADD COLUMN devolucion_id INTEGER REFERENCES devoluciones(id)");
   db.exec("CREATE INDEX IF NOT EXISTS idx_movimientos_venta ON movimientos(venta_id)");
+
+  // Fase 3: quién registró cada operación.
+  for (const tabla of ["ventas", "entradas", "ajustes", "devoluciones"]) {
+    const cols = (db.prepare(`PRAGMA table_info(${tabla})`).all() as { name: string }[]).map((c) => c.name);
+    if (!cols.includes("usuario_id")) db.exec(`ALTER TABLE ${tabla} ADD COLUMN usuario_id INTEGER REFERENCES usuarios(id)`);
+  }
 }
 
 // En desarrollo Next recarga módulos; guardamos la conexión en globalThis
@@ -56,6 +62,8 @@ export function registrarMovimiento(params: {
   ajusteId?: number | null;
   devolucionId?: number | null;
   nota?: string | null;
+  /** Nombre de quien hizo la operación (queda en el historial). */
+  usuario?: string | null;
 }) {
   const prod = db
     .prepare("SELECT id, nombre, stock FROM productos WHERE id = ?")
@@ -76,8 +84,8 @@ export function registrarMovimiento(params: {
 
   db.prepare(
     `INSERT INTO movimientos (producto_id, tipo, cantidad, stock_anterior, stock_resultante,
-       venta_id, entrada_id, ajuste_id, devolucion_id, nota)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       venta_id, entrada_id, ajuste_id, devolucion_id, nota, usuario)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   ).run(
     prod.id,
     params.tipo,
@@ -89,6 +97,7 @@ export function registrarMovimiento(params: {
     params.ajusteId ?? null,
     params.devolucionId ?? null,
     params.nota ?? null,
+    params.usuario ?? null,
   );
   return { anterior, resultante };
 }

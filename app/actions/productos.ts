@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { exigirAdmin } from "@/lib/auth";
 import { UNIDADES, UNIDADES_MEDIDA } from "@/lib/config";
 import { db, ErrorNegocio, registrarMovimiento } from "@/lib/db";
 import { centavos, type EstadoForm, entero, mensajeError, numero, texto } from "@/lib/forms";
@@ -103,6 +104,7 @@ function generarCodigo(id: number): string {
 }
 
 export async function crearProducto(_prev: EstadoForm, fd: FormData): Promise<EstadoForm> {
+  const yo = await exigirAdmin();
   const { datos, campos } = leerFormulario(fd);
   if (!datos) return { error: "Revisa los campos marcados.", campos };
 
@@ -138,7 +140,7 @@ export async function crearProducto(_prev: EstadoForm, fd: FormData): Promise<Es
         db.prepare("UPDATE productos SET codigo = ? WHERE id = ?").run(generarCodigo(id), id);
       }
       if (stockInicial > 0) {
-        registrarMovimiento({ productoId: id, tipo: "entrada", cantidad: stockInicial, nota: "Stock inicial" });
+        registrarMovimiento({ productoId: id, tipo: "entrada", cantidad: stockInicial, nota: "Stock inicial", usuario: yo.nombre });
       }
       return id;
     })();
@@ -152,6 +154,7 @@ export async function crearProducto(_prev: EstadoForm, fd: FormData): Promise<Es
 }
 
 export async function actualizarProducto(_prev: EstadoForm, fd: FormData): Promise<EstadoForm> {
+  await exigirAdmin();
   const id = Number(fd.get("id"));
   const { datos, campos } = leerFormulario(fd);
   if (!datos) return { error: "Revisa los campos marcados.", campos };
@@ -196,6 +199,7 @@ export async function actualizarProducto(_prev: EstadoForm, fd: FormData): Promi
 
 /** "Eliminar" un producto = desactivarlo. Conserva su historial de ventas y movimientos. */
 export async function cambiarEstadoProducto(fd: FormData) {
+  await exigirAdmin();
   const id = Number(fd.get("id"));
   const activo = fd.get("activo") === "1" ? 1 : 0;
   db.prepare("UPDATE productos SET activo = ?, actualizado_en = datetime('now','localtime') WHERE id = ?").run(

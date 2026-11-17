@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { registrarVenta } from "@/app/actions/ventas";
 import { METODOS_PAGO } from "@/lib/config";
 import type { ProductoBusqueda } from "@/lib/data/productos";
@@ -13,8 +13,27 @@ import { Aviso, Campo, Tarjeta, Vacio } from "./ui";
 
 type Renglon = { producto: ProductoBusqueda; cantidad: string; precio: string };
 
-export function NuevaVenta() {
+const CLAVE_AUTO = "inventario:imprimir-ticket";
+
+export function NuevaVenta({ puedeCambiarPrecio }: { puedeCambiarPrecio: boolean }) {
   const buscador = useRef<BuscadorRef>(null);
+  // Preferencia guardada en este navegador: abrir el ticket al cobrar.
+  const [imprimirAuto, setImprimirAuto] = useState(false);
+  useEffect(() => {
+    try {
+      setImprimirAuto(localStorage.getItem(CLAVE_AUTO) === "1");
+    } catch {
+      /* sin almacenamiento: queda desactivado */
+    }
+  }, []);
+  function cambiarImprimirAuto(v: boolean) {
+    setImprimirAuto(v);
+    try {
+      localStorage.setItem(CLAVE_AUTO, v ? "1" : "0");
+    } catch {
+      /* no pasa nada */
+    }
+  }
   const [renglones, setRenglones] = useState<Renglon[]>([]);
   const [metodo, setMetodo] = useState<string>("efectivo");
   const [descuento, setDescuento] = useState("");
@@ -100,6 +119,7 @@ export function NuevaVenta() {
       });
       if (res.ok) {
         setExito({ id: res.id, total, cambio });
+        if (imprimirAuto) window.open(`/ticket/${res.id}?imprimir=1`, "_blank", "noopener");
         limpiar();
         buscador.current?.enfocar();
       } else {
@@ -123,9 +143,14 @@ export function NuevaVenta() {
                 </p>
               )}
             </div>
-            <Link href={`/ventas/${exito.id}`} className={btnSecundario}>
-              Ver / imprimir ticket
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <a href={`/ticket/${exito.id}?imprimir=1`} target="_blank" rel="noopener" className={btnSecundario}>
+                🖨 Imprimir ticket
+              </a>
+              <Link href={`/ventas/${exito.id}`} className={btnSecundario}>
+                Ver venta
+              </Link>
+            </div>
           </div>
         )}
 
@@ -170,7 +195,9 @@ export function NuevaVenta() {
                             inputMode="decimal"
                             value={r.precio}
                             onChange={(e) => cambiar(i, "precio", e.target.value)}
-                            className={`${inputCls} tabular min-w-20 text-right`}
+                            readOnly={!puedeCambiarPrecio}
+                            title={puedeCambiarPrecio ? undefined : "Solo un administrador puede cambiar el precio"}
+                            className={`${inputCls} tabular min-w-20 text-right ${puedeCambiarPrecio ? "" : "!border-transparent !bg-transparent !shadow-none"}`}
                             aria-label={`Precio de ${r.producto.nombre}`}
                           />
                         </td>
@@ -285,6 +312,16 @@ export function NuevaVenta() {
           <Campo label="Nota" htmlFor="nota_venta">
             <input id="nota_venta" value={nota} onChange={(e) => setNota(e.target.value)} className={inputCls} />
           </Campo>
+
+          <label className="flex items-center gap-2 text-sm text-zinc-600">
+            <input
+              type="checkbox"
+              checked={imprimirAuto}
+              onChange={(e) => cambiarImprimirAuto(e.target.checked)}
+              className="accent-teal-700"
+            />
+            Imprimir el ticket al cobrar
+          </label>
 
           {error && <Aviso tipo="error">{error}</Aviso>}
 

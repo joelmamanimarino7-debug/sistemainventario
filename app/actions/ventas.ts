@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { usuarioDeAccion } from "@/lib/auth";
 import { METODOS_PAGO } from "@/lib/config";
 import { db, ErrorNegocio, redondear, registrarMovimiento } from "@/lib/db";
 import { mensajeError } from "@/lib/forms";
@@ -17,6 +18,7 @@ export async function registrarVenta(datos: {
   renglones: RenglonVenta[];
 }): Promise<ResultadoOperacion> {
   try {
+    const yo = await usuarioDeAccion();
     if (!datos.renglones.length) throw new ErrorNegocio("La venta no tiene productos.");
     if (!METODOS_PAGO.some((m) => m.valor === datos.metodoPago)) throw new ErrorNegocio("Método de pago no válido.");
     for (const r of datos.renglones) {
@@ -28,11 +30,14 @@ export async function registrarVenta(datos: {
     const id = db.transaction(() => {
       // Tomamos el costo vigente de cada producto para poder calcular la ganancia después.
       const lineas = datos.renglones.map((r) => {
-        const prod = db.prepare("SELECT id, nombre, precio_costo, activo FROM productos WHERE id = ?").get(r.productoId) as
-          | { id: number; nombre: string; precio_costo: number; activo: number }
-          | undefined;
+        const prod = db
+          .prepare("SELECT id, nombre, precio_costo, precio_venta, activo FROM productos WHERE id = ?")
+          .get(r.productoId) as { id: number; nombre: string; precio_costo: number; precio_venta: number; activo: number } | undefined;
         if (!prod) throw new ErrorNegocio(`El producto #${r.productoId} no existe.`);
         if (!prod.activo) throw new ErrorNegocio(`"${prod.nombre}" está dado de baja y no se puede vender.`);
+        // Solo un administrador puede vender a un precio distinto del registrado.
+        if (yo.rol !== "admin" && r.precioUnitario !== prod.precio_venta)
+          throw new ErrorNegocio(`El precio de "${prod.nombre}" cambió o fue modificado. Quita el producto y vuelve a agregarlo.`);
         const cant = redondear(r.cantidad);
         return { ...r, cantidad: cant, costo: prod.precio_costo, subtotal: Math.round(cant * r.precioUnitario) };
       });
@@ -46,8 +51,8 @@ export async function registrarVenta(datos: {
 
       const v = db
         .prepare(
-          `INSERT INTO ventas (cliente, metodo_pago, subtotal, descuento, total, pago_con, nota)
-           VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO ventas (cliente, metodo_pago, subtotal, descuento, total, pago_con, nota, usuario_id)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         )
         .run(
           datos.cliente?.trim() || null,
@@ -57,6 +62,7 @@ export async function registrarVenta(datos: {
           total,
           datos.metodoPago === "efectivo" ? datos.pagoCon : null,
           datos.nota?.trim() || null,
+          yo.id,
         );
       const ventaId = Number(v.lastInsertRowid);
 
@@ -67,7 +73,7 @@ export async function registrarVenta(datos: {
       for (const l of lineas) {
         ins.run(ventaId, l.productoId, l.cantidad, l.precioUnitario, l.costo, l.subtotal);
         // Lanza error (y deshace toda la venta) si no hay stock suficiente.
-        registrarMovimiento({ productoId: l.productoId, tipo: "venta", cantidad: -l.cantidad, ventaId });
+        registrarMovimiento({ productoId: l.productoId, tipo: "venta", cantidad: -l.cantidad, ventaId, usuario: yo.nombre });
       }
       return ventaId;
     })();

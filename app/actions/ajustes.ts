@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { crearAjuste, type RenglonAjuste } from "@/lib/ajustes";
+import { usuarioDeAccion } from "@/lib/auth";
 import { MOTIVOS_AJUSTE } from "@/lib/config";
 import { db, ErrorNegocio } from "@/lib/db";
 import { mensajeError } from "@/lib/forms";
@@ -13,10 +14,11 @@ export async function registrarAjuste(datos: {
   renglones: RenglonAjuste[];
 }): Promise<ResultadoOperacion> {
   try {
+    const yo = await usuarioDeAccion("admin");
     if (!(MOTIVOS_AJUSTE as readonly string[]).includes(datos.motivo)) throw new ErrorNegocio("Elige un motivo.");
     if (!datos.renglones.length) throw new ErrorNegocio("Agrega al menos un producto.");
     if (datos.motivo === "Otro" && !datos.nota?.trim()) throw new ErrorNegocio('Si el motivo es "Otro", explica el motivo en la nota.');
-    const id = db.transaction(() => crearAjuste(datos))();
+    const id = db.transaction(() => crearAjuste({ ...datos, usuario: yo }))();
     if (id == null) throw new ErrorNegocio("No hay diferencias: el stock ya coincide con lo que escribiste.");
     revalidatePath("/", "layout");
     return { ok: true, id };
